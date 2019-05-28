@@ -1,0 +1,32 @@
+## local config
+component:
+  name: landing_zone_code_pipeline_role
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_code_pipeline_role/terraform.tfstate
+    resource:
+      aws_iam_role:
+        landing_zone_code_pipeline_role:
+          assume_role_policy: '${file("${local.component["path"]}/iam_trust_policy.json.tpl")}'
+          description: '${var.landing_zone_code_pipeline_role_description}'
+          force_detach_policies: '${var.landing_zone_code_pipeline_role_force_detach_policies}'
+          name: '${var.landing_zone_code_pipeline_role_name}'
+          path: '${var.landing_zone_code_pipeline_role_path}'
+    tfvars:
+      landing_zone_code_pipeline_role_name: 'LandingZoneCodePipelineRole'
+      landing_zone_code_pipeline_role_description: 'Managed by TerraHub'
+      landing_zone_code_pipeline_role_force_detach_policies: false
+      landing_zone_code_pipeline_role_path: '/'
+    output:
+      id:
+        value: '${aws_iam_role.landing_zone_code_pipeline_role.id}'
+      thub_id:
+        value: '${aws_iam_role.landing_zone_code_pipeline_role.id}'
+      name:
+        value: '${aws_iam_role.landing_zone_code_pipeline_role.name}'
+      arn:
+        value: '${aws_iam_role.landing_zone_code_pipeline_role.arn}'
+
