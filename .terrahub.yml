@@ -13,9 +13,9 @@ project:
 terraform:
   varFile:
     - 'default.tfvars'
-#   var:
-#     region: us-east-1
-#     account_id: 123456789012
+  # var:
+  #   region: us-east-1
+  #   account_id: 123456789012
 #   backend:
 #     region: us-east-1
 #     bucket: data-lake-terrahub-us-east-1
@@ -26,6 +26,10 @@ terraform:
 #   version: 0.11.11
 
 template:
+  provider:
+    aws:
+      region: '${var.region}'
+      allowed_account_ids: ['${var.account_id}']
   tfvars:
     region: us-east-1
     account_id: 123456789012

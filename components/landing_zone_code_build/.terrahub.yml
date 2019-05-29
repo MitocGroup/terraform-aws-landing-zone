@@ -1,0 +1,57 @@
+## local config
+component:
+  name: landing_zone_code_build
+  dependsOn:
+    - ../landing_zone_code_build_role
+    - ../landing_zone_pipeline_artifact_s3_bucket
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_code_build/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_code_build_role:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_code_build_role/terraform.tfstate
+        landing_zone_pipeline_artifact_s3_bucket:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
+    resource:
+      aws_codebuild_project:
+        landing_zone_code_build:
+          name: '${var.landing_zone_code_build_name}'
+          service_role: '${data.terraform_remote_state.landing_zone_code_build_role.arn}'
+          artifacts:
+          - type: ${var.landing_zone_code_build_artifacts_type}
+          source:
+          - type: '${var.landing_zone_code_build_source_type}'
+            buildspec: ${file("${local.component["path"]}/buildspec.yml")}
+          environment:
+          - compute_type: '${var.landing_zone_code_build_environment_compute_type}'
+            image: '${var.landing_zone_code_build_environment_image}'
+            type: '${var.landing_zone_code_build_environment_type}'
+            environment_variable:
+            - name: 'ARTIFACT_BUCKET'
+              value: '${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}'
+    tfvars:
+      landing_zone_code_build_name: 'AWS-Landing-Zone-CodeBuild'
+      landing_zone_code_build_artifacts_type: 'CODEPIPELINE'
+      landing_zone_code_build_source_type: 'CODEPIPELINE'
+      landing_zone_code_build_environment_compute_type: 'BUILD_GENERAL1_SMALL'
+      landing_zone_code_build_environment_image: 'aws/codebuild/nodejs:8.11.0'
+      landing_zone_code_build_environment_type: 'LINUX_CONTAINER'
+    output:
+      id:
+        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+      thub_id:
+        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+      badge_url:
+        value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
+      arn:
+        value: '${aws_codebuild_project.landing_zone_code_build.arn}'

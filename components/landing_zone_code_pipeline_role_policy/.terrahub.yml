@@ -6,8 +6,6 @@ component:
     - ../landing_zone_pipeline_artifact_s3_bucket
     - ../landing_zone_code_pipeline_role
     - ../landing_zone_code_build
-    - ../landing_zone_launch_avm_code_build
-    - ../landing_zone_state_machine_trigger_lambda
   template:
     terraform:
       backend:
@@ -36,16 +34,6 @@ component:
           config:
             path: >-
               /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_code_build/terraform.tfstate
-        landing_zone_launch_avm_code_build:
-          backend: local
-          config:
-            path: >-
-              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_launch_avm_code_build/terraform.tfstate
-        landing_zone_state_machine_trigger_lambda:
-          backend: local
-          config:
-            path: >-
-              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_state_machine_trigger_lambda/terraform.tfstate
       template_file:
         landing_zone_code_pipeline_role_policy:
           template: '${file("${local.component["path"]}/iam_assume_policy.json.tpl")}'
@@ -53,8 +41,6 @@ component:
             s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_s3_bucket.arn}'
             artifact_s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.arn}'
             code_build_arn: ${data.terraform_remote_state.landing_zone_code_build.arn}'
-            launch_avm_code_build_arn: ${data.terraform_remote_state.landing_zone_launch_avm_code_build.arn}'
-            lambda_arn: ${data.terraform_remote_state.landing_zone_state_machine_trigger_lambda.arn}'
     resource:
       aws_iam_role_policy:
         landing_zone_code_pipeline_role_policy:

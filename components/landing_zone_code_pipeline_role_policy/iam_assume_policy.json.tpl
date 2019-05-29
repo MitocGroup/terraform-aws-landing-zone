@@ -37,17 +37,6 @@
     {
       "Effect": "Allow",
       "Action": [
-          "codebuild:BatchGetBuilds",
-          "codebuild:StartBuilds"
-      ],
-      Resource: [
-        "${code_build_arn}"
-        "${launch_avm_code_build_arn}"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
           "codecommit:GetBranch",
           "codecommit:GetCommit",
           "codecommit:UploadArchive",
@@ -63,13 +52,6 @@
           "lambda:ListVersionsByFunction"
       ],
       Resource: "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-          "lambda:InvokeFunction"
-      ],
-      Resource: "${lambda_arn}"
-    }    
+    } 
   ]
 }

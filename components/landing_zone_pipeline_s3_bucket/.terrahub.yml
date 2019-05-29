@@ -23,3 +23,5 @@ component:
         value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.id}'
       arn:
         value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn}'
+      bucket:
+        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket}'
