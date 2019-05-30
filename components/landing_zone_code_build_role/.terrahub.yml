@@ -24,4 +24,10 @@ component:
         value: '${aws_iam_role.landing_zone_code_build_role.name}'
       arn:
         value: '${aws_iam_role.landing_zone_code_build_role.arn}'
+      landing_zone_code_build_role_id:
+        value: '${aws_iam_role.landing_zone_code_build_role.id}'
+      landing_zone_code_build_role_name:
+        value: '${aws_iam_role.landing_zone_code_build_role.name}'
+      landing_zone_code_build_role_arn:
+        value: '${aws_iam_role.landing_zone_code_build_role.arn}'
 

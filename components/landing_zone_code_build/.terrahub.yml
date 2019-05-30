@@ -48,3 +48,9 @@ component:
         value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
       arn:
         value: '${aws_codebuild_project.landing_zone_code_build.arn}'
+      landing_zone_code_build_id:
+        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+      landing_zone_code_build_badge_url:
+        value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
+      landing_zone_code_build_arn:
+        value: '${aws_codebuild_project.landing_zone_code_build.arn}'

@@ -20,3 +20,7 @@ component:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
       arn:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
+      landing_zone_organization_accounts_id:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+      landing_zone_organization_accounts_arn:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'

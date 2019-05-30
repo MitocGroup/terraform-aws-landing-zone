@@ -73,4 +73,8 @@ component:
         value: '${aws_codepipeline.landing_zone_code_pipeline.id}'
       arn:
         value: '${aws_codepipeline.landing_zone_code_pipeline.arn}'
+      landing_zone_code_pipeline_id:
+        value: '${aws_codepipeline.landing_zone_code_pipeline.id}'
+      landing_zone_code_pipeline_arn:
+        value: '${aws_codepipeline.landing_zone_code_pipeline.arn}'
 

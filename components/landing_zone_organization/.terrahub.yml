@@ -18,15 +18,13 @@ component:
         value: '${aws_organizations_organization.landing_zone_organization.id}'
       thub_id:
         value: '${aws_organizations_organization.landing_zone_organization.id}'
-      master_account_id:
-        value: '${aws_organizations_organization.landing_zone_organization.master_account_id}'
-      arn:
-        value: '${aws_organizations_organization.landing_zone_organization.arn}'
-      master_account_arn:
-        value: '${aws_organizations_organization.landing_zone_organization.master_account_arn}'
-      master_account_email:
-        value: '${aws_organizations_organization.landing_zone_organization.master_account_email}'
       accounts:
         value: '${aws_organizations_organization.landing_zone_organization.accounts}'
       roots:
+        value: '${aws_organizations_organization.landing_zone_organization.roots}'
+      landing_zone_organization_id:
+        value: '${aws_organizations_organization.landing_zone_organization.id}'
+      landing_zone_organization_accounts:
+        value: '${aws_organizations_organization.landing_zone_organization.accounts}'
+      landing_zone_organization_roots:
         value: '${aws_organizations_organization.landing_zone_organization.roots}'
