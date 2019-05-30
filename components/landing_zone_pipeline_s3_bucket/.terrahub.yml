@@ -13,9 +13,6 @@ component:
           bucket: '${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}'
         versioning:
           enabled: '${var.landing_zone_pipeline_s3_bucket_versioning}'
-    tfvars:
-      landing_zone_pipeline_s3_bucket_name: 'aws-landing-zone-configuration'
-      landing_zone_pipeline_s3_bucket_versioning: true
     output:
       id:
         value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.id}'

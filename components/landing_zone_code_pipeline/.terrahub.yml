@@ -65,9 +65,7 @@ component:
               output_artifacts:
               - Name: 'SourceApp'
               configuration:
-              - ProjectName: '${data.terraform_remote_state.landing_zone_code_build.id}'  
-    tfvars:
-      landing_zone_code_pipeline_name: 'AWS-Landing-Zone-CodePipeline'
+              - ProjectName: '${data.terraform_remote_state.landing_zone_code_build.id}'
     output:
       id:
         value: '${aws_codepipeline.landing_zone_code_pipeline.id}'

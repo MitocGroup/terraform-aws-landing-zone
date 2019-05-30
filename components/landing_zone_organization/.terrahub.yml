@@ -13,13 +13,6 @@ component:
           aws_service_access_principals: '${var.landing_zone_organization_service_access_principals}'
           enabled_policy_types: '${var.landing_zone_organization_enabled_policy_types}'
           feature_set: '${var.landing_zone_organization_feature_set}'
-    tfvars:
-      landing_zone_organization_service_access_principals:
-      - 'cloudtrail.amazonaws.com'
-      - 'config.amazonaws.com'
-      landing_zone_organization_enabled_policy_types:
-      - 'SERVICE_CONTROL_POLICY'
-      landing_zone_organization_feature_set: 'ALL'
     output:
       id:
         value: '${aws_organizations_organization.landing_zone_organization.id}'

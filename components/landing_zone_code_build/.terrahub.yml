@@ -39,13 +39,6 @@ component:
             environment_variable:
             - name: 'ARTIFACT_BUCKET'
               value: '${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}'
-    tfvars:
-      landing_zone_code_build_name: 'AWS-Landing-Zone-CodeBuild'
-      landing_zone_code_build_artifacts_type: 'CODEPIPELINE'
-      landing_zone_code_build_source_type: 'CODEPIPELINE'
-      landing_zone_code_build_environment_compute_type: 'BUILD_GENERAL1_SMALL'
-      landing_zone_code_build_environment_image: 'aws/codebuild/nodejs:8.11.0'
-      landing_zone_code_build_environment_type: 'LINUX_CONTAINER'
     output:
       id:
         value: '${aws_codebuild_project.landing_zone_code_build.id}'

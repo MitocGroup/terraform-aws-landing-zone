@@ -47,8 +47,6 @@ component:
           name: '${var.landing_zone_code_pipeline_role_policy_name}'
           policy: '${data.template_file.landing_zone_code_pipeline_role_policy.rendered}'
           role: '${data.terraform_remote_state.landing_zone_code_pipeline_role.id}'
-    tfvars:
-      landing_zone_code_pipeline_role_policy_name: 'AWS-Landing-Zone-CodePipeline-Policy'
     output:
       id:
         value: '${aws_iam_role_policy.landing_zone_code_pipeline_role_policy.id}'
