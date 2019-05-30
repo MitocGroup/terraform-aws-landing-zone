@@ -1,4 +1,4 @@
-module "example-create-s3-and-codepipeline" {
+module "sample" {
   source = "../../modules/landing_zone"
   landing_zone_components = {
       landing_zone_pipeline_s3_bucket = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
