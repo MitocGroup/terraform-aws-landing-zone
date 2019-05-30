@@ -15,13 +15,21 @@ def main():
     process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
 
-    process.wait()
-    
-    # args_init = ['terrahub', 'apply', '-i', includ, '-a', '-y']
-    # process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-    # (result, error) = process.communicate()
+    rc = process.wait()
 
-    # process.wait()
+    if rc != 0:
+        print("Error: failed to execute command:")
+        raise Exception(error)
+    
+    args_init = ['terrahub', os.environ['command'], '-i', includ, '-a', '-y']
+    process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
+    (result, error) = process.communicate()
+
+    rc = process.wait()
+
+    if rc != 0:
+        print("Error: failed to execute command:")
+        raise Exception(error)
 
     args_output = ['terrahub', 'output', '-o', 'json', '-i', includ, '-y']
     process = subprocess.Popen(args_output, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
@@ -31,14 +39,12 @@ def main():
 
     if rc != 0:
         print("Error: failed to execute command:")
-        print(error)
-    
+        raise Exception(error)    
     
     response = {}
     for (key, val) in json.loads(result).items():
     	for (key_sub, val_sub) in val.items():
             response[key_sub]=val_sub['value']
-
 
     with open('output.json', 'wb') as json_file:
         json_file.write(json.dumps(response).encode("utf-8"))
