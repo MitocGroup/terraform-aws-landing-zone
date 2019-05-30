@@ -1,0 +1,43 @@
+component:
+  name: landing_zone
+  template:
+    data:
+      external:
+        landing_zone_output_file:
+          depends_on:
+            - null_resource.landing_zone
+          program:
+            - cat
+            - '${path.module}/output.json'
+    resource:
+      null_resource:
+        landing_zone:
+          triggers:
+            command: '${var.landing_zone_command}'
+            components: '${md5(jsonencode(var.landing_zone_components))}'
+            timestamp: '${timestamp()}'
+          provisioner:
+            - local-exec:
+                command: 'python ${local.component["path"]}/scripts/apply.py'
+                environment:
+                  root: '${local.project["path"]}'
+                  command: '${var.landing_zone_command}'
+                  components: '${jsonencode(var.landing_zone_components)}'
+    output:
+      landing_zone:
+        value: '${data.external.landing_zone_output_file.result}'
+    variable:
+      landing_zone_command:
+        type: string
+        default: run
+      landing_zone_components:
+        type: map
+    tfvars:
+      landing_zone_components:
+        landing_zone_organization: >-
+          gs://data-lake-terrahub/tfvars/terraform-aws-landing-zone/landing_zone_organization/default.tfvars
+    terraform:
+      backend:
+        local:
+          path: >-
+            /tmp/.terrahub/local_backend/terraform-google-project-landing_zone/landing_zone/terraform.tfstate

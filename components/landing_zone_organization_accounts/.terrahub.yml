@@ -20,14 +20,8 @@ component:
       - 'euliancom@yahoo.com'
     output:
       id:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.id}'
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
       thub_id:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.id}'
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
       arn:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.arn}'
-      joined_method:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.joined_method}'
-      joined_timestamp:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.joined_timestamp}'
-      status:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.status}'
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
