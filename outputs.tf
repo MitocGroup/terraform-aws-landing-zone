@@ -42,6 +42,18 @@ output "landing_zone_organization_roots" {
   value = "${module.sample.landing_zone["landing_zone_organization_roots"]}"
 }
 
+output "landing_zone_organization_unit_id" {
+  value = "${module.sample.landing_zone["landing_zone_organization_unit_id"]}"
+}
+
+output "landing_zone_organization_unit_arn" {
+  value = "${module.sample.landing_zone["landing_zone_organization_unit_arn"]}"
+}
+
+output "landing_zone_organization_unit_accounts" {
+  value = "${module.sample.landing_zone["landing_zone_organization_unit_accounts"]}"
+}
+
 output "landing_zone_code_pipeline_role_id" {
   value = "${module.sample.landing_zone["landing_zone_code_pipeline_role_id"]}"
 }
