@@ -1,5 +1,5 @@
 module "sample" {
-  source = "../../modules/landing_zone"
+  source = "./modules/landing_zone"
   landing_zone_components = {
       landing_zone_pipeline_s3_bucket = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
       landing_zone_pipeline_artifact_s3_bucket = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
