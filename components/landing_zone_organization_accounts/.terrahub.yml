@@ -1,0 +1,36 @@
+## local config
+component:
+  name: landing_zone_organization_accounts
+  dependsOn:
+    - ../landing_zone_organization
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization_accounts/terraform.tfstate    
+    data:
+      terraform_remote_state:
+        landing_zone_organization:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization/terraform.tfstate
+    resource:
+      aws_organizations_account:
+        landing_zone_organization_accounts:
+          count: '${length(var.landing_zone_organization_accounts_email)}'
+          name: '${element(var.landing_zone_organization_accounts_name, count.index)}'
+          email: '${element(var.landing_zone_organization_accounts_email, count.index)}'
+          parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
+    output:
+      id:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+      thub_id:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+      arn:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
+      landing_zone_organization_accounts_id:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+      landing_zone_organization_accounts_arn:
+        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'

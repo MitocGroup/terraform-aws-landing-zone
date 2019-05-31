@@ -1,0 +1,38 @@
+## local config
+component:
+  name: landing_zone_organization_unit
+  dependsOn:
+    - ../landing_zone_organization
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization_unit/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_organization:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization/terraform.tfstate
+    resource:
+      aws_organizations_organizational_unit:
+        landing_zone_organization_unit:
+          name: '${var.landing_zone_organization_unit_name}'
+          parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
+    output:
+      id:
+        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+      thub_id:
+        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+      arn:
+        value: '${aws_organizations_account.landing_zone_organization_unit.arn}'
+      accounts:
+        value: '${aws_organizations_account.landing_zone_organization_unit.accounts}'
+      landing_zone_organization_unit_id:
+        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+      landing_zone_organization_unit_arn:
+        value: '${aws_organizations_account.landing_zone_organization_unit.arn}'
+      landing_zone_organization_unit_accounts:
+        value: '${aws_organizations_account.landing_zone_organization_unit.accounts}'

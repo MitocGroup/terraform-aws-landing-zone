@@ -1,0 +1,13 @@
+version: 0.2
+
+run-as: root
+phases:
+  install:
+    commands:
+      - echo "Install"
+  pre_build:
+    commands:
+      - echo "Pre Build"
+  build:
+    commands:
+      - echo "Build"
