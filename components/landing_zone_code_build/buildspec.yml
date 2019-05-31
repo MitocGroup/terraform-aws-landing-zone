@@ -1,34 +1,13 @@
 version: 0.2
 
-#env:
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
 run-as: root
 phases:
   install:
     commands:
-      # - command
+      - echo "Install"
   pre_build:
     commands:
       - echo "Pre Build"
   build:
     commands:
       - echo "Build"
-    #post_build:
-    #commands:
-      # - command
-      # - command
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - paths
