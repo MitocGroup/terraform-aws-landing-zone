@@ -18,3 +18,7 @@ variable "account_id" {
   type = "string"
   description = "AWS account ID to prevent you from mistakenly using an incorrect one (and potentially end up destroying a live environment)."
 }
+
+variable "root_path" {
+  type = "string"
+}
