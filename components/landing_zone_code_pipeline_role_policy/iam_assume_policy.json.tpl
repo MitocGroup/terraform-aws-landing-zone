@@ -6,7 +6,7 @@
       "Action": [
           "s3:GetBucketVersioning"
       ],
-      Resource: [
+      "Resource": [
         "${s3_bucket_arn}"
         "${artifact_s3_bucket_arn}"
       ]
@@ -18,7 +18,7 @@
           "s3:GetObject",
           "s3:GetObjectVersion"
       ],
-      Resource: [
+      "Resource": [
         "${s3_bucket_arn}"
         "${artifact_s3_bucket_arn}"
       ]
@@ -32,7 +32,7 @@
           "ssm:GetParametersByPath",
           "ssm:DescribeParameters"
       ],
-      Resource: "*"
+      "Resource": "*"
     },
     {
       "Effect": "Allow",
@@ -43,7 +43,7 @@
           "codecommit:GetUploadArchiveStatus",
           "codecommit:CancelUploadArchive"
       ],
-      Resource: "*"
+      "Resource": "*"
     },
     {
       "Effect": "Allow",
@@ -51,7 +51,7 @@
           "lambda:ListFunctions",
           "lambda:ListVersionsByFunction"
       ],
-      Resource: "*"
+      "Resource": "*"
     } 
   ]
 }

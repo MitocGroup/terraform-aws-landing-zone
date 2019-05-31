@@ -12,6 +12,8 @@ module "sample" {
       landing_zone_organization = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
       landing_zone_organization_accounts = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
       landing_zone_organization_unit = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
+      landing_zone_organization_policy = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
+      landing_zone_organization_policy_attachment = "s3://{BUCKET NAME}/{BUCKET KEY}/default.tfvars"
   }
   region = "us-east-1"
   account_id = "123456789012"

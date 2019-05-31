@@ -8,7 +8,7 @@
           "logs:CreateLogStream",
           "logs:PutLogEvents"
       ],
-      Resource: "arn:aws:logs:${region}:${account_id}:log-group:/aws/codebuild/*"
+      "Resource": "arn:aws:logs:${region}:${account_id}:log-group:/aws/codebuild/*"
     },
     {
       "Effect": "Allow",
@@ -17,14 +17,14 @@
           "s3:GetObjectVersion",
           "s3:DeleteObject"
       ],
-      Resource: "${artifact_s3_bucket_arn}"
+      "Resource": "${artifact_s3_bucket_arn}"
     },
     {
       "Effect": "Allow",
       "Action": [
           "s3:GetObject"
       ],
-      Resource: "arn:aws:s3:::solutions-reference/*"
+      "Resource": "arn:aws:s3:::solutions-reference/*"
     },
     {
       "Effect": "Allow",
@@ -33,7 +33,7 @@
           "ssm:GetParametersByPath",
           "ssm:DescribeParameters"
       ],
-      Resource: "*"
+      "Resource": "*"
     }     
   ]
 }

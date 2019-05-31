@@ -1,2 +1,2 @@
-# landing_zone_organization_accounts
+# landing_zone_organization_unit
 Component for AWS Landing Zone
