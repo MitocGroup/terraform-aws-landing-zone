@@ -1,5 +1,5 @@
-region = "us-east-1"
 account_id = "123456789012"
+region = "us-east-1"
 landing_zone_components = {
   landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/example/landing_zone_pipeline_s3_bucket/default.tfvars"
   landing_zone_pipeline_artifact_s3_bucket = "s3://terraform-aws-landing-zone/example/landing_zone_pipeline_artifact_s3_bucket/default.tfvars"
