@@ -48,17 +48,20 @@ This terraform module at this point in time covers only Multi-Account Structure:
 Based on above architecture, the list of available components is:
 * Two Amazon S3 buckets for [manifest files](components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L12) and [artifacts](components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L12)
 * AWS CodePipeline [configuration](components/landing_zone_code_pipeline/.terrahub.yml#L39) for continuous delivery
-* AWS CodeBuild [configuration](components/landing_zone_code_build/.terrahub.yml#L26) for building artifacts
-* AWS Organization [account](components/landing_zone_organization/.terrahub.yml#L11) and [multi-accounts setup](components/landing_zone_organization_accounts/.terrahub.yml#L21)
+* AWS CodeBuild [configuration](components/landing_zone_code_build/.terrahub.yml#L27) for building artifacts
+* AWS Organization [account](components/landing_zone_organization/.terrahub.yml#L12) and [multi-accounts setup](components/landing_zone_organization_accounts/.terrahub.yml#L21)
 
 ### Account Vending Machine
-![AWS Landing Zone Architecture](docs/aws-landing-zone-account-vending-machine.png)
 Coming soon...
+
+![AWS Landing Zone Architecture](docs/aws-landing-zone-account-vending-machine.png)
 
 ### User Access and Identity Management
-![AWS Landing Zone Architecture](docs/aws-landing-zone-user-access.png)
 Coming soon...
 
+![AWS Landing Zone Architecture](docs/aws-landing-zone-user-access.png)
+
 ### Monitoring and Notifications
-![AWS Landing Zone Architecture](docs/aws-landing-zone-notifications.png)
 Coming soon...
+
+![AWS Landing Zone Architecture](docs/aws-landing-zone-notifications.png)
