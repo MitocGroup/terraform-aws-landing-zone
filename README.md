@@ -32,14 +32,14 @@ module "sample" {
 
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:
-1. Multi-Account Structure
+1. [Multi-Account Structure](#multi-account-structure)
    * AWS Organization account
    * Shared Services account
    * Log Archive account
    * Security account
-2. Account Vending Machine
-3. User Access and Identity Management
-4. Monitoring and Notifications
+2. [Account Vending Machine](#account-vending-machine)
+3. [User Access and Identity Management](#user-access-and-identity-management)
+4. [Monitoring and Notifications](#monitoring-and-notifications)
 
 ### Multi-Account Structure
 This terraform module at this point in time covers only Multi-Account Structure:
@@ -52,13 +52,13 @@ Based on above architecture, the list of available components is:
 * AWS Organization [account](tree/master/components/landing_zone_organization/.terrahub.yml) and [multi-accounts setup](tree/master/components/landing_zone_organization_accounts/.terrahub.yml)
 
 ### Account Vending Machine
-Coming soon...
 ![AWS Landing Zone Architecture](docs/aws-landing-zone-account-vending-machine.png)
+Coming soon...
 
 ### User Access and Identity Management
-Coming soon...
 ![AWS Landing Zone Architecture](docs/aws-landing-zone-user-access.png)
+Coming soon...
 
 ### Monitoring and Notifications
+![AWS Landing Zone Architecture](docs/aws-landing-zone-notifications.png)
 Coming soon...
-![AWS Landing Zone Architecture](docs/aws-landing-zone-nnotifications.png)
