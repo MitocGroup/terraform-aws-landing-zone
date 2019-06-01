@@ -46,10 +46,10 @@ This terraform module at this point in time covers only Multi-Account Structure:
 ![AWS Landing Zone Architecture](docs/aws-landing-zone-architecture.png)
 
 Based on above architecture, the list of available components is:
-* Two Amazon S3 buckets for [manifest files](components/landing_zone_pipeline_s3_bucket/.terrahub.yml) and [artifacts](components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml)
-* AWS CodePipeline [configuration](components/landing_zone_code_pipeline/.terrahub.yml) for continuous delivery
-* AWS CodeBuild [configuration](components/landing_zone_code_build/.terrahub.yml) for building artifacts
-* AWS Organization [account](components/landing_zone_organization/.terrahub.yml) and [multi-accounts setup](components/landing_zone_organization_accounts/.terrahub.yml)
+* Two Amazon S3 buckets for [manifest files](components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L12) and [artifacts](components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L12)
+* AWS CodePipeline [configuration](components/landing_zone_code_pipeline/.terrahub.yml#L39) for continuous delivery
+* AWS CodeBuild [configuration](components/landing_zone_code_build/.terrahub.yml#L26) for building artifacts
+* AWS Organization [account](components/landing_zone_organization/.terrahub.yml#L11) and [multi-accounts setup](components/landing_zone_organization_accounts/.terrahub.yml#L21)
 
 ### Account Vending Machine
 ![AWS Landing Zone Architecture](docs/aws-landing-zone-account-vending-machine.png)
