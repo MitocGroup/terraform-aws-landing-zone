@@ -1,0 +1,33 @@
+## local config
+component:
+  name: landing_zone_pipeline_artifact_s3_bucket
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
+    resource:
+      aws_s3_bucket:
+        landing_zone_pipeline_artifact_s3_bucket:
+          bucket: '${var.landing_zone_pipeline_artifact_s3_bucket_name}'
+          versioning:
+            enabled: '${var.landing_zone_pipeline_artifact_s3_bucket_versioning}'
+          server_side_encryption_configuration:
+            rule:
+              apply_server_side_encryption_by_default:
+                sse_algorithm: '${var.landing_zone_pipeline_artifact_s3_bucket_sse_algorithm}'
+    output:
+      id:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.id}'
+      thub_id:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.id}'
+      arn:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.arn}'
+      bucket:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.bucket}'
+      landing_zone_pipeline_artifact_s3_bucket_id:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.id}'
+      landing_zone_pipeline_artifact_s3_bucket_arn:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.arn}'
+      landing_zone_pipeline_artifact_s3_bucket_bucket:
+        value: '${aws_s3_bucket.landing_zone_pipeline_artifact_s3_bucket.bucket}'

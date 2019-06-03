@@ -1,0 +1,29 @@
+## local config
+component:
+  name: landing_zone_organization_policy_attachment
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_organization_policy_attachment/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_organization_unit:
+          backend: local
+          config:
+            path: ${local.component["local"]}/landing_zone_organization_unit/terraform.tfstate
+        landing_zone_organization_policy:
+          backend: local
+          config:
+            path: ${local.component["local"]}/landing_zone_organization_policy/terraform.tfstate
+    resource:
+      aws_organizations_policy_attachment:
+        landing_zone_organization_policy_attachment:
+          policy_id: '${data.terraform_remote_state.landing_zone_organization_policy.id}'
+          target_id: '${data.terraform_remote_state.landing_zone_organization_unit.id}'
+    output:
+      id:
+        value: '${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}'
+      thub_id:
+        value: '${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}'
+

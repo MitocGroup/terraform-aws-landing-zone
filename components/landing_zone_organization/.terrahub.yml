@@ -1,0 +1,29 @@
+## local config
+component:
+  name: landing_zone_organization
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_organization/terraform.tfstate
+    resource:
+      aws_organizations_organization:
+        landing_zone_organization:
+          aws_service_access_principals: '${var.landing_zone_organization_service_access_principals}'
+          enabled_policy_types: '${var.landing_zone_organization_enabled_policy_types}'
+          feature_set: '${var.landing_zone_organization_feature_set}'
+    output:
+      id:
+        value: '${aws_organizations_organization.landing_zone_organization.id}'
+      thub_id:
+        value: '${aws_organizations_organization.landing_zone_organization.id}'
+      accounts:
+        value: '${aws_organizations_organization.landing_zone_organization.accounts}'
+      roots:
+        value: '${aws_organizations_organization.landing_zone_organization.roots}'
+      landing_zone_organization_id:
+        value: '${aws_organizations_organization.landing_zone_organization.id}'
+      landing_zone_organization_accounts:
+        value: '${aws_organizations_organization.landing_zone_organization.accounts}'
+      landing_zone_organization_roots:
+        value: '${aws_organizations_organization.landing_zone_organization.roots}'
