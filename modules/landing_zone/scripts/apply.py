@@ -10,7 +10,12 @@ def main():
         args = ['terrahub', 'configure', '-i', k, '-c', "terraform.varFile[0]=" + str(v)]
         subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     includ = ','.join(includ)
+    if terrahubInit(includ):
+        if terrahubRun(includ):
+            return terrahubOutput(includ)
 
+
+def terrahubInit(includ):
     args_init = ['terrahub', 'init', '-i', includ]
     process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
@@ -21,6 +26,9 @@ def main():
         print("Error: failed to execute command:")
         raise Exception(error)
     
+    return True
+
+def terrahubRun(includ):    
     args_init = ['terrahub', os.environ['command'], '-i', includ, '-a', '-y']
     process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
@@ -30,7 +38,10 @@ def main():
     if rc != 0:
         print("Error: failed to execute command:")
         raise Exception(error)
+    
+    return True
 
+def terrahubOutput(includ):
     args_output = ['terrahub', 'output', '-o', 'json', '-i', includ, '-y']
     process = subprocess.Popen(args_output, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
