@@ -1,3 +1,4 @@
+## local config
 component:
   name: landing_zone_pipeline_s3_bucket
   template:
