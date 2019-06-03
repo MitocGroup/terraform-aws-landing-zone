@@ -7,7 +7,7 @@ def main():
     include = []
     for (k, v) in components.items():
         include.append(k)
-        args_add_delete = ['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y']
+        args_add_delete = ['terrahub', 'configure', '-i', k, '-c', 'terraform', '--delete', '-y']
         process = subprocess.Popen(args_add_delete, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
         (result, error) = process.communicate()
         rc = process.wait()
