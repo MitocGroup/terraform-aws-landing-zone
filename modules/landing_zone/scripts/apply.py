@@ -4,19 +4,19 @@ import subprocess
 
 def main():
     components = eval(os.environ['components'])
-    includ = []
+    include = []
     for (k, v) in components.items():
-        includ.append(k)
+        include.append(k)
         args = ['terrahub', 'configure', '-i', k, '-c', "terraform.varFile[0]=" + str(v)]
         subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-    includ = ','.join(includ)
-    if terrahubInit(includ):
-        if terrahubRun(includ):
-            return terrahubOutput(includ)
+    include = ','.join(include)
+    if terrahubInit(include):
+        if terrahubRun(include):
+            return terrahubOutput(include)
 
 
-def terrahubInit(includ):
-    args_init = ['terrahub', 'init', '-i', includ]
+def terrahubInit(include):
+    args_init = ['terrahub', 'init', '-i', include]
     process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
 
@@ -28,8 +28,8 @@ def terrahubInit(includ):
     
     return True
 
-def terrahubRun(includ):    
-    args_init = ['terrahub', os.environ['command'], '-i', includ, '-a', '-y']
+def terrahubRun(include):    
+    args_init = ['terrahub', os.environ['command'], '-i', include, '-a', '-y']
     process = subprocess.Popen(args_init, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
 
@@ -41,8 +41,8 @@ def terrahubRun(includ):
     
     return True
 
-def terrahubOutput(includ):
-    args_output = ['terrahub', 'output', '-o', 'json', '-i', includ, '-y']
+def terrahubOutput(include):
+    args_output = ['terrahub', 'output', '-o', 'json', '-i', include, '-y']
     process = subprocess.Popen(args_output, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = process.communicate()
 
