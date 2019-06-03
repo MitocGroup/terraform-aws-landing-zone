@@ -7,15 +7,13 @@ component:
     terraform:
       backend:
         local:
-          path: >-
-            /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization_accounts/terraform.tfstate    
+          path: ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_organization:
           backend: local
           config:
-            path: >-
-              /tmp/.terrahub/local_backend/terraform-aws-landing-zone/landing_zone_organization/terraform.tfstate
+            path: ${local.component["local"]}/landing_zone_organization/terraform.tfstate
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
