@@ -1,4 +1,3 @@
-## local config
 component:
   name: landing_zone_pipeline_s3_bucket
   template:
@@ -9,7 +8,7 @@ component:
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_s3_bucket:
-          bucket: '${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}'
+          bucket: ${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}
           versioning:
             enabled: '${var.landing_zone_pipeline_s3_bucket_versioning}'
     output:
