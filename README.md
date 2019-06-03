@@ -10,11 +10,11 @@ solution based on input list of `.tfvars` files.
 Based on terraform's [standard module structure](
 https://www.terraform.io/docs/modules/index.html#standard-module-structure)
 guidelines, this repository contains the following folders:
-* [root](tree/master) - module's standard terraform configuration
-* [components](tree/master/components) - yaml-based and terraform compatible configurations
-* [examples](tree/master/examples) - different ways to combine components as part of this module
-* [modules](tree/master/modules) - standalone, reusable and production-ready module
-* [tests](tree/master/tests) - set of automated tests to use in CI/CD pipelines
+* root folder - module's standard terraform configuration
+* [components](components/) - yaml-based and terraform compatible configurations
+* [examples](examples/) - different ways to combine components as part of this module
+* [modules](modules/) - standalone, reusable and production-ready module
+* [tests](tests/) - set of automated tests to use in CI/CD pipelines
 
 To get started, simply include `main.tf` into your codebase:
 ```hcl
