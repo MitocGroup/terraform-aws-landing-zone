@@ -15,7 +15,7 @@ guidelines, this repository contains the following folders:
 * [modules](./modules/) - standalone, reusable and production-ready module
 * [tests](./tests/) - set of automated tests to use in CI/CD pipelines
 
-This terraform module requires to the following dependencies:
+This terraform module requires the following dependencies:
 * [python](https://www.python.org) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L22)
 * [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L21)
 
