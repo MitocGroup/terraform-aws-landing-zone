@@ -1,16 +1,15 @@
+## local config
 component:
   name: landing_zone_pipeline_s3_bucket
   template:
     terraform:
       backend:
         local:
-          path: >-
-            ${local.component["local"]}/landing_zone_pipeline_s3_bucket/terraform.tfstate
+          path: ${local.component["local"]}/landing_zone_pipeline_s3_bucket/terraform.tfstate
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_s3_bucket:
-          bucket: >-
-            ${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}
+          bucket: '${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}'
           versioning:
             enabled: '${var.landing_zone_pipeline_s3_bucket_versioning}'
     output:
