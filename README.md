@@ -10,10 +10,10 @@ solution based on input list of `.tfvars` files.
 Based on terraform's [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
 guidelines, this repository contains the following folders:
 * root folder - module's standard terraform configuration
-* [components](./components/) - yaml-based and terraform compatible configurations
-* [examples](./examples/) - different ways to combine components as part of this module
-* [modules](./modules/) - standalone, reusable and production-ready module
-* [tests](./tests/) - set of automated tests to use in CI/CD pipelines
+* [components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
+* [examples](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
+* [modules](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules) - standalone, reusable and production-ready module
+* [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
 * [python](https://www.python.org) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L22)
@@ -46,25 +46,25 @@ AWS Landing Zone solution is defined by the following strategy:
 
 ### Multi-Account Structure
 This terraform module at this point in time covers only Multi-Account Structure:
-![AWS Landing Zone Architecture](./docs/aws-landing-zone-architecture.png)
+![AWS Landing Zone Architecture](https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png)
 
 Based on above architecture, the list of available components is:
-* Two Amazon S3 buckets for [manifest files](./components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L12) and [artifacts](./components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L12)
-* AWS CodePipeline [configuration](./components/landing_zone_code_pipeline/.terrahub.yml#L39) for continuous delivery
-* AWS CodeBuild [configuration](./components/landing_zone_code_build/.terrahub.yml#L27) for building artifacts
-* AWS Organization [account](./components/landing_zone_organization/.terrahub.yml#L12) and [multi-accounts setup](./components/landing_zone_organization_accounts/.terrahub.yml#L21)
+* Two Amazon S3 buckets for [manifest files](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L12) and [artifacts](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L12)
+* AWS CodePipeline [configuration](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L39) for continuous delivery
+* AWS CodeBuild [configuration](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build/.terrahub.yml#L27) for building artifacts
+* AWS Organization [account](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization/.terrahub.yml#L12) and [multi-accounts setup](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_accounts/.terrahub.yml#L21)
 
 ### Account Vending Machine
 Coming soon...
 
-![AWS Landing Zone Architecture](./docs/aws-landing-zone-account-vending-machine.png)
+![AWS Landing Zone Architecture](https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png)
 
 ### User Access and Identity Management
 Coming soon...
 
-![AWS Landing Zone Architecture](./docs/aws-landing-zone-user-access.png)
+![AWS Landing Zone Architecture](https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png)
 
 ### Monitoring and Notifications
 Coming soon...
 
-![AWS Landing Zone Architecture](./docs/aws-landing-zone-notifications.png)
+![AWS Landing Zone Architecture](https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png)
