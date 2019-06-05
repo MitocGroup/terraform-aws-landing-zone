@@ -36,10 +36,10 @@ module "sample" {
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:
 1. [Multi-Account Structure](#multi-account-structure)
-    * AWS Organization account
-    * Shared Services account
-    * Log Archive account
-    * Security account
+    * AWS Organization Account
+    * Shared Services Account
+    * Log Archive Account
+    * Security Account
 2. [Account Vending Machine](#account-vending-machine)
 3. [User Access and Identity Management](#user-access-and-identity-management)
 4. [Monitoring and Notifications](#monitoring-and-notifications)
