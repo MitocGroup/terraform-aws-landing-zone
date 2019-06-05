@@ -1,4 +1,4 @@
-module "example-create-s3-and-codepipeline" {
+module "example_create_s3_and_codepipeline" {
   source = "../../modules/landing_zone"
   landing_zone_components = {
       landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/example/landing_zone_pipeline_s3_bucket/default.tfvars"

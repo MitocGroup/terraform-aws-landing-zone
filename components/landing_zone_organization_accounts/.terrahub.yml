@@ -22,13 +22,13 @@ component:
           email: '${element(var.landing_zone_organization_accounts_email, count.index)}'
           parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
     output:
-      id:
+      ids:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
-      thub_id:
+      thub_ids:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
-      arn:
+      arns:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
-      landing_zone_organization_accounts_id:
+      landing_zone_organization_accounts_ids:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
-      landing_zone_organization_accounts_arn:
+      landing_zone_organization_accounts_arns:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
