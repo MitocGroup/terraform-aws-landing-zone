@@ -21,7 +21,7 @@ This terraform module requires the following dependencies:
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
-module "sample" {
+module "landing_zone" {
   source     = "TerraHubCorp/landing-zone/aws"
   version    = "0.0.3"
   root_path  = "${path.module}"
