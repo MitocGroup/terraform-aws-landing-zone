@@ -15,7 +15,7 @@ guidelines, this repository contains the following folders:
 * [modules](./modules/) - standalone, reusable and production-ready module
 * [tests](./tests/) - set of automated tests to use in CI/CD pipelines
 
-This terraform module requires to the following dependencies:
+This terraform module requires the following dependencies:
 * [python](https://www.python.org) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L22)
 * [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L21)
 
@@ -36,10 +36,10 @@ module "sample" {
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:
 1. [Multi-Account Structure](#multi-account-structure)
-    * AWS Organization account
-    * Shared Services account
-    * Log Archive account
-    * Security account
+    * AWS Organization Account
+    * Shared Services Account
+    * Log Archive Account
+    * Security Account
 2. [Account Vending Machine](#account-vending-machine)
 3. [User Access and Identity Management](#user-access-and-identity-management)
 4. [Monitoring and Notifications](#monitoring-and-notifications)
