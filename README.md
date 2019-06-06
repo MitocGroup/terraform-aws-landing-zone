@@ -32,6 +32,24 @@ module "landing_zone" {
 ```
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
 
+To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
+```
+account_id = "123456789012"
+region = "us-east-1"
+landing_zone_components = {
+  landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
+  [...]
+}
+
+```
+
+This means that when you use this terraform module, you will need to:
+1. Change `account_id` and `region` to values that correspond to your AWS Organization
+2. Change `landing_zone_components` to values that fit your AWS Landing Zone use case
+    * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
+    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3
+3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files
+
 
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:
