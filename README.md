@@ -50,6 +50,8 @@ This means that when you use this terraform module, you will need to:
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3
 3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files
 
+> NOTE: This module can have tens, hundreds or thousands of components. At runtime, components that are not part of `landing_zone_components` map will be ignored.
+
 
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:
