@@ -29,7 +29,7 @@ resource "null_resource" "landing_zone_destroy" {
   depends_on = ["null_resource.landing_zone_apply"]
 
   triggers = {
-    components = "${md5(jsonencode(var.landing_zone_components))}"
+    components = "any component (or all components)"
   }
 
   provisioner "local-exec" {
