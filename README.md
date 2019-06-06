@@ -16,14 +16,14 @@ guidelines, this repository contains the following folders:
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
-* [python](https://www.python.org) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L22)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L21)
+* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L33)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L34)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.3"
+  version    = "0.0.4"
   root_path  = "${path.module}"
   account_id = "${var.account_id}"
   region     = "${var.region}"
@@ -33,7 +33,7 @@ module "landing_zone" {
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
-```
+```hcl
 account_id = "123456789012"
 region = "us-east-1"
 landing_zone_components = {
@@ -107,5 +107,3 @@ Based on the user access architecture, here below are currently available compon
 
 Based on the notifications architecture, here below are currently available components:
 1. Coming soon ...
-
-<br clear="right" />
