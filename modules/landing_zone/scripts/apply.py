@@ -18,7 +18,7 @@ def main():
     processes.append(['terrahub', 'init', '-i', include])
     processes.append(['terrahub', os.environ['command'], '-i', include, '-y'])
     processes.append(['terrahub', 'output', '-o', 'json', '-i', include, '-y'])
-    return terrahubOutput(exec(processes))
+    return terrahubOutput(execWithErrors(processes))
 
 def terrahubOutput(result):
     response = {}
@@ -37,7 +37,7 @@ def terrahubOutput(result):
 
     return 'Success'
 
-def exec(args_list):
+def execWithErrors(args_list):
     result = ''
     for args in args_list:
         p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
