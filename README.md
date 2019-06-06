@@ -33,7 +33,7 @@ module "landing_zone" {
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
-```
+```hcl
 account_id = "123456789012"
 region = "us-east-1"
 landing_zone_components = {
