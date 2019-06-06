@@ -1,0 +1,40 @@
+## local config
+component:
+  name: landing_zone_subnet_private
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+    resource:
+      aws_subnet:
+        landing_zone_subnet_private:
+          count: '${length(var.landing_zone_subnet_private_cidr_block)}'
+          vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
+          cidr_block: '${element(var.landing_zone_subnet_private_cidr_block, count.index)}'
+          availability_zone: '${element(var.availability_zones, count.index)}'
+          tags: ${merge(var.landing_zone_subnet_private_tags, map("Name", "Landing Zone Subnet Private ${element(var.availability_zones, count.index)}"))}
+          assign_ipv6_address_on_creation: '${var.landing_zone_subnet_private_assign_ipv6_address_on_creation}'
+    output:
+      ids:
+        value: '${aws_subnet.landing_zone_subnet_private.*.id}'
+      thub_ids:
+        value: '${aws_subnet.landing_zone_subnet_private.*.id}'
+      availability_zone_ids:
+        value: '${aws_subnet.landing_zone_subnet_private.*.availability_zone_id}'
+      arns:
+        value: '${aws_subnet.landing_zone_subnet_private.*.arn}'
+      landing_zone_subnet_private_ids:
+        value: '${aws_subnet.landing_zone_subnet_private.*.id}'
+      landing_zone_subnet_private_availability_zone_ids:
+        value: '${aws_subnet.landing_zone_subnet_private.*.availability_zone_id}'
+      landing_zone_subnet_private_arns:
+        value: '${aws_subnet.landing_zone_subnet_private.*.arn}'

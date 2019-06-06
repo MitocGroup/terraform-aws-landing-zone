@@ -67,9 +67,9 @@ AWS Landing Zone solution is defined by the following strategy:
 > NOTE: This terraform module at this point in time covers only Multi-Account Structure.
 
 ### Multi-Account Structure
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Architecture" />
 
-Based on the multi-account architecture, here below are currently available components:
+Based on the multi-account architecture, the list of available components is:
 1. [landing_zone_pipeline_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L11)
 2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L11)
 3. [landing_zone_code_pipeline](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L34)
@@ -87,25 +87,25 @@ Based on the multi-account architecture, here below are currently available comp
 <br clear="right" />
 
 ### Account Vending Machine
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine Architecture" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine" />
 
-Based on the account vending machine architecture, here below are currently available components:
+Based on the account vending machine architecture, the list of available components is:
 1. Coming soon ...
 
 <br clear="right" />
 
 ### User Access and Identity Management
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access and Identity Management Architecture" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access" />
 
-Based on the user access architecture, here below are currently available components:
+Based on the user access architecture, the list of available components is:
 1. Coming soon ...
 
 <br clear="right" />
 
 ### Monitoring and Notifications
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone Monitoring and Notifications Architecture" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone User Access" />
 
-Based on the notifications architecture, here below are currently available components:
+Based on the notifications architecture, the list of available components is:
 1. Coming soon ...
 
 <br clear="right" />

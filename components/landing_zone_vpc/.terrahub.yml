@@ -1,0 +1,30 @@
+## local config
+component:
+  name: landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+    resource:
+      aws_vpc:
+        landing_zone_vpc:
+          cidr_block: '${var.landing_zone_vpc_cidr_block}'
+          tags: '${var.landing_zone_vpc_tags}'
+          instance_tenancy: '${var.landing_zone_vpc_instance_tenancy}'
+          enable_dns_support: '${var.landing_zone_vpc_enable_dns_support}'
+          assign_generated_ipv6_cidr_block: '${var.landing_zone_vpc_assign_generated_ipv6_cidr_block}'
+          enable_classiclink: '${var.landing_zone_vpc_enable_classiclink}'
+          enable_dns_hostnames: '${var.landing_zone_vpc_enable_dns_hostnames}'
+          enable_classiclink_dns_support: '${var.landing_zone_vpc_enable_classiclink_dns_support}'
+    output:
+      id:
+        value: '${aws_vpc.landing_zone_vpc.id}'
+      thub_id:
+        value: '${aws_vpc.landing_zone_vpc.id}'
+      arn:
+        value: '${aws_vpc.landing_zone_vpc.arn}'
+      landing_zone_vpc_id:
+        value: '${aws_vpc.landing_zone_vpc.id}'
+      landing_zone_vpc_arn:
+        value: '${aws_vpc.landing_zone_vpc.arn}'

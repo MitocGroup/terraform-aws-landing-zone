@@ -117,3 +117,83 @@ output "landing_zone_code_build_arn" {
   value = "${module.landing-zone.landing_zone["landing_zone_code_build_arn"]}"
   description = "The ARN of the CodeBuild project."
 }
+
+output "landing_zone_vpc_id" {
+  value = "${module.landing-zone.landing_zone["landing_zone_vpc_id"]}"
+  description = "The ID of the VPC."
+}
+
+output "landing_zone_vpc_arn" {
+  value = "${module.landing-zone.landing_zone["landing_zone_vpc_arn"]}"
+  description = "The ARN of the VPC."
+}
+
+output "landing_zone_subnet_private_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_private_ids"]}"
+  description = "The ID's of the Subnet Private."
+}
+
+output "landing_zone_subnet_private_availability_zone_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_private_availability_zone_ids"]}"
+  description = "The Availability Zone ID's of the Subnet Private."
+}
+
+output "landing_zone_subnet_private_arns" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_private_arns"]}"
+  description = "The ARN's of the Subnet Private."
+}
+
+output "landing_zone_subnet_public_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_public_ids"]}"
+  description = "The ID's of the Subnet Public."
+}
+
+output "landing_zone_subnet_public_availability_zone_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_public_availability_zone_ids"]}"
+  description = "The Availability Zone ID's of the Subnet Public."
+}
+
+output "landing_zone_subnet_public_arns" {
+  value = "${module.landing-zone.landing_zone["landing_zone_subnet_public_arns"]}"
+  description = "The ARN's of the Subnet Public."
+}
+
+output "landing_zone_eip_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_eip_ids"]}"
+  description = "The ID's of the EIP."
+}
+
+output "landing_zone_eip_public_ips" {
+  value = "${module.landing-zone.landing_zone["landing_zone_eip_public_ips"]}"
+  description = "The Public IP's of the EIP."
+}
+
+output "landing_zone_nat_gateway_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_nat_gateway_ids"]}"
+  description = "The ID's of the Nat Gateway."
+}
+
+output "landing_zone_nat_gateway_network_interface_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_nat_gateway_network_interface_ids"]}"
+  description = "The Network interface ID's of the Nat Gateway."
+}
+
+output "landing_zone_internet_gateway_id" {
+  value = "${module.landing-zone.landing_zone["landing_zone_internet_gateway_id"]}"
+  description = "The ID's of the Internet Gateway."
+}
+
+output "landing_zone_route_table_id" {
+  value = "${module.landing-zone.landing_zone["landing_zone_route_table_id"]}"
+  description = "The ID's of the Route Table."
+}
+
+output "landing_zone_route_table_association_ids" {
+  value = "${module.landing-zone.landing_zone["landing_zone_route_table_association_ids"]}"
+  description = "The ID's of the Route Table Association."
+}
+
+output "landing_zone_route_id" {
+  value = "${module.landing-zone.landing_zone["landing_zone_route_id"]}"
+  description = "The ID's of the Route."
+}
