@@ -12,7 +12,7 @@ def main():
     include = []
     for (k, v) in components.items():
         include.append(k)
-        exeWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
+        execWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
         processes.append(['terrahub', 'configure', '-i', k, '-c', 'terraform.varFile[0]=' + str(v)])
     include = ','.join(include)
     processes.append(['terrahub', 'init', '-i', include])
