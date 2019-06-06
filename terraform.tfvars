@@ -14,4 +14,13 @@ landing_zone_components = {
   landing_zone_organization_unit = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization_unit/default.tfvars"
   landing_zone_organization_policy = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization_policy/default.tfvars"
   landing_zone_organization_policy_attachment = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization_policy_attachment/default.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
+  landing_zone_subnet_private = "s3://terraform-aws-landing-zone/mycompany/landing_zone_subnet_private/default.tfvars"
+  landing_zone_subnet_public = "s3://terraform-aws-landing-zone/mycompany/landing_zone_subnet_public/default.tfvars"
+  landing_zone_eip = "s3://terraform-aws-landing-zone/mycompany/landing_zone_eip/default.tfvars"
+  landing_zone_nat_gateway = "s3://terraform-aws-landing-zone/mycompany/landing_zone_nat_gateway/default.tfvars"
+  landing_zone_internet_gateway = "s3://terraform-aws-landing-zone/mycompany/landing_zone_internet_gateway/default.tfvars"
+  landing_zone_route_table = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route_table/default.tfvars"
+  landing_zone_route_table_association = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route_table_association/default.tfvars"
+  landing_zone_route = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route/default.tfvars"
 }

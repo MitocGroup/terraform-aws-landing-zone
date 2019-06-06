@@ -1,24 +1,18 @@
-## project config
 project:
-  name: 'terraform-aws-landing-zone'
-  code: 'eef16dcf'
+  name: terraform-aws-landing-zone
+  code: eef16dcf
   include:
-    - '.'
+    - .
   exclude:
     - '**/.terraform/**'
     - '**/node_modules/**'
     - '**/.git/**'
-
-## terraform config
 terraform:
   varFile:
-    - 'default.tfvars'
-
+    - default.tfvars
 template:
   provider:
     aws:
       region: '${var.region}'
-      allowed_account_ids: ['${var.account_id}']
-  tfvars:
-    region: us-east-1
-    account_id: 123456789012
+      allowed_account_ids:
+        - '${var.account_id}'
