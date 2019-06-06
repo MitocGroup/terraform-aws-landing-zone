@@ -25,10 +25,7 @@ def terrahubOutput(result):
 
     for (key, val) in json.loads(result).items():
         for (key_sub, val_sub) in val.items():
-            if type(val_sub['value']) == str:
-                response[key_sub]=val_sub['value']
-            else:
-                response[key_sub]=marshal.dumps(val_sub['value'])
+            response[key_sub]=marshal.dumps(val_sub['value'])
 
     output_file_path = os.path.join(os.environ['root'], 'output.json')
     open(output_file_path, 'a').close()
