@@ -9,8 +9,8 @@ def main():
     for (k, v) in components.items():
         include.append(k)
     include = ','.join(include)
-    args = ['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore']
-    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
+    args_to_destroy = ['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore']
+    p = subprocess.Popen(args_to_destroy, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = p.communicate()
     if p.wait() != 0:
         print("Error: failed to execute command:")

@@ -46,8 +46,8 @@ def execWithErrors(args_list):
     return result
 
 
-def execWithoutErrors(args):
-    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
+def execWithoutErrors(args_list):
+    p = subprocess.Popen(args_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
     (result, error) = p.communicate()
     if p.wait() != 0:
         print("Error: failed to execute command:")
