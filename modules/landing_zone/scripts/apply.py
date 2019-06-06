@@ -1,16 +1,19 @@
 import os
 import json
 import subprocess
+import marshal
 
 def main():
     components = eval(os.environ['components'])
     processes = []
+    processes.append(['terrahub', 'configure', '-c', 'template.tfvars.region=' + os.environ['region']])
+    processes.append(['terrahub', 'configure', '-c', 'template.tfvars.account_id=' + os.environ['account_id']])
 
     include = []
     for (k, v) in components.items():
         include.append(k)
         exeWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
-        processes.append(['terrahub', 'configure', '-i', k, '-c', "terraform.varFile[0]=" + str(v)])
+        processes.append(['terrahub', 'configure', '-i', k, '-c', 'terraform.varFile[0]=' + str(v)])
     include = ','.join(include)
     processes.append(['terrahub', 'init', '-i', include])
     processes.append(['terrahub', os.environ['command'], '-i', include, '-y'])
@@ -22,7 +25,10 @@ def terrahubOutput(result):
 
     for (key, val) in json.loads(result).items():
         for (key_sub, val_sub) in val.items():
-            response[key_sub]=val_sub['value']
+            if type(val_sub['value']) == str:
+                response[key_sub]=val_sub['value']
+            else:
+                response[key_sub]=marshal.dumps(val_sub['value'])
 
     output_file_path = os.path.join(os.environ['root'], 'output.json')
     open(output_file_path, 'a').close()

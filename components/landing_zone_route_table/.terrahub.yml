@@ -1,0 +1,28 @@
+## local config
+component:
+  name: landing_zone_route_table
+  dependsOn: ['../landing_zone_vpc']
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+    resource:
+      aws_route_table:
+        landing_zone_route_table:
+          vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
+          tags: '${var.landing_zone_route_table_tags}'
+          propagating_vgws: '${var.landing_zone_route_table_propagating_vgws}'
+    output:
+      id:
+        value: '${aws_route_table.landing_zone_route_table.id}'
+      thub_id:
+        value: '${aws_route_table.landing_zone_route_table.id}'
+      landing_zone_route_table_id:
+        value: '${aws_route_table.landing_zone_route_table.id}'
