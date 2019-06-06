@@ -1,4 +1,4 @@
-module "landing-zone" {
+module "landing_zone" {
   source     = "./modules/landing_zone"
   version    = "0.0.1"
   root_path  = "${path.module}"
