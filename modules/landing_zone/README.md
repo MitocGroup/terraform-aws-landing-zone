@@ -1,4 +1,4 @@
-# terraform-aws-landing-zone
+# landing_zone
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
 AWS environment based on AWS best practices. This repository contains one
@@ -16,14 +16,14 @@ guidelines, this repository contains the following folders:
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
-* [python](https://www.python.org) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L22)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](./modules/landing_zone/scripts/apply.sh#L21)
+* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L33)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L34)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.3"
+  version    = "0.0.4"
   root_path  = "${path.module}"
   account_id = "${var.account_id}"
   region     = "${var.region}"
@@ -33,7 +33,7 @@ module "landing_zone" {
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
-```
+```hcl
 account_id = "123456789012"
 region = "us-east-1"
 landing_zone_components = {
@@ -45,7 +45,7 @@ landing_zone_components = {
 
 This means that when you use this terraform module, you will need to:
 1. Change `account_id` and `region` to values that correspond to your AWS Organization
-2. Change `landing_zone_components` to values that fit your AWS Landing Zone use case
+2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
     * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3
 3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files
@@ -67,9 +67,9 @@ AWS Landing Zone solution is defined by the following strategy:
 > NOTE: This terraform module at this point in time covers only Multi-Account Structure.
 
 ### Multi-Account Structure
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Architecture" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
 
-Based on the multi-account architecture, the list of available components is:
+Based on the multi-account architecture, here below are currently available components:
 1. [landing_zone_pipeline_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L11)
 2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L11)
 3. [landing_zone_code_pipeline](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L34)
@@ -87,25 +87,23 @@ Based on the multi-account architecture, the list of available components is:
 <br clear="right" />
 
 ### Account Vending Machine
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine Architecture" />
 
-Based on the account vending machine architecture, the list of available components is:
+Based on the account vending machine architecture, here below are currently available components:
 1. Coming soon ...
 
 <br clear="right" />
 
 ### User Access and Identity Management
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access and Identity Management Architecture" />
 
-Based on the user access architecture, the list of available components is:
+Based on the user access architecture, here below are currently available components:
 1. Coming soon ...
 
 <br clear="right" />
 
 ### Monitoring and Notifications
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone User Access" />
+<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone Monitoring and Notifications Architecture" />
 
-Based on the notifications architecture, the list of available components is:
+Based on the notifications architecture, here below are currently available components:
 1. Coming soon ...
-
-<br clear="right" />
