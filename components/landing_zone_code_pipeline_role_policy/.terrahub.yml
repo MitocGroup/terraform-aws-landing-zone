@@ -40,7 +40,7 @@ component:
       aws_iam_role_policy:
         landing_zone_code_pipeline_role_policy:
           name: '${var.landing_zone_code_pipeline_role_policy_name}'
-          policy: ${data.template_file.landing_zone_code_pipeline_role_policy.rendered}
+          policy: '${data.template_file.landing_zone_code_pipeline_role_policy.rendered}'
           role: '${data.terraform_remote_state.landing_zone_code_pipeline_role.id}'
     output:
       id:

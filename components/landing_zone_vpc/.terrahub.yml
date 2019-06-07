@@ -1,3 +1,4 @@
+## local config
 component:
   name: landing_zone_vpc
   template:

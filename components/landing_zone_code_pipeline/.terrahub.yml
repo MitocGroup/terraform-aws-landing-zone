@@ -1,3 +1,4 @@
+## local config
 component:
   name: landing_zone_code_pipeline
   dependsOn:
@@ -34,32 +35,32 @@ component:
           name: '${var.landing_zone_code_pipeline_name}'
           role_arn: '${data.terraform_remote_state.landing_zone_code_pipeline_role.arn}'
           artifact_store:
-            - location: ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}
-              type: S3
+          - location: '${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}'
+            type: 'S3'
           stage:
-            - action: null
-            - name: Source
-              action:
-                - category: Source
-                  owner: AWS
-                  version: '1'
-                  provider: S3
-                  output_artifacts:
-                    - Name: SourceApp
-                  configuration:
-                    - S3Bucket: ${data.terraform_remote_state.landing_zone_pipeline_s3_bucket.bucket}
-                      S3ObjectKey: aws-landing-zone-configuration.zip
-              run_order: '1'
-            - name: Build
-              action:
-                - category: Build
-                  owner: AWS
-                  version: '1'
-                  provider: CodeBuild
-                  output_artifacts:
-                    - Name: SourceApp
-                  configuration:
-                    - ProjectName: ${data.terraform_remote_state.landing_zone_code_build.id}
+          - action:
+          - name: 'Source'
+            action:
+            - category: 'Source'
+              owner: 'AWS'
+              version: '1'
+              provider: S3
+              output_artifacts:
+              - Name: 'SourceApp'
+              configuration:
+              - S3Bucket: '${data.terraform_remote_state.landing_zone_pipeline_s3_bucket.bucket}'
+                S3ObjectKey: 'aws-landing-zone-configuration.zip'
+            run_order: '1'        
+          - name: 'Build'
+            action:
+            - category: 'Build'
+              owner: 'AWS'
+              version: '1'
+              provider: CodeBuild
+              output_artifacts:
+              - Name: 'SourceApp'
+              configuration:
+              - ProjectName: '${data.terraform_remote_state.landing_zone_code_build.id}'
     output:
       id:
         value: '${aws_codepipeline.landing_zone_code_pipeline.id}'

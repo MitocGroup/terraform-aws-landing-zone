@@ -21,10 +21,7 @@ component:
           vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
           cidr_block: '${element(var.landing_zone_subnet_private_cidr_block, count.index)}'
           availability_zone: '${element(var.availability_zones, count.index)}'
-          tags: >-
-            ${merge(var.landing_zone_subnet_private_tags, map("Name", "Landing
-            Zone Subnet Private ${element(var.availability_zones,
-            count.index)}"))}
+          tags: ${merge(var.landing_zone_subnet_private_tags, map("Name", "Landing Zone Subnet Private ${element(var.availability_zones, count.index)}"))}
           assign_ipv6_address_on_creation: '${var.landing_zone_subnet_private_assign_ipv6_address_on_creation}'
     output:
       ids:

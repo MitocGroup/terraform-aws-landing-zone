@@ -23,6 +23,6 @@ component:
           target_id: '${data.terraform_remote_state.landing_zone_organization_unit.id}'
     output:
       id:
-        value: ${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}
+        value: '${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}'
       thub_id:
-        value: ${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}
+        value: '${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}'
