@@ -1,0 +1,46 @@
+component:
+  name: landing_zone_route_table_association_private
+  dependsOn:
+    - ../landing_zone_route_table
+    - ../landing_zone_subnet_private
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_route_table_association_private/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_route_table:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
+        landing_zone_subnet_private:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+    resource:
+      aws_route_table_association:
+        landing_zone_route_table_association_private:
+          count: >-
+            ${length(data.terraform_remote_state.landing_zone_subnet_private.thub_ids)}
+          subnet_id: >-
+            ${element(data.terraform_remote_state.landing_zone_subnet_private.thub_ids,
+            count.index)}
+          route_table_id: '${data.terraform_remote_state.landing_zone_route_table.thub_id}'
+    output:
+      ids:
+        value: >-
+          ${aws_route_table_association.landing_zone_route_table_association_private.*.id}
+      thub_ids:
+        value: >-
+          ${aws_route_table_association.landing_zone_route_table_association_private.*.id}
+      landing_zone_route_table_association_private_ids:
+        value: >-
+          ${aws_route_table_association.landing_zone_route_table_association_private.*.id}
+terraform:
+  varFile:
+    - >-
+      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_route_table_association_private/default.tfvars

@@ -1,24 +1,28 @@
-## local config
 component:
   name: landing_zone_eip
   dependsOn:
-  - '../landing_zone_subnet_public'
+    - ../landing_zone_subnet_public
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_eip/terraform.tfstate
+          path: '${local.component["local"]}/landing_zone_eip/terraform.tfstate'
     data:
       terraform_remote_state:
         landing_zone_subnet_public:
           backend: local
           config:
-            path: '${local.component["local"]}/landing_zone_subnet_public/terraform.tfstate'
+            path: >-
+              ${local.component["local"]}/landing_zone_subnet_public/terraform.tfstate
     resource:
       aws_eip:
         landing_zone_eip:
-          count: '${length(data.terraform_remote_state.landing_zone_subnet_public.thub_ids)}'
-          tags: '${merge(var.landing_zone_eip_tags, map("Name", "Landing Zone EIP ${element(data.terraform_remote_state.landing_zone_subnet_public.thub_ids, count.index)}"))}'
+          count: >-
+            ${length(data.terraform_remote_state.landing_zone_subnet_public.thub_ids)}
+          tags: >-
+            ${merge(var.landing_zone_eip_tags, map("Name", "Landing Zone EIP
+            ${element(data.terraform_remote_state.landing_zone_subnet_public.thub_ids,
+            count.index)}"))}
           vpc: '${var.landing_zone_eip_vpc}'
     output:
       ids:
@@ -31,3 +35,7 @@ component:
         value: '${aws_eip.landing_zone_eip.*.id}'
       landing_zone_eip_public_ips:
         value: '${aws_eip.landing_zone_eip.*.public_ip}'
+terraform:
+  varFile:
+    - >-
+      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_eip/default.tfvars

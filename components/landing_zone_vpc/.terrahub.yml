@@ -1,4 +1,3 @@
-## local config
 component:
   name: landing_zone_vpc
   template:
@@ -28,3 +27,7 @@ component:
         value: '${aws_vpc.landing_zone_vpc.id}'
       landing_zone_vpc_arn:
         value: '${aws_vpc.landing_zone_vpc.arn}'
+terraform:
+  varFile:
+    - >-
+      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_vpc/default.tfvars

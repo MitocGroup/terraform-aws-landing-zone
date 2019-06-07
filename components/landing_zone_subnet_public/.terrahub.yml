@@ -1,4 +1,3 @@
-## local config
 component:
   name: landing_zone_subnet_public
   dependsOn:
@@ -7,7 +6,8 @@ component:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_subnet_public/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_subnet_public/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_vpc:
@@ -21,7 +21,10 @@ component:
           vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
           cidr_block: '${element(var.landing_zone_subnet_public_cidr_block, count.index)}'
           availability_zone: '${element(var.availability_zones, count.index)}'
-          tags: '${merge(var.landing_zone_subnet_public_tags, map("Name", "Landing Zone Subnet Public ${element(var.availability_zones,count.index)}"))}'
+          tags: >-
+            ${merge(var.landing_zone_subnet_public_tags, map("Name", "Landing
+            Zone Subnet Public
+            ${element(var.availability_zones,count.index)}"))}
           assign_ipv6_address_on_creation: '${var.landing_zone_subnet_public_assign_ipv6_address_on_creation}'
     output:
       ids:
@@ -38,3 +41,7 @@ component:
         value: '${aws_subnet.landing_zone_subnet_public.*.availability_zone_id}'
       landing_zone_subnet_public_arns:
         value: '${aws_subnet.landing_zone_subnet_public.*.arn}'
+terraform:
+  varFile:
+    - >-
+      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_subnet_public/default.tfvars

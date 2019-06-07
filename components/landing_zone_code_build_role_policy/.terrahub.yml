@@ -24,8 +24,8 @@ component:
           template: '${file("${local.component["path"]}/iam_assume_policy.json.tpl")}'
           vars:
             artifact_s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.arn}'
-            account_id: ${var.account_id}'
-            region: ${var.region}'
+            account_id: '${var.account_id}'
+            region: '${var.region}'
     resource:
       aws_iam_role_policy:
         landing_zone_code_build_role_policy:
