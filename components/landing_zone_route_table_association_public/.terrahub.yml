@@ -1,0 +1,34 @@
+## local config
+component:
+  name: landing_zone_route_table_association_public
+  dependsOn:
+    - ../landing_zone_route_table
+    - ../landing_zone_subnet_public
+  template:
+    terraform:
+      backend:
+        local:
+          path: ${local.component["local"]}/landing_zone_route_table_association_public/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_route_table:
+          backend: local
+          config:
+            path: ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
+        landing_zone_subnet_public:
+          backend: local
+          config:
+            path: ${local.component["local"]}/landing_zone_subnet_public/terraform.tfstate
+    resource:
+      aws_route_table_association:
+        landing_zone_route_table_association_public:
+          count: ${length(data.terraform_remote_state.landing_zone_subnet_public.thub_ids)}
+          subnet_id: ${element(data.terraform_remote_state.landing_zone_subnet_public.thub_ids, count.index)}
+          route_table_id: '${data.terraform_remote_state.landing_zone_route_table.thub_id}'
+    output:
+      ids:
+        value: ${aws_route_table_association.landing_zone_route_table_association_public.*.id}
+      thub_ids:
+        value: ${aws_route_table_association.landing_zone_route_table_association_public.*.id}
+      landing_zone_route_table_association_public_ids:
+        value: ${aws_route_table_association.landing_zone_route_table_association_public.*.id}

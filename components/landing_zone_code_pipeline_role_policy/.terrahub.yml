@@ -35,7 +35,7 @@ component:
           vars:
             s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_s3_bucket.arn}'
             artifact_s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.arn}'
-            code_build_arn: ${data.terraform_remote_state.landing_zone_code_build.arn}'
+            code_build_arn: '${data.terraform_remote_state.landing_zone_code_build.arn}'
     resource:
       aws_iam_role_policy:
         landing_zone_code_pipeline_role_policy:

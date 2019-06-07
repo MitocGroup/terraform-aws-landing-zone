@@ -1,7 +1,8 @@
 ## local config
 component:
   name: landing_zone_route_table
-  dependsOn: ['../landing_zone_vpc']
+  dependsOn:
+    - ../landing_zone_vpc
   template:
     terraform:
       backend:
