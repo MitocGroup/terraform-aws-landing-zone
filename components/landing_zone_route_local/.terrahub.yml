@@ -1,24 +1,25 @@
-## local config
 component:
   name: landing_zone_route_local
   dependsOn:
-  - '../landing_zone_route_table'
+    - ../landing_zone_route_table
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_route_local/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_route_local/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_route_table:
           backend: local
           config:
-            path: '${local.component["local"]}/landing_zone_route_table/terraform.tfstate'
+            path: >-
+              ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
     resource:
       aws_route:
         landing_zone_route_local:
           route_table_id: '${data.terraform_remote_state.landing_zone_route_table.thub_id}'
-          destination_cidr_block: '${var.landing_zone_route_destination_cidr_block}'          
+          destination_cidr_block: '${var.landing_zone_route_destination_cidr_block}'
     output:
       id:
         value: '${aws_route.landing_zone_route_local.id}'

@@ -1,11 +1,11 @@
-## local config
 component:
   name: landing_zone_organization_policy
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_organization_policy/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_organization_policy/terraform.tfstate
     resource:
       aws_organizations_policy:
         landing_zone_organization_policy:

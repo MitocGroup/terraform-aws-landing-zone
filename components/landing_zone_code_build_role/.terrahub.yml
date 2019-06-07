@@ -1,11 +1,11 @@
-## local config
 component:
   name: landing_zone_code_build_role
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
     resource:
       aws_iam_role:
         landing_zone_code_build_role:
