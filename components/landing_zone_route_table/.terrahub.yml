@@ -1,12 +1,13 @@
-## local config
 component:
   name: landing_zone_route_table
-  dependsOn: ['../landing_zone_vpc']
+  dependsOn:
+    - ../landing_zone_vpc
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_vpc:

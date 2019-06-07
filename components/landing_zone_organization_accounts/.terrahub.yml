@@ -1,4 +1,3 @@
-## local config
 component:
   name: landing_zone_organization_accounts
   dependsOn:
@@ -7,19 +6,23 @@ component:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_organization:
           backend: local
           config:
-            path: ${local.component["local"]}/landing_zone_organization/terraform.tfstate
+            path: >-
+              ${local.component["local"]}/landing_zone_organization/terraform.tfstate
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
           count: '${length(var.landing_zone_organization_accounts_email)}'
           name: '${element(var.landing_zone_organization_accounts_name, count.index)}'
-          email: '${element(var.landing_zone_organization_accounts_email, count.index)}'
+          email: >-
+            ${element(var.landing_zone_organization_accounts_email,
+            count.index)}
           parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
     output:
       ids:

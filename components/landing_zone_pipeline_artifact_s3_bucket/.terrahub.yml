@@ -1,11 +1,11 @@
-## local config
 component:
   name: landing_zone_pipeline_artifact_s3_bucket
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_artifact_s3_bucket:

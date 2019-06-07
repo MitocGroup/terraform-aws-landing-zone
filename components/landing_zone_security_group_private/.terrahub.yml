@@ -1,0 +1,45 @@
+component:
+  name: landing_zone_security_group_private
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group_private/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+    resource:
+      aws_security_group:
+        landing_zone_security_group_private:
+          name: '${var.landing_zone_security_group_private_name}'
+          description: '${var.landing_zone_security_group_private_description}'
+          vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
+          tags: '${var.landing_zone_security_group_private_tags}'
+      aws_security_group_rule:
+        landing_zone_security_group_private:
+          type: ingress
+          protocol: all
+          from_port: '-1'
+          to_port: '-1'
+          security_group_id: '${aws_security_group.landing_zone_security_group_private.id}'
+          self: true
+        landing_zone_security_group_private-1:
+          type: egress
+          protocol: all
+          from_port: '0'
+          to_port: '0'
+          cidr_blocks:
+            - 0.0.0.0/0
+          security_group_id: '${aws_security_group.landing_zone_security_group_private.id}'
+          self: false
+    output:
+      id:
+        value: '${aws_security_group.landing_zone_security_group_private.id}'
+      thub_id:
+        value: '${aws_security_group.landing_zone_security_group_private.id}'

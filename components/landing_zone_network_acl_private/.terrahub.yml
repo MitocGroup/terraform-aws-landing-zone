@@ -1,0 +1,37 @@
+component:
+  name: landing_zone_network_acl_private
+  dependsOn:
+    - ../landing_zone_vpc
+    - ../landing_zone_subnet_private
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_network_acl_private/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+        landing_zone_subnet_private:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+    resource:
+      aws_network_acl:
+        landing_zone_network_acl_private:
+          vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
+          tags: '${var.landing_zone_network_acl_private_tags}'
+          subnet_ids:
+            - >-
+              ${data.terraform_remote_state.landing_zone_subnet_private.thub_ids}
+    output:
+      id:
+        value: '${aws_network_acl.landing_zone_network_acl_private.id}'
+      thub_id:
+        value: '${aws_network_acl.landing_zone_network_acl_private.id}'
+      landing_zone_network_acl_private_id:
+        value: '${aws_network_acl.landing_zone_network_acl_private.id}'

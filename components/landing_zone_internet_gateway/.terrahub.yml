@@ -1,27 +1,28 @@
-## local config
 component:
-  name: 'landing_zone_internet_gateway'
-  dependsOn: ['../landing_zone_vpc']
+  name: landing_zone_internet_gateway
+  dependsOn:
+    - ../landing_zone_vpc
   template:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_internet_gateway/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_internet_gateway/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_internet_gateway:
           backend: local
           config:
-            path: ${local.component["local"]}/landing_zone_vpc/terraform.tfstate
+            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
     resource:
       aws_internet_gateway:
         landing_zone_internet_gateway:
-          tags: ${var.landing_zone_internet_gateway_tags}
-          vpc_id: ${data.terraform_remote_state.landing_zone_internet_gateway.thub_id}
+          tags: '${var.landing_zone_internet_gateway_tags}'
+          vpc_id: '${data.terraform_remote_state.landing_zone_internet_gateway.thub_id}'
     output:
       id:
-        value: ${aws_internet_gateway.landing_zone_internet_gateway.id}
+        value: '${aws_internet_gateway.landing_zone_internet_gateway.id}'
       thub_id:
-        value: ${aws_internet_gateway.landing_zone_internet_gateway.id}
+        value: '${aws_internet_gateway.landing_zone_internet_gateway.id}'
       landing_zone_internet_gateway_id:
-        value: ${aws_internet_gateway.landing_zone_internet_gateway.id}
+        value: '${aws_internet_gateway.landing_zone_internet_gateway.id}'
