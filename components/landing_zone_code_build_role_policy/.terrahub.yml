@@ -1,4 +1,3 @@
-## local config
 component:
   name: landing_zone_code_build_role_policy
   dependsOn:
@@ -8,22 +7,26 @@ component:
     terraform:
       backend:
         local:
-          path: ${local.component["local"]}/landing_zone_code_build_role_policy/terraform.tfstate
+          path: >-
+            ${local.component["local"]}/landing_zone_code_build_role_policy/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_pipeline_artifact_s3_bucket:
           backend: local
           config:
-            path: ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
+            path: >-
+              ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
         landing_zone_code_build_role:
           backend: local
           config:
-            path: ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
+            path: >-
+              ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
       template_file:
         landing_zone_code_build_role_policy:
           template: '${file("${local.component["path"]}/iam_assume_policy.json.tpl")}'
           vars:
-            artifact_s3_bucket_arn: ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.arn}'
+            artifact_s3_bucket_arn: >-
+              ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.arn}'
             account_id: '${var.account_id}'
             region: '${var.region}'
     resource:
