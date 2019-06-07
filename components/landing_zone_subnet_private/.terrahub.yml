@@ -1,3 +1,4 @@
+## local config
 component:
   name: landing_zone_subnet_private
   dependsOn:
@@ -6,8 +7,7 @@ component:
     terraform:
       backend:
         local:
-          path: >-
-            ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+          path: ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_vpc:
@@ -41,7 +41,3 @@ component:
         value: '${aws_subnet.landing_zone_subnet_private.*.availability_zone_id}'
       landing_zone_subnet_private_arns:
         value: '${aws_subnet.landing_zone_subnet_private.*.arn}'
-terraform:
-  varFile:
-    - >-
-      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_subnet_private/default.tfvars

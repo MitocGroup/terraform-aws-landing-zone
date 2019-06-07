@@ -1,3 +1,4 @@
+## local config
 component:
   name: landing_zone_organization_accounts
   dependsOn:
@@ -6,15 +7,13 @@ component:
     terraform:
       backend:
         local:
-          path: >-
-            ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
+          path:  ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_organization:
           backend: local
           config:
-            path: >-
-              ${local.component["local"]}/landing_zone_organization/terraform.tfstate
+            path: ${local.component["local"]}/landing_zone_organization/terraform.tfstate
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
@@ -35,7 +34,3 @@ component:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
       landing_zone_organization_accounts_arns:
         value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
-terraform:
-  varFile:
-    - >-
-      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_organization_accounts/default.tfvars

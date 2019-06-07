@@ -33,7 +33,3 @@ component:
         value: '${aws_network_acl.landing_zone_network_acl_private.id}'
       landing_zone_network_acl_private_id:
         value: '${aws_network_acl.landing_zone_network_acl_private.id}'
-terraform:
-  varFile:
-    - >-
-      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_network_acl_private/default.tfvars

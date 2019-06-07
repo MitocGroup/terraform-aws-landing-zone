@@ -42,6 +42,3 @@ component:
         value: '${aws_security_group.landing_zone_security_group_private.id}'
       thub_id:
         value: '${aws_security_group.landing_zone_security_group_private.id}'
-terraform:
-  varFile:
-    - s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_security_group_private/default.tfvars

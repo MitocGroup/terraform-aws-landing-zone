@@ -24,7 +24,3 @@ component:
           rule_action: '${element(var.landing_zone_network_acl_rules_private_rule_actions, count.index)}'
           egress: '${element(var.landing_zone_network_acl_rules_private_egress, count.index)}'
           cidr_block: '${element(var.landing_zone_network_acl_rules_private_cidr_blocks, count.index)}'
-terraform:
-  varFile:
-    - >-
-      s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_network_acl_rules_private/default.tfvars
