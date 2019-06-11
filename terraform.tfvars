@@ -28,4 +28,9 @@ landing_zone_components = {
   landing_zone_network_acl_private = "s3://terraform-aws-landing-zone/mycompany/landing_zone_network_acl_private/default.tfvars"
   landing_zone_network_acl_rules_private = "s3://terraform-aws-landing-zone/mycompany/landing_zone_network_acl_rules_private/default.tfvars"
   landing_zone_security_group_private = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group_private/default.tfvars"
+  landing_zone_security_group_private_rule_ingress = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group_private_rule_ingress/default.tfvars"
+  landing_zone_security_group_private_rule_egress = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group_private_rule_egress/default.tfvars"
+  landing_zone_cloudtrail_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket/default.tfvars"
+  landing_zone_cloudtrail_s3_bucket_policy = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket_policy/default.tfvars"
+  landing_zone_cloudtrail = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail/default.tfvars"
 }

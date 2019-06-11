@@ -212,3 +212,33 @@ output "landing_zone_network_acl_private_id" {
   value = "${module.landing_zone.landing_zone["landing_zone_network_acl_private_id"]}"
   description = "The ID's of the Network ACL Private."
 }
+
+output "landing_zone_security_group_private_id" {
+  value = "${module.landing_zone.landing_zone["landing_zone_security_group_private_id"]}"
+  description = "The ID's of the Private Security Group."
+}
+
+output "landing_zone_cloudtrail_s3_bucket_id" {
+  value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_s3_bucket_id"]}"
+  description = "The name of the Landing Zone CloudTrail S3 Bucket."
+}
+
+output "landing_zone_cloudtrail_s3_bucket_arn" {
+  value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_s3_bucket_arn"]}"
+  description = "The ARN of the Landing Zone CloudTrail S3 Bucket."
+}
+
+output "landing_zone_cloudtrail_s3_bucket_bucket" {
+  value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_s3_bucket_bucket"]}"
+  description = "The name of the Landing Zone CloudTrail S3 Bucket."
+}
+
+output "landing_zone_cloudtrail_id" {
+  value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_id"]}"
+  description = "The name of the Landing Zone CloudTrail."
+}
+
+output "landing_zone_cloudtrail_arn" {
+  value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_arn"]}"
+  description = "The ARN of the Landing Zone CloudTrail."
+}

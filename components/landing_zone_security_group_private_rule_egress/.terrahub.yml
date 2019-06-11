@@ -1,0 +1,35 @@
+component:
+  name: landing_zone_security_group_private_rule_egress
+  dependsOn:
+    - ../landing_zone_security_group_private
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group_private_rule_egress/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_security_group_private:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_security_group_private/terraform.tfstate
+    resource:
+      aws_security_group_rule:
+        landing_zone_security_group_private_rule_egress:
+          type: egress
+          protocol: '${var.landing_zone_security_group_private_rule_egress_protocol}'
+          from_port: '${var.landing_zone_security_group_private_rule_egress_from_port}'
+          to_port: '${var.landing_zone_security_group_private_rule_egress_to_port}'
+          cidr_blocks: '${var.landing_zone_security_group_private_rule_egress_cidr_blocks}'
+          security_group_id: >-
+            ${data.terraform_remote_state.landing_zone_security_group_private.thub_id}
+          self: '${var.landing_zone_security_group_private_rule_egress_self}'
+    output:
+      id:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_private_rule_egress.id}
+      thub_id:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_private_rule_egress.id}
