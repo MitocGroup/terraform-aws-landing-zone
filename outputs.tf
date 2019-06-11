@@ -212,3 +212,8 @@ output "landing_zone_network_acl_private_id" {
   value = "${module.landing_zone.landing_zone["landing_zone_network_acl_private_id"]}"
   description = "The ID's of the Network ACL Private."
 }
+
+output "landing_zone_security_group_private_id" {
+  value = "${module.landing_zone.landing_zone["landing_zone_security_group_private_id"]}"
+  description = "The ID's of the Private Security Group."
+}
