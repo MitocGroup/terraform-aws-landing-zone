@@ -1,0 +1,44 @@
+component:
+  name: landing_zone_cloudtrail
+  dependsOn:
+    - ../landing_zone_cloudtrail_s3_bucket
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_cloudtrail/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_cloudtrail_s3_bucket:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_cloudtrail_s3_bucket/terraform.tfstate
+    resource:
+      aws_cloudtrail:
+        landing_zone_cloudtrail:
+          s3_bucket_name: >-
+            ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
+          name: '${var.landing_zone_cloudtrail_name}'
+          is_multi_region_trail: '${var.landing_zone_cloudtrail_is_multi_region_trail}'
+          is_organization_trail: '${var.landing_zone_cloudtrail_is_organization_trail}'
+          event_selector:
+            data_resource:
+              type: '${var.landing_zone_event_selector_data_resource_type}'
+              values: '${var.landing_zone_event_selector_data_resource_values}'
+    output:
+      id:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+      thub_id:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+      home_region:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
+      arn:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
+      landing_zone_cloudtrail_id:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+      landing_zone_cloudtrail_home_region:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
+      landing_zone_cloudtrail_arn:
+        value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
