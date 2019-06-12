@@ -1,0 +1,51 @@
+component:
+  name: landing_zone_directory_service_directory
+  dependsOn:
+    - ../landing_zone_vpc
+    - ../landing_zone_subnet_private
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_directory_service_directory/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_vpc/terraform.tfstate
+        landing_zone_subnet_private:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+    resource:
+      aws_directory_service_directory:
+        landing_zone_directory_service_directory:
+          name: '${var.landing_zone_directory_service_directory_name}'
+          password: '${var.landing_zone_directory_service_directory_password}'
+          vpc_settings:
+            vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
+            subnet_ids: ['${data.terraform_remote_state.landing_zone_subnet_private.thub_ids}']
+    output:
+      id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      thub_id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      access_url:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}'
+      alias:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.alias}'
+      security_group_id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.security_group_id}'
+      short_name:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.short_name}'
+      dns_ip_addresses:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.dns_ip_addresses}'
+      edition:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.edition}'
+      size:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.size}'
+
