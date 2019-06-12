@@ -1,0 +1,47 @@
+component:
+  name: landing_zone_directory_service_directory
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_directory_service_directory/terraform.tfstate
+    data:
+      aws_vpc:
+        default_vpc:
+          default: true
+      aws_subnet:
+        default_subnet:
+          count: '${length(var.landing_zone_directory_service_directory_availability_zone)}'
+          vpc_id: '${data.aws_vpc.default_vpc.id}'
+          availability_zone: '${element(var.landing_zone_directory_service_directory_availability_zone, count.index)}'
+    resource:
+      aws_directory_service_directory:
+        landing_zone_directory_service_directory:
+          name: '${var.landing_zone_directory_service_directory_name}'
+          short_name: '${var.landing_zone_directory_service_directory_short_name}'
+          password: '${var.landing_zone_directory_service_directory_password}'
+          alias: '${var.landing_zone_directory_service_directory_alias}'
+          description: '${var.landing_zone_directory_service_directory_description}'
+          edition: '${var.landing_zone_directory_service_directory_edition}'
+          enable_sso: '${var.landing_zone_directory_service_directory_enable_sso}'
+          size: '${var.landing_zone_directory_service_directory_size}'
+          type: '${var.landing_zone_directory_service_directory_type}'
+          vpc_settings:
+            vpc_id: '${data.aws_vpc.default_vpc.id}'
+            subnet_ids: ['${data.aws_subnet.default_subnet.*.id}']
+    output:
+      id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      thub_id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      access_url:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}'
+      alias:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.alias}'
+      landing_zone_directory_service_directory_id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      landing_zone_directory_service_directory_access_url:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}'
+      landing_zone_directory_service_directory_alias:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.alias}'

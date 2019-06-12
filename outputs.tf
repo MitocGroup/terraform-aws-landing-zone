@@ -242,3 +242,18 @@ output "landing_zone_cloudtrail_arn" {
   value = "${module.landing_zone.landing_zone["landing_zone_cloudtrail_arn"]}"
   description = "The ARN of the Landing Zone CloudTrail."
 }
+
+output "landing_zone_directory_service_directory_id" {
+  value = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_id"]}"
+  description = "The ID of the Landing Zone Directory Service."
+}
+
+output "landing_zone_directory_service_directory_access_url" {
+  value = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_access_url"]}"
+  description = "The access url of the Landing Zone Directory Service."
+}
+
+output "landing_zone_directory_service_directory_alias" {
+  value = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_alias"]}"
+  description = "The alias of the Landing Zone Directory Service."
+}
