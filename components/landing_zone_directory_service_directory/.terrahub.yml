@@ -1,8 +1,5 @@
 component:
   name: landing_zone_directory_service_directory
-  dependsOn:
-    - ../landing_zone_vpc
-    - ../landing_zone_subnet_private
   template:
     terraform:
       backend:
@@ -10,25 +7,29 @@ component:
           path: >-
             ${local.component["local"]}/landing_zone_directory_service_directory/terraform.tfstate
     data:
-      terraform_remote_state:
-        landing_zone_vpc:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_vpc/terraform.tfstate
-        landing_zone_subnet_private:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+      aws_vpc:
+        default_vpc:
+          default: true
+      aws_subnet:
+        default_subnet:
+          count: '${length(var.landing_zone_directory_service_directory_availability_zone)}'
+          vpc_id: '${data.aws_vpc.default_vpc.id}'
+          availability_zone: '${element(var.landing_zone_directory_service_directory_availability_zone, count.index)}'
     resource:
       aws_directory_service_directory:
         landing_zone_directory_service_directory:
           name: '${var.landing_zone_directory_service_directory_name}'
+          short_name: '${var.landing_zone_directory_service_directory_short_name}'
           password: '${var.landing_zone_directory_service_directory_password}'
+          alias: '${var.landing_zone_directory_service_directory_alias}'
+          description: '${var.landing_zone_directory_service_directory_description}'
+          edition: '${var.landing_zone_directory_service_directory_edition}'
+          enable_sso: '${var.landing_zone_directory_service_directory_enable_sso}'
+          size: '${var.landing_zone_directory_service_directory_size}'
+          type: '${var.landing_zone_directory_service_directory_type}'
           vpc_settings:
-            vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
-            subnet_ids: ['${data.terraform_remote_state.landing_zone_subnet_private.thub_ids}']
+            vpc_id: '${data.aws_vpc.default_vpc.id}'
+            subnet_ids: ['${data.aws_subnet.default_subnet.*.id}']
     output:
       id:
         value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
@@ -38,14 +39,9 @@ component:
         value: '${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}'
       alias:
         value: '${aws_directory_service_directory.landing_zone_directory_service_directory.alias}'
-      security_group_id:
-        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.security_group_id}'
-      short_name:
-        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.short_name}'
-      dns_ip_addresses:
-        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.dns_ip_addresses}'
-      edition:
-        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.edition}'
-      size:
-        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.size}'
-
+      landing_zone_directory_service_directory_id:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.id}'
+      landing_zone_directory_service_directory_access_url:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}'
+      landing_zone_directory_service_directory_alias:
+        value: '${aws_directory_service_directory.landing_zone_directory_service_directory.alias}'

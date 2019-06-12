@@ -33,4 +33,5 @@ landing_zone_components = {
   landing_zone_cloudtrail_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket/default.tfvars"
   landing_zone_cloudtrail_s3_bucket_policy = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket_policy/default.tfvars"
   landing_zone_cloudtrail = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail/default.tfvars"
+  landing_zone_directory_service_directory = "s3://terraform-aws-landing-zone/mycompany/landing_zone_directory_service_directory/default.tfvars"
 }
