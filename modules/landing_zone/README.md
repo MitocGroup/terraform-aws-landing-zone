@@ -1,4 +1,4 @@
-# terraform-aws-landing-zone
+# landing_zone
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
 AWS environment based on AWS best practices. This repository contains one
