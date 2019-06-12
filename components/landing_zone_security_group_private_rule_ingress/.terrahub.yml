@@ -1,0 +1,34 @@
+component:
+  name: landing_zone_security_group_private_rule_ingress
+  dependsOn:
+    - ../landing_zone_security_group_private
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group_private_rule_ingress/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_security_group_private:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_security_group_private/terraform.tfstate
+    resource:
+      aws_security_group_rule:
+        landing_zone_security_group_private_rule_ingress:
+          type: ingress
+          protocol: '${var.landing_zone_security_group_private_rule_ingress_protocol}'
+          from_port: '${var.landing_zone_security_group_private_rule_ingress_from_port}'
+          to_port: '${var.landing_zone_security_group_private_rule_ingress_to_port}'
+          security_group_id: >-
+            ${data.terraform_remote_state.landing_zone_security_group_private.thub_id}
+          self: '${var.landing_zone_security_group_private_rule_ingress_self}'
+    output:
+      id:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_private_rule_ingress.id}
+      thub_id:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_private_rule_ingress.id}
