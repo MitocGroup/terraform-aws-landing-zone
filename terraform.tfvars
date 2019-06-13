@@ -1,7 +1,7 @@
 account_id = "123456789012"
 region = "us-east-1"
 landing_zone_components = {
-  landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
+  landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone-mitocgroup/tfvars/landing_zone_pipeline_s3_bucket/default.tfvars"
   landing_zone_pipeline_artifact_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_artifact_s3_bucket/default.tfvars"
   landing_zone_code_build_role = "s3://terraform-aws-landing-zone/mycompany/landing_zone_code_build_role/default.tfvars"
   landing_zone_code_build_role_policy = "s3://terraform-aws-landing-zone/mycompany/landing_zone_code_build_role_policy/default.tfvars"
