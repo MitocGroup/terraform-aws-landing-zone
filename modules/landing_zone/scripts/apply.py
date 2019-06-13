@@ -1,6 +1,7 @@
 import os
 import json
 import subprocess
+from six import string_types
 
 def main():
     components = eval(os.environ['components'])
@@ -18,10 +19,10 @@ def main():
 def terrahubOutput(include):
     response = {}
 
-    for innclude_item in include:
+    for include_item in include:
         result = ''
         p = subprocess.Popen(
-            ['terrahub', 'output', '-o', 'json', '-i', innclude_item, '-y'],
+            ['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=os.environ['root'])
@@ -39,16 +40,16 @@ def terrahubOutput(include):
 def extractOutputValues(result):
     response = {}
     for (key, val) in json.loads(result).items():
-        try:
-            for (key_sub, val_sub) in val.items():
+        for (key_sub, val_sub) in val.items():
+            try:
                 response[key_sub]=getOutputValueByType(val_sub['value'])
-        except:
-            print('This key: ' + key + ' does NOT have any values defined.')
+            except:
+                print('Warning: The key `' + key_sub + '` does NOT have any value defined.')
     
     return response
 
 def getOutputValueByType(value):
-    if type(value) is unicode:
+    if isinstance(value, string_types):
         return value
     else:
         return ','.join(map(str, value))
