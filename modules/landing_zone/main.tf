@@ -43,6 +43,8 @@ resource "null_resource" "landing_zone_apply" {
       ROOT_PATH = "${var.root_path}"
       COMMAND = "${var.landing_zone_command}"
       COMPONENTS = "${jsonencode(var.landing_zone_components)}"
+      REGION = "${var.region}"
+      ACCOUNT_ID = "${var.account_id}"
     }
   }
 

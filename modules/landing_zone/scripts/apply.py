@@ -43,7 +43,7 @@ def extractOutputValues(result):
             for (key_sub, val_sub) in val.items():
                 response[key_sub]=getOutputValueByType(val_sub['value'])
         except:
-            print('This key: ' + key + ' dose not have values.')
+            print('This key: ' + key + ' does NOT have any values defined.')
     
     return response
 
