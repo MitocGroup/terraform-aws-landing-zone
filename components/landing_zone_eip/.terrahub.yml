@@ -8,7 +8,7 @@ component:
     resource:
       aws_eip:
         landing_zone_eip:
-          count: ${var.landing_zone_eip_count}
+          count: ${var.landing_zone_eip_names}
           tags: >-
             ${merge(var.landing_zone_eip_tags, map("Name", "${element(var.landing_zone_eip_names, count.index)}"))}
           vpc: '${var.landing_zone_eip_vpc}'
