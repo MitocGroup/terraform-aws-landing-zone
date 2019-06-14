@@ -8,27 +8,30 @@ component:
         local:
           path: '${local.component["local"]}/landing_zone_route/terraform.tfstate'
     data:
-      terraform_remote_state:
-        landing_zone_route_table:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
-        landing_zone_internet_gateway:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_internet_gateway/terraform.tfstate
+      aws_subnet:
+        selected:
+          count: '${length(var.landing_zone_subnet_cidr_block)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_block, count.index)}'
+      aws_route_table:
+        selected:
+          count: '${length(data.aws_subnet.selected.*.id)}'
+          subnet_id: '${element(data.aws_subnet.selected.*.id, count.index)}'
     resource:
       aws_route:
         landing_zone_route:
-          route_table_id: '${data.terraform_remote_state.landing_zone_route_table.thub_id}'
-          gateway_id: '${data.terraform_remote_state.landing_zone_internet_gateway.thub_id}'
-          destination_cidr_block: '${var.landing_zone_route_destination_cidr_block}'
+          count: >-
+            ${length(distinct(data.aws_route_table.selected.*.id)) *
+            length(var.landing_zone_route_destination_cidr_block)}
+          route_table_id: >-
+            ${element(distinct(data.aws_route_table.selected.*.id),
+            count.index)}
+          destination_cidr_block: >-
+            ${element(var.landing_zone_route_destination_cidr_block,
+            count.index)}
     output:
-      id:
-        value: '${aws_route.landing_zone_route.id}'
-      thub_id:
-        value: '${aws_route.landing_zone_route.id}'
-      landing_zone_route_id:
-        value: '${aws_route.landing_zone_route.id}'
+      ids:
+        value: '${aws_route.landing_zone_route.*.id}'
+      thub_ids:
+        value: '${aws_route.landing_zone_route.*.id}'
+      landing_zone_route_ids:
+        value: '${aws_route.landing_zone_route.*.id}'

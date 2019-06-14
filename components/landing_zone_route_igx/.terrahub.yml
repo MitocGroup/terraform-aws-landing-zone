@@ -1,0 +1,50 @@
+component:
+  name: landing_zone_route_igx
+  dependsOn:
+    - ../landing_zone_route_table
+    - ../landing_zone_internet_gateway
+  template:
+    terraform:
+      backend:
+        local:
+          path: '${local.component["local"]}/landing_zone_route_igx/terraform.tfstate'
+    data:
+      aws_subnet:
+        selected:
+          count: '${length(var.landing_zone_subnet_cidr_block)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_block, count.index)}'
+      aws_route_table:
+        selected:
+          count: '${length(data.aws_subnet.selected.*.id)}'
+          subnet_id: '${element(data.aws_subnet.selected.*.id, count.index)}'
+      aws_internet_gateway:
+        selected:
+          count: '${length(distinct(data.aws_subnet.selected.*.vpc_id))}'
+          filter:
+            name: attachment.vpc-id
+            values:
+              - >-
+                ${element(distinct(data.aws_subnet.selected.*.vpc_id),
+                count.index)}
+    resource:
+      aws_route:
+        landing_zone_route_igx:
+          count: >-
+            ${length(distinct(data.aws_route_table.selected.*.id)) *
+            length(var.landing_zone_route_igx_destination_cidr_block)}
+          route_table_id: >-
+            ${element(distinct(data.aws_route_table.selected.*.id),
+            count.index)}
+          gateway_id: >-
+            ${element(distinct(data.aws_internet_gateway.selected.*.id),
+            count.index)}
+          destination_cidr_block: >-
+            ${element(var.landing_zone_route_igx_destination_cidr_block,
+            count.index)}
+    output:
+      ids:
+        value: '${aws_route.landing_zone_route_igx.*.id}'
+      thub_ids:
+        value: '${aws_route.landing_zone_route_igx.*.id}'
+      landing_zone_route_igx_ids:
+        value: '${aws_route.landing_zone_route_igx.*.id}'

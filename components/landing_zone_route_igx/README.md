@@ -1,2 +1,2 @@
-# landing_zone_subnet_private
+# landing_zone_route_igx
 Component for AWS Landing Zone

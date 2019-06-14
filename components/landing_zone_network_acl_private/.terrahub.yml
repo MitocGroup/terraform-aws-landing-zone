@@ -2,7 +2,7 @@ component:
   name: landing_zone_network_acl_private
   dependsOn:
     - ../landing_zone_vpc
-    - ../landing_zone_subnet_private
+    - ../landing_zone_subnet
   template:
     terraform:
       backend:
@@ -15,11 +15,11 @@ component:
           backend: local
           config:
             path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
-        landing_zone_subnet_private:
+        landing_zone_subnet:
           backend: local
           config:
             path: >-
-              ${local.component["local"]}/landing_zone_subnet_private/terraform.tfstate
+              ${local.component["local"]}/landing_zone_subnet/terraform.tfstate
     resource:
       aws_network_acl:
         landing_zone_network_acl_private:
@@ -27,7 +27,7 @@ component:
           tags: '${var.landing_zone_network_acl_private_tags}'
           subnet_ids:
             - >-
-              ${data.terraform_remote_state.landing_zone_subnet_private.thub_ids}
+              ${data.terraform_remote_state.landing_zone_subnet.thub_ids}
     output:
       id:
         value: '${aws_network_acl.landing_zone_network_acl_private.id}'
