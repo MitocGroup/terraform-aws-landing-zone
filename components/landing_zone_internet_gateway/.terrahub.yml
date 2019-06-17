@@ -11,8 +11,8 @@ component:
     data:
       aws_vpc:
         selected:
-          count: '${length(var.landing_zone_vpc_cidr_block)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_block, count.index)}'
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
     resource:
       aws_internet_gateway:
         landing_zone_internet_gateway:

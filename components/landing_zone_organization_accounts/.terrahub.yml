@@ -18,10 +18,10 @@ component:
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
-          count: '${length(var.landing_zone_organization_accounts_email)}'
-          name: '${element(var.landing_zone_organization_accounts_name, count.index)}'
+          count: '${length(var.landing_zone_organization_accounts_emails)}'
+          name: '${element(var.landing_zone_organization_accounts_names, count.index)}'
           email: >-
-            ${element(var.landing_zone_organization_accounts_email,
+            ${element(var.landing_zone_organization_accounts_emails,
             count.index)}
           parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
     output:

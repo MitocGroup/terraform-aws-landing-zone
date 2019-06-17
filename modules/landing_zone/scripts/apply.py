@@ -12,7 +12,7 @@ def main():
         include.append(k)
     includeStr = ','.join(include)
     processes.append(['terrahub', 'init', '-i', includeStr])
-    # processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
+    processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
     execWithErrors(processes)
     return terrahubOutput(include)
 

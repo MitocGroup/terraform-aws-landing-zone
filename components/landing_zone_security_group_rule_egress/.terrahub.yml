@@ -1,0 +1,52 @@
+component:
+  name: landing_zone_security_group_rule_egress
+  dependsOn:
+    - ../landing_zone_security_group
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group_rule_egress/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_security_group:
+        selected:
+          count: '${length(data.aws_vpc.selected.*.id)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          name: '${element(var.landing_zone_security_group_names, count.index)}'
+    resource:
+      aws_security_group_rule:
+        landing_zone_security_group_rule_egress:
+          count: '${length(var.landing_zone_security_group_association_relation)}'
+          type: egress
+          protocol: >-
+            ${element(var.landing_zone_security_group_rule_egress_protocols,
+            count.index)}
+          from_port: >-
+            ${element(var.landing_zone_security_group_rule_egress_from_ports,
+            count.index)}
+          to_port: >-
+            ${element(var.landing_zone_security_group_rule_egress_to_ports,
+            count.index)}
+          cidr_blocks:
+            - >-
+              ${element(var.landing_zone_security_group_rule_egress_cidr_blocks,
+              count.index)}
+          security_group_id: >-
+            ${element(data.aws_security_group.selected.*.id, element(split("/",
+            element(var.landing_zone_security_group_association_relation,
+            count.index)), 1))}
+          self: >-
+            ${element(var.landing_zone_security_group_rule_egress_selfies,
+            count.index)}
+    output:
+      ids:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_rule_egress.*.id}
+      thub_ids:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_rule_egress.*.id}

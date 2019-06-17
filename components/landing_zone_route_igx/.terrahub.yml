@@ -11,8 +11,8 @@ component:
     data:
       aws_subnet:
         selected:
-          count: '${length(var.landing_zone_subnet_cidr_block)}'
-          cidr_block: '${element(var.landing_zone_subnet_cidr_block, count.index)}'
+          count: '${length(var.landing_zone_subnet_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
       aws_route_table:
         selected:
           count: '${length(data.aws_subnet.selected.*.id)}'
@@ -31,7 +31,7 @@ component:
         landing_zone_route_igx:
           count: >-
             ${length(distinct(data.aws_route_table.selected.*.id)) *
-            length(var.landing_zone_route_igx_destination_cidr_block)}
+            length(var.landing_zone_route_igx_destination_cidr_blocks)}
           route_table_id: >-
             ${element(distinct(data.aws_route_table.selected.*.id),
             count.index)}
@@ -39,7 +39,7 @@ component:
             ${element(distinct(data.aws_internet_gateway.selected.*.id),
             count.index)}
           destination_cidr_block: >-
-            ${element(var.landing_zone_route_igx_destination_cidr_block,
+            ${element(var.landing_zone_route_igx_destination_cidr_blocks,
             count.index)}
     output:
       ids:

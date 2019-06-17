@@ -168,8 +168,8 @@ output "landing_zone_internet_gateway_ids" {
   description = "The ID's of the Internet Gateway."
 }
 
-output "landing_zone_route_table_id" {
-  value = "${module.landing_zone.landing_zone["landing_zone_route_table_id"]}"
+output "landing_zone_route_table_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_route_table_ids"]}"
   description = "The ID's of the Route Table."
 }
 
@@ -178,23 +178,23 @@ output "landing_zone_route_table_association_ids" {
   description = "The ID's of the Route Table Association Subnets."
 }
 
-output "landing_zone_route_id" {
-  value = "${module.landing_zone.landing_zone["landing_zone_route_id"]}"
+output "landing_zone_route_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_route_ids"]}"
   description = "The ID's of the Route."
 }
 
-output "landing_zone_route_local_id" {
-  value = "${module.landing_zone.landing_zone["landing_zone_route_local_id"]}"
+output "landing_zone_route_igx_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_route_igx_ids"]}"
   description = "The ID's of the Local Route."
 }
 
-output "landing_zone_network_acl_private_id" {
-  value = "${module.landing_zone.landing_zone["landing_zone_network_acl_private_id"]}"
+output "landing_zone_network_acl_private_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_network_acl_private_ids"]}"
   description = "The ID's of the Network ACL Private."
 }
 
-output "landing_zone_security_group_private_id" {
-  value = "${module.landing_zone.landing_zone["landing_zone_security_group_private_id"]}"
+output "landing_zone_security_group_private_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_security_group_private_ids"]}"
   description = "The ID's of the Private Security Group."
 }
 

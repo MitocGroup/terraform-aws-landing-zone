@@ -13,10 +13,10 @@ component:
       aws_subnet:
         default_subnet:
           count: >-
-            ${length(var.landing_zone_directory_service_directory_availability_zone)}
+            ${length(var.landing_zone_directory_service_directory_availability_zones)}
           vpc_id: '${data.aws_vpc.default_vpc.id}'
           availability_zone: >-
-            ${element(var.landing_zone_directory_service_directory_availability_zone,
+            ${element(var.landing_zone_directory_service_directory_availability_zones,
             count.index)}
     resource:
       aws_directory_service_directory:

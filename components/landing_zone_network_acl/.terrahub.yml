@@ -1,0 +1,43 @@
+component:
+  name: landing_zone_network_acl
+  dependsOn:
+    - ../landing_zone_vpc
+    - ../landing_zone_subnet
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_network_acl/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_subnet_ids:
+        selected:
+          count: '${length(data.aws_vpc.selected.*.id)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          filter:
+            name: cidr-block
+            values:
+              - >-
+                ${split(",", element(var.landing_zone_subnet_cidr_blocks,
+                count.index))}
+    resource:
+      aws_network_acl:
+        landing_zone_network_acl:
+          count: '${length(var.landing_zone_network_acl_names)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_network_acl_tags, map("Name",
+            "${element(var.landing_zone_network_acl_names, count.index)}"))}
+          subnet_ids:
+            - '${data.aws_subnet_ids.selected.ids}'
+    output:
+      ids:
+        value: '${aws_network_acl.landing_zone_network_acl.*.id}'
+      thub_ids:
+        value: '${aws_network_acl.landing_zone_network_acl.*.id}'
+      landing_zone_network_acl_ids:
+        value: '${aws_network_acl.landing_zone_network_acl.*.id}'

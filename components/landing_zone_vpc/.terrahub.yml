@@ -9,16 +9,20 @@ component:
       aws_vpc:
         landing_zone_vpc:
           count: '${length(var.landing_zone_vpc_names)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_block, count.index)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
           tags: >-
-            ${merge(var.landing_zone_vpc_tags, map("Name", "${element(var.landing_zone_vpc_names,
-            count.index)}"))}
-          instance_tenancy: '${element(var.landing_zone_vpc_instance_tenancy, count.index)}'
-          enable_dns_support: '${element(var.landing_zone_vpc_enable_dns_support, count.index)}'
-          assign_generated_ipv6_cidr_block: '${element(var.landing_zone_vpc_assign_generated_ipv6_cidr_block, count.index)}'
-          enable_classiclink: '${element(var.landing_zone_vpc_enable_classiclink, count.index)}'
+            ${merge(var.landing_zone_vpc_tags, map("Name",
+            "${element(var.landing_zone_vpc_names, count.index)}"))}
+          instance_tenancy: '${element(var.landing_zone_vpc_instance_tenancies, count.index)}'
+          enable_dns_support: '${element(var.landing_zone_vpc_enable_dns_supports, count.index)}'
+          assign_generated_ipv6_cidr_block: >-
+            ${element(var.landing_zone_vpc_assign_generated_ipv6_cidr_blocks,
+            count.index)}
+          enable_classiclink: '${element(var.landing_zone_vpc_enable_classiclinks, count.index)}'
           enable_dns_hostnames: '${element(var.landing_zone_vpc_enable_dns_hostnames, count.index)}'
-          enable_classiclink_dns_support: '${element(var.landing_zone_vpc_enable_classiclink_dns_support, count.index)}'
+          enable_classiclink_dns_support: >-
+            ${element(var.landing_zone_vpc_enable_classiclink_dns_supports,
+            count.index)}
     output:
       ids:
         value: '${aws_vpc.landing_zone_vpc.*.id}'
