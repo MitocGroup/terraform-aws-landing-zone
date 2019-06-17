@@ -9,21 +9,23 @@ component:
           path: >-
             ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
     data:
-      terraform_remote_state:
-        landing_zone_vpc:
-          backend: local
-          config:
-            path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
     resource:
       aws_route_table:
         landing_zone_route_table:
-          vpc_id: '${data.terraform_remote_state.landing_zone_vpc.thub_id}'
-          tags: '${var.landing_zone_route_table_tags}'
+          count: '${length(var.landing_zone_route_table_names)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_route_table_tags, map("Name",
+            "${element(var.landing_zone_route_table_names, count.index)}"))}
           propagating_vgws: '${var.landing_zone_route_table_propagating_vgws}'
     output:
-      id:
-        value: '${aws_route_table.landing_zone_route_table.id}'
-      thub_id:
-        value: '${aws_route_table.landing_zone_route_table.id}'
-      landing_zone_route_table_id:
-        value: '${aws_route_table.landing_zone_route_table.id}'
+      ids:
+        value: '${aws_route_table.landing_zone_route_table.*.id}'
+      thub_ids:
+        value: '${aws_route_table.landing_zone_route_table.*.id}'
+      landing_zone_route_table_ids:
+        value: '${aws_route_table.landing_zone_route_table.*.id}'

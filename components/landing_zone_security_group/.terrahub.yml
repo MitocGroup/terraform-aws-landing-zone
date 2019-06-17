@@ -1,0 +1,34 @@
+component:
+  name: landing_zone_security_group
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+    resource:
+      aws_security_group:
+        landing_zone_security_group:
+          count: '${length(var.landing_zone_security_group_names)}'
+          name: '${element(var.landing_zone_security_group_names, count.index)}'
+          description: >-
+            ${element(var.landing_zone_security_group_descriptions,
+            count.index)}
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_security_group_tags, map("Name",
+            "${element(var.landing_zone_security_group_names, count.index)}"))}
+    output:
+      ids:
+        value: '${aws_security_group.landing_zone_security_group.*.id}'
+      thub_ids:
+        value: '${aws_security_group.landing_zone_security_group.*.id}'
+      landing_zone_security_group_ids:
+        value: '${aws_security_group.landing_zone_security_group.*.id}'

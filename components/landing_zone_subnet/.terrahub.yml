@@ -1,0 +1,43 @@
+component:
+  name: landing_zone_subnet
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: '${local.component["local"]}/landing_zone_subnet/terraform.tfstate'
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+    resource:
+      aws_subnet:
+        landing_zone_subnet:
+          count: '${length(var.landing_zone_subnet_cidr_blocks)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
+          availability_zone: '${element(var.availability_zones, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_subnet_tags, map("Name",
+            "${element(var.landing_zone_subnet_names, count.index)}
+            ${element(var.availability_zones, count.index)}"))}
+          assign_ipv6_address_on_creation: >-
+            ${element(var.landing_zone_subnet_assign_ipv6_address_on_creation,
+            count.index)}
+    output:
+      ids:
+        value: '${aws_subnet.landing_zone_subnet.*.id}'
+      thub_ids:
+        value: '${aws_subnet.landing_zone_subnet.*.id}'
+      availability_zone_ids:
+        value: '${aws_subnet.landing_zone_subnet.*.availability_zone_id}'
+      arns:
+        value: '${aws_subnet.landing_zone_subnet.*.arn}'
+      landing_zone_subnet_ids:
+        value: '${aws_subnet.landing_zone_subnet.*.id}'
+      landing_zone_subnet_availability_zone_ids:
+        value: '${aws_subnet.landing_zone_subnet.*.availability_zone_id}'
+      landing_zone_subnet_arns:
+        value: '${aws_subnet.landing_zone_subnet.*.arn}'

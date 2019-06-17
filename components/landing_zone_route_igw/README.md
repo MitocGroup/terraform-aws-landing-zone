@@ -1,2 +1,2 @@
-# landing_zone_organization
+# landing_zone_route_igw
 Component for AWS Landing Zone

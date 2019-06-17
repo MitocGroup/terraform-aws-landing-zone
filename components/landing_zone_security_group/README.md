@@ -1,2 +1,2 @@
-# landing_zone_subnet_public
+# landing_zone_security_group
 Component for AWS Landing Zone
