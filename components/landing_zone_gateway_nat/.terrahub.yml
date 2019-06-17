@@ -1,0 +1,49 @@
+component:
+  name: landing_zone_gateway_nat
+  dependsOn:
+    - ../landing_zone_eip
+    - ../landing_zone_subnet
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_gateway_nat/terraform.tfstate
+    data:
+      terraform_remote_state:
+        landing_zone_eip:
+          backend: local
+          config:
+            path: '${local.component["local"]}/landing_zone_eip/terraform.tfstate'
+        landing_zone_subnet:
+          backend: local
+          config:
+            path: >-
+              ${local.component["local"]}/landing_zone_subnet/terraform.tfstate
+    resource:
+      aws_nat_gateway:
+        landing_zone_gateway_nat:
+          count: >-
+            ${length(data.terraform_remote_state.landing_zone_subnet.thub_ids)}
+          allocation_id: >-
+            ${element(data.terraform_remote_state.landing_zone_eip.thub_ids,
+            count.index)}
+          subnet_id: >-
+            ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
+            count.index)}
+          tags: >-
+            ${merge(var.landing_zone_gateway_nat_tags, map("Name", "Landing Zone
+            Nat Gateway
+            ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
+            count.index)}"))}
+    output:
+      ids:
+        value: '${aws_nat_gateway.landing_zone_gateway_nat.*.id}'
+      thub_ids:
+        value: '${aws_nat_gateway.landing_zone_gateway_nat.*.id}'
+      network_interface_ids:
+        value: '${aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id}'
+      landing_zone_gateway_nat_ids:
+        value: '${aws_nat_gateway.landing_zone_gateway_nat.*.id}'
+      landing_zone_gateway_nat_network_interface_ids:
+        value: '${aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id}'

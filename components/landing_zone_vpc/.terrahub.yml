@@ -8,22 +8,29 @@ component:
     resource:
       aws_vpc:
         landing_zone_vpc:
-          cidr_block: '${var.landing_zone_vpc_cidr_block}'
-          tags: '${var.landing_zone_vpc_tags}'
-          instance_tenancy: '${var.landing_zone_vpc_instance_tenancy}'
-          enable_dns_support: '${var.landing_zone_vpc_enable_dns_support}'
-          assign_generated_ipv6_cidr_block: '${var.landing_zone_vpc_assign_generated_ipv6_cidr_block}'
-          enable_classiclink: '${var.landing_zone_vpc_enable_classiclink}'
-          enable_dns_hostnames: '${var.landing_zone_vpc_enable_dns_hostnames}'
-          enable_classiclink_dns_support: '${var.landing_zone_vpc_enable_classiclink_dns_support}'
+          count: '${length(var.landing_zone_vpc_names)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_vpc_tags, map("Name",
+            "${element(var.landing_zone_vpc_names, count.index)}"))}
+          instance_tenancy: '${element(var.landing_zone_vpc_instance_tenancies, count.index)}'
+          enable_dns_support: '${element(var.landing_zone_vpc_enable_dns_supports, count.index)}'
+          assign_generated_ipv6_cidr_block: >-
+            ${element(var.landing_zone_vpc_assign_generated_ipv6_cidr_blocks,
+            count.index)}
+          enable_classiclink: '${element(var.landing_zone_vpc_enable_classiclinks, count.index)}'
+          enable_dns_hostnames: '${element(var.landing_zone_vpc_enable_dns_hostnames, count.index)}'
+          enable_classiclink_dns_support: >-
+            ${element(var.landing_zone_vpc_enable_classiclink_dns_supports,
+            count.index)}
     output:
-      id:
-        value: '${aws_vpc.landing_zone_vpc.id}'
-      thub_id:
-        value: '${aws_vpc.landing_zone_vpc.id}'
-      arn:
-        value: '${aws_vpc.landing_zone_vpc.arn}'
-      landing_zone_vpc_id:
-        value: '${aws_vpc.landing_zone_vpc.id}'
-      landing_zone_vpc_arn:
-        value: '${aws_vpc.landing_zone_vpc.arn}'
+      ids:
+        value: '${aws_vpc.landing_zone_vpc.*.id}'
+      thub_ids:
+        value: '${aws_vpc.landing_zone_vpc.*.id}'
+      arns:
+        value: '${aws_vpc.landing_zone_vpc.*.arn}'
+      landing_zone_vpc_ids:
+        value: '${aws_vpc.landing_zone_vpc.*.id}'
+      landing_zone_vpc_arns:
+        value: '${aws_vpc.landing_zone_vpc.*.arn}'

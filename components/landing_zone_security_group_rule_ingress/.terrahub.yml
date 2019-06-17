@@ -1,0 +1,48 @@
+component:
+  name: landing_zone_security_group_rule_ingress
+  dependsOn:
+    - ../landing_zone_security_group
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_security_group_rule_ingress/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_security_group:
+        selected:
+          count: '${length(data.aws_vpc.selected.*.id)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          name: '${element(var.landing_zone_security_group_names, count.index)}'
+    resource:
+      aws_security_group_rule:
+        landing_zone_security_group_rule_ingress:
+          count: '${length(var.landing_zone_security_group_association_relation)}'
+          type: ingress
+          protocol: >-
+            ${element(var.landing_zone_security_group_rule_ingress_protocols,
+            count.index)}
+          from_port: >-
+            ${element(var.landing_zone_security_group_rule_ingress_from_ports,
+            count.index)}
+          to_port: >-
+            ${element(var.landing_zone_security_group_rule_ingress_to_ports,
+            count.index)}
+          security_group_id: >-
+            ${element(data.aws_security_group.selected.*.id, element(split("|",
+            element(var.landing_zone_security_group_association_relation,
+            count.index)), 1))}
+          self: >-
+            ${element(var.landing_zone_security_group_rule_ingress_selfies,
+            count.index)}
+    output:
+      ids:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_rule_ingress.*.id}
+      thub_ids:
+        value: >-
+          ${aws_security_group_rule.landing_zone_security_group_rule_ingress.*.id}

@@ -1,0 +1,41 @@
+component:
+  name: landing_zone_network_acl_rules
+  dependsOn:
+    - ../landing_zone_network_acl
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_network_acl_rules/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_network_acls:
+        selected:
+          count: '${length(data.aws_vpc.selected.*.id)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+    resource:
+      aws_network_acl_rule:
+        landing_zone_network_acl_rules:
+          count: '${length(var.landing_zone_network_acl_rules_rule_numbers)}'
+          network_acl_id: >-
+            ${element(data.aws_network_acls.selected.ids,
+            element(split("|",
+            element(var.landing_zone_network_acl_association_vpcs,
+            count.index)), 1))}
+          rule_number: >-
+            ${element(var.landing_zone_network_acl_rules_rule_numbers,
+            count.index)}
+          protocol: >-
+            ${element(var.landing_zone_network_acl_rules_protocols,
+            count.index)}
+          rule_action: >-
+            ${element(var.landing_zone_network_acl_rules_rule_actions,
+            count.index)}
+          egress: '${element(var.landing_zone_network_acl_rules_egress, count.index)}'
+          cidr_block: >-
+            ${element(var.landing_zone_network_acl_rules_cidr_blocks,
+            count.index)}
