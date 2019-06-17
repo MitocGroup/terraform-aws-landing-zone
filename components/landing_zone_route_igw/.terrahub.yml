@@ -1,5 +1,5 @@
 component:
-  name: landing_zone_route_igx
+  name: landing_zone_route_igw
   dependsOn:
     - ../landing_zone_route_table
     - ../landing_zone_internet_gateway
@@ -7,7 +7,7 @@ component:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_route_igx/terraform.tfstate'
+          path: '${local.component["local"]}/landing_zone_route_igw/terraform.tfstate'
     data:
       aws_subnet:
         selected:
@@ -28,10 +28,10 @@ component:
                 count.index)}
     resource:
       aws_route:
-        landing_zone_route_igx:
+        landing_zone_route_igw:
           count: >-
             ${length(distinct(data.aws_route_table.selected.*.id)) *
-            length(var.landing_zone_route_igx_destination_cidr_blocks)}
+            length(var.landing_zone_route_igw_destination_cidr_blocks)}
           route_table_id: >-
             ${element(distinct(data.aws_route_table.selected.*.id),
             count.index)}
@@ -39,12 +39,12 @@ component:
             ${element(distinct(data.aws_internet_gateway.selected.*.id),
             count.index)}
           destination_cidr_block: >-
-            ${element(var.landing_zone_route_igx_destination_cidr_blocks,
+            ${element(var.landing_zone_route_igw_destination_cidr_blocks,
             count.index)}
     output:
       ids:
-        value: '${aws_route.landing_zone_route_igx.*.id}'
+        value: '${aws_route.landing_zone_route_igw.*.id}'
       thub_ids:
-        value: '${aws_route.landing_zone_route_igx.*.id}'
-      landing_zone_route_igx_ids:
-        value: '${aws_route.landing_zone_route_igx.*.id}'
+        value: '${aws_route.landing_zone_route_igw.*.id}'
+      landing_zone_route_igw_ids:
+        value: '${aws_route.landing_zone_route_igw.*.id}'
