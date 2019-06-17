@@ -12,7 +12,7 @@ guidelines, this repository contains the following folders:
 * root folder - module's standard terraform configuration
 * [components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
 * [examples](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
-* [modules](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules) - standalone, reusable and production-ready module
+* [modules](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules) - standalone, reusable and production-ready modules
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
@@ -23,7 +23,7 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.5"
+  version    = "0.0.6"
   root_path  = "${path.module}"
   account_id = "${var.account_id}"
   region     = "${var.region}"
@@ -47,10 +47,10 @@ This means that when you use this terraform module, you will need to:
 1. Change `account_id` and `region` to values that correspond to your AWS Organization
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
     * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
-    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3
-3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files
+    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 (or local disk)
+3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files (or absolute path on local disk)
 
-> NOTE: This module can have tens, hundreds or thousands of components. At runtime, components that are not part of `landing_zone_components` map will be ignored.
+> NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be deployed. At runtime, components that are not part of `landing_zone_components` map will be ignored.
 
 
 ## What Components Are Available

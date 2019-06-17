@@ -8,7 +8,7 @@ resource "null_resource" "landing_zone_config" {
 
   "provisioner" "local-exec" {
     when    = "create"
-    command = "sh ${path.module}/scripts/add_config.sh"
+    command = "sh ${path.module}/scripts/config.sh"
     environment = {
       ROOT_PATH = "${var.root_path}"
       COMMAND = "${var.landing_zone_command}"
@@ -20,7 +20,7 @@ resource "null_resource" "landing_zone_config" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "python ${path.module}/scripts/sub_config.py"
+    command = "python ${path.module}/scripts/remove_config.py"
     environment = {
       root = "${var.root_path}"
       components = "${jsonencode(var.landing_zone_components)}"
