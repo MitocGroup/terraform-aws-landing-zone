@@ -20,8 +20,7 @@ component:
           vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
           tags: >-
             ${merge(var.landing_zone_gateway_igw_tags, map("Name",
-            "${element(var.landing_zone_gateway_igw_names,
-            count.index)}"))}
+            "${element(var.landing_zone_gateway_igw_names, count.index)}"))}
     output:
       ids:
         value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
