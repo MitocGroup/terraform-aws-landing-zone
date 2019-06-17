@@ -48,9 +48,9 @@ This means that when you use this terraform module, you will need to:
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
     * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 (or local disk)
-3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files (or absolute path on local disk)
+3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files (or absolute path to `.tfvars` files on local disk)
 
-> NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be deployed. At runtime, components that are not part of `landing_zone_components` map will be ignored.
+> NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` map variable will be ignored.
 
 
 ## What Components Are Available
