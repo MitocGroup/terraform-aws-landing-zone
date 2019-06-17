@@ -1,2 +1,2 @@
-# landing_zone_nat_gateway
+# landing_zone_gateway_igw
 Component for AWS Landing Zone

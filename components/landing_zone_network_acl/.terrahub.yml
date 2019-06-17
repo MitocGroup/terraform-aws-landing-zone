@@ -22,7 +22,7 @@ component:
             name: cidr-block
             values:
               - >-
-                ${split(",", element(var.landing_zone_subnet_cidr_blocks,
+                ${split("|", element(var.landing_zone_subnet_cidr_blocks,
                 count.index))}
     resource:
       aws_network_acl:

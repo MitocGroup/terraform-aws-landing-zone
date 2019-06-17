@@ -35,11 +35,11 @@ component:
           route_table_id: >-
             ${element(distinct(data.aws_route_table.selected.*.id),
             count.index)}
-          gateway_id: >-
-            ${element(distinct(data.aws_internet_gateway.selected.*.id),
-            count.index)}
           destination_cidr_block: >-
             ${element(var.landing_zone_route_igw_destination_cidr_blocks,
+            count.index)}
+          gateway_id: >-
+            ${element(distinct(data.aws_internet_gateway.selected.*.id),
             count.index)}
     output:
       ids:

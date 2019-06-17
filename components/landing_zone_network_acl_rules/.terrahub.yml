@@ -23,7 +23,7 @@ component:
           count: '${length(var.landing_zone_network_acl_rules_rule_numbers)}'
           network_acl_id: >-
             ${element(data.aws_network_acls.selected.ids,
-            element(split("/",
+            element(split("|",
             element(var.landing_zone_network_acl_association_vpcs,
             count.index)), 1))}
           rule_number: >-

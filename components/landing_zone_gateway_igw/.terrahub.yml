@@ -1,0 +1,31 @@
+component:
+  name: landing_zone_gateway_igw
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${local.component["local"]}/landing_zone_gateway_igw/terraform.tfstate
+    data:
+      aws_vpc:
+        selected:
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+    resource:
+      aws_internet_gateway:
+        landing_zone_gateway_igw:
+          count: '${length(var.landing_zone_gateway_igw_names)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          tags: >-
+            ${merge(var.landing_zone_gateway_igw_tags, map("Name",
+            "${element(var.landing_zone_gateway_igw_names,
+            count.index)}"))}
+    output:
+      ids:
+        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
+      thub_ids:
+        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
+      landing_zone_gateway_igw_ids:
+        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'

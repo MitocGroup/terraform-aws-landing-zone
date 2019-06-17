@@ -153,18 +153,18 @@ output "landing_zone_eip_public_ips" {
   description = "The Public IP's of the EIP."
 }
 
-output "landing_zone_nat_gateway_ids" {
-  value = "${module.landing_zone.landing_zone["landing_zone_nat_gateway_ids"]}"
+output "landing_zone_gateway_nat_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_gateway_nat_ids"]}"
   description = "The ID's of the Nat Gateway."
 }
 
-output "landing_zone_nat_gateway_network_interface_ids" {
-  value = "${module.landing_zone.landing_zone["landing_zone_nat_gateway_network_interface_ids"]}"
+output "landing_zone_gateway_nat_network_interface_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_gateway_nat_network_interface_ids"]}"
   description = "The Network interface ID's of the Nat Gateway."
 }
 
-output "landing_zone_internet_gateway_ids" {
-  value = "${module.landing_zone.landing_zone["landing_zone_internet_gateway_ids"]}"
+output "landing_zone_gateway_igw_ids" {
+  value = "${module.landing_zone.landing_zone["landing_zone_gateway_igw_ids"]}"
   description = "The ID's of the Internet Gateway."
 }
 

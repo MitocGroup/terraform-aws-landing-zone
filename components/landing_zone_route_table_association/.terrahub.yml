@@ -26,12 +26,12 @@ component:
           count: '${length(var.landing_zone_route_table_association_relation)}'
           subnet_id: >-
             ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
-            element(split("/",
+            element(split("|",
             element(var.landing_zone_route_table_association_relation,
             count.index)), 0))}
           route_table_id: >-
             ${element(data.terraform_remote_state.landing_zone_route_table.thub_ids,
-            element(split("/",
+            element(split("|",
             element(var.landing_zone_route_table_association_relation,
             count.index)), 1))}
     output:
