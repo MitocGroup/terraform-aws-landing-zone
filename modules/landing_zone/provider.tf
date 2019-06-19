@@ -1,4 +1,4 @@
 provider "aws" {
-  region              = "${var.region}"
-  allowed_account_ids = ["${var.account_id}"]
+  region              = "${lookup(lookup(var.provider_aliases, "default"), "region")}"
+  allowed_account_ids = ["${lookup(lookup(var.provider_aliases, "default"), "account_id")}"]
 }

@@ -1,6 +1,6 @@
 import os
 import json
-import subprocess
+from libs import cli
 from six import string_types
 
 def main():
@@ -12,7 +12,7 @@ def main():
         include.append(k)
     includeStr = ','.join(include)
     processes.append(['terrahub', 'init', '-i', includeStr])
-    processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
+    # processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
     execWithErrors(processes)
     return terrahubOutput(include)
 
@@ -21,13 +21,8 @@ def terrahubOutput(include):
 
     for include_item in include:
         result = ''
-        p = subprocess.Popen(
-            ['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=os.environ['root'])
-        (result, error) = p.communicate()
-        if p.wait() == 0:
+        (error, result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['root'])
+        if error == 0:
             response.update(extractOutputValues(result))
 
     output_file_path = os.path.join(os.environ['root'], 'output.json')
@@ -56,11 +51,10 @@ def getOutputValueByType(value):
 
 def execWithErrors(args_list):
     for args in args_list:
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-        (result, error) = p.communicate()
-        if p.wait() != 0:
+        (error, result) = cli(args, os.environ['root'])
+        if error != 0:
             print("Error: failed to execute command:")
-            raise Exception(error)
+            raise Exception(result)
 
 if __name__ == '__main__':
     RESP = main()

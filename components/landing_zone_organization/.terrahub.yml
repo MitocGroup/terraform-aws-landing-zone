@@ -5,10 +5,11 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_organization/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization/terraform.tfstate
     resource:
       aws_organizations_organization:
         landing_zone_organization:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           aws_service_access_principals: '${var.landing_zone_organization_service_access_principals}'
           enabled_policy_types: '${var.landing_zone_organization_enabled_policy_types}'
           feature_set: '${var.landing_zone_organization_feature_set}'

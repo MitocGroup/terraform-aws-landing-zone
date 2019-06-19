@@ -8,19 +8,19 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_code_build_role_policy/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_code_build_role_policy/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_pipeline_artifact_s3_bucket:
           backend: local
           config:
             path: >-
-              ${local.component["local"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
         landing_zone_code_build_role:
           backend: local
           config:
             path: >-
-              ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_code_build_role/terraform.tfstate
       template_file:
         landing_zone_code_build_role_policy:
           template: '${file("${local.component["path"]}/iam_assume_policy.json.tpl")}'
@@ -32,6 +32,7 @@ component:
     resource:
       aws_iam_role_policy:
         landing_zone_code_build_role_policy:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           name: '${var.landing_zone_code_build_role_policy_name}'
           policy: '${data.template_file.landing_zone_code_build_role_policy.rendered}'
           role: '${data.terraform_remote_state.landing_zone_code_build_role.id}'

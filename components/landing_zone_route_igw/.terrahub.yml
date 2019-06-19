@@ -3,22 +3,33 @@ component:
   dependsOn:
     - ../landing_zone_route_table
     - ../landing_zone_gateway_igw
+    - ../landing_zone_route_table_association
   template:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_route_igw/terraform.tfstate'
+          path: >-
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_igw/terraform.tfstate
     data:
+      aws_vpc:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
       aws_subnet:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_subnet_cidr_blocks)}'
           cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
       aws_route_table:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(data.aws_subnet.selected.*.id)}'
           subnet_id: '${element(data.aws_subnet.selected.*.id, count.index)}'
       aws_internet_gateway:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(distinct(data.aws_subnet.selected.*.vpc_id))}'
           filter:
             name: attachment.vpc-id
@@ -29,6 +40,7 @@ component:
     resource:
       aws_route:
         landing_zone_route_igw:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: >-
             ${length(distinct(data.aws_route_table.selected.*.id)) *
             length(var.landing_zone_route_igw_destination_cidr_blocks)}

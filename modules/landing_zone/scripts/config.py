@@ -1,12 +1,39 @@
 import os
 import json
-import subprocess
+from libs import cli
 
 def main():
     components = eval(os.environ['components'])
+    aliases    = eval(os.environ['aliases'])
+
     processes = []
-    processes.append(['terrahub', 'configure', '-c', 'template.tfvars.region=' + os.environ['region']])
-    processes.append(['terrahub', 'configure', '-c', 'template.tfvars.account_id=' + os.environ['account_id']])
+    index = 1
+    for (k, v) in aliases.items():
+        if k != 'default':
+            index += 1
+            default = 'template.provider[' + str(index) + ']'
+            processes.append(['terrahub', 'configure', '-c',
+                default +'={}'])
+            processes.append(['terrahub', 'configure', '-c',
+                default +'.aws={}'])
+            processes.append(['terrahub', 'configure', '-c',
+                default + '.aws.alias=' + k])
+            processes.append(['terrahub', 'configure', '-c',
+                default + '.aws.region=${var.'+ k + '_region}'])
+            processes.append(['terrahub', 'configure', '-c',
+                default + '.aws.assume_role[0]={}'])
+            config = '\'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole\''
+            processes.append(['terrahub', 'configure', '-c',
+                default + '.aws.assume_role[0].role_arn=' + config])
+            processes.append(['terrahub', 'configure', '-c',
+                default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
+        for (key_sub, val_sub) in v.items():
+            if k == 'default':
+                processes.append(['terrahub', 'configure', '-c',
+                    'template.tfvars.' + key_sub + '=' + val_sub])
+            else:
+                processes.append(['terrahub', 'configure', '-c',
+                    'template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
 
     for (k, v) in components.items():
         execWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
@@ -16,18 +43,16 @@ def main():
 
 def execWithErrors(args_list):
     for args in args_list:
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-        (result, error) = p.communicate()
-        if p.wait() != 0:
+        (error, result) = cli(args, os.environ['root'])
+        if error != 0:
             print("Error: failed to execute command:")
-            raise Exception(error)
+            raise Exception(result)
 
 def execWithoutErrors(args_list):
-    p = subprocess.Popen(args_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-    (result, error) = p.communicate()
-    if p.wait() != 0:
+    (error, result) = cli(args_list, os.environ['root'])
+    if error != 0:
         print("Error: failed to execute command:")
-        print(error)
+        print(result)
 
 if __name__ == '__main__':
     RESP = main()

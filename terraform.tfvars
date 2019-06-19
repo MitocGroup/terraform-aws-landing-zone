@@ -1,6 +1,13 @@
-account_id = "123456789012"
-
-region = "us-east-1"
+provider_aliases = {
+  default = {
+    account_id = "123456789012"
+    region     = "us-east-1"
+  } // ,
+  # sample = {
+  #   account_id = "123456789012"
+  #   region     = "us-east-1"
+  # }
+}
 
 landing_zone_components = {
   landing_zone_pipeline_s3_bucket             = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"

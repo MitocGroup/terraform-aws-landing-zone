@@ -4,13 +4,15 @@ component:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_eip/terraform.tfstate'
+          path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_eip/terraform.tfstate'
     resource:
       aws_eip:
         landing_zone_eip:
-          count: ${var.landing_zone_eip_names}
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${var.landing_zone_eip_names}'
           tags: >-
-            ${merge(var.landing_zone_eip_tags, map("Name", "${element(var.landing_zone_eip_names, count.index)}"))}
+            ${merge(var.landing_zone_eip_tags, map("Name",
+            "${element(var.landing_zone_eip_names, count.index)}"))}
           vpc: '${var.landing_zone_eip_vpc}'
     output:
       ids:

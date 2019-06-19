@@ -6,15 +6,18 @@ component:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_subnet/terraform.tfstate'
+          path: >-
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate
     data:
       aws_vpc:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_vpc_cidr_blocks)}'
           cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
     resource:
       aws_subnet:
         landing_zone_subnet:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_subnet_cidr_blocks)}'
           vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
           cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'

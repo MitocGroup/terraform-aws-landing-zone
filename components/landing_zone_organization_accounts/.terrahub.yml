@@ -7,19 +7,22 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_organization_accounts/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization_accounts/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_organization:
           backend: local
           config:
             path: >-
-              ${local.component["local"]}/landing_zone_organization/terraform.tfstate
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization/terraform.tfstate
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_organization_accounts_emails)}'
-          name: '${element(var.landing_zone_organization_accounts_names, count.index)}'
+          name: >-
+            ${element(var.landing_zone_organization_accounts_names,
+            count.index)}
           email: >-
             ${element(var.landing_zone_organization_accounts_emails,
             count.index)}
