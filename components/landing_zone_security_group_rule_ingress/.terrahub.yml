@@ -7,20 +7,23 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_security_group_rule_ingress/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_security_group_rule_ingress/terraform.tfstate
     data:
       aws_vpc:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_vpc_cidr_blocks)}'
           cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
       aws_security_group:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(data.aws_vpc.selected.*.id)}'
           vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
           name: '${element(var.landing_zone_security_group_names, count.index)}'
     resource:
       aws_security_group_rule:
         landing_zone_security_group_rule_ingress:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_security_group_association_relation)}'
           type: ingress
           protocol: >-

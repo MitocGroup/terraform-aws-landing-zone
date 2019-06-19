@@ -8,30 +8,48 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_route_table_association/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_table_association/terraform.tfstate
     data:
-      terraform_remote_state:
-        landing_zone_route_table:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
-        landing_zone_subnet:
-          backend: local
-          config:
-            path: '${local.component["local"]}/landing_zone_subnet/terraform.tfstate'
+      aws_vpc:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_subnet:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_subnet_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+      aws_route_table:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_route_table_filters)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          filter:
+            - name: 'tag:Name'
+              values:
+                - >-
+                  ${element(split("|",
+                  element(var.landing_zone_route_table_filters, count.index)),
+                  0)}
+            - name: association.main
+              values:
+                - >-
+                  ${element(split("|",
+                  element(var.landing_zone_route_table_filters, count.index)),
+                  1)}
     resource:
       aws_route_table_association:
         landing_zone_route_table_association:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_route_table_association_relation)}'
           subnet_id: >-
-            ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
-            element(split("|",
+            ${element(data.aws_subnet.selected.*.id, element(split("|",
             element(var.landing_zone_route_table_association_relation,
             count.index)), 0))}
           route_table_id: >-
-            ${element(data.terraform_remote_state.landing_zone_route_table.thub_ids,
-            element(split("|",
+            ${element(data.aws_route_table.selected.*.id, element(split("|",
             element(var.landing_zone_route_table_association_relation,
             count.index)), 1))}
     output:

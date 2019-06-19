@@ -4,10 +4,11 @@ component:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+          path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_vpc/terraform.tfstate'
     resource:
       aws_vpc:
         landing_zone_vpc:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_vpc_names)}'
           cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
           tags: >-

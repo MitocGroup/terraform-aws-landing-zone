@@ -5,13 +5,15 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_directory_service_directory/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_directory_service_directory/terraform.tfstate
     data:
       aws_vpc:
         default_vpc:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           default: true
       aws_subnet:
         default_subnet:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: >-
             ${length(var.landing_zone_directory_service_directory_availability_zones)}
           vpc_id: '${data.aws_vpc.default_vpc.id}'
@@ -21,6 +23,7 @@ component:
     resource:
       aws_directory_service_directory:
         landing_zone_directory_service_directory:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           name: '${var.landing_zone_directory_service_directory_name}'
           short_name: '${var.landing_zone_directory_service_directory_short_name}'
           password: '${var.landing_zone_directory_service_directory_password}'

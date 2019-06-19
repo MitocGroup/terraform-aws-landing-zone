@@ -8,33 +8,34 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_gateway_nat/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_gateway_nat/terraform.tfstate
     data:
-      terraform_remote_state:
-        landing_zone_eip:
-          backend: local
-          config:
-            path: '${local.component["local"]}/landing_zone_eip/terraform.tfstate'
-        landing_zone_subnet:
-          backend: local
-          config:
-            path: >-
-              ${local.component["local"]}/landing_zone_subnet/terraform.tfstate
+      aws_vpc:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+      aws_subnet:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_subnet_cidr_blocks)}'
+          cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
+          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+      aws_eip:
+        selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(var.landing_zone_eip_public_ips)}'
+          public_ip: '${element(var.landing_zone_eip_public_ips, count.index)}'
     resource:
       aws_nat_gateway:
         landing_zone_gateway_nat:
-          count: >-
-            ${length(data.terraform_remote_state.landing_zone_subnet.thub_ids)}
-          allocation_id: >-
-            ${element(data.terraform_remote_state.landing_zone_eip.thub_ids,
-            count.index)}
-          subnet_id: >-
-            ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
-            count.index)}
+          provider: '${tfvar.terrahub["provider_alias"]}'
+          count: '${length(data.aws_subnet.selected.*.id)}'
+          allocation_id: '${element(data.aws_eip.selected.*.id, count.index)}'
+          subnet_id: '${element(data.aws_subnet.selected.*.id, count.index)}'
           tags: >-
             ${merge(var.landing_zone_gateway_nat_tags, map("Name", "Landing Zone
-            Nat Gateway
-            ${element(data.terraform_remote_state.landing_zone_subnet.thub_ids,
+            Nat Gateway ${element(data.aws_subnet.selected.*.id,
             count.index)}"))}
     output:
       ids:

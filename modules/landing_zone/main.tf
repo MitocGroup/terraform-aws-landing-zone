@@ -2,8 +2,7 @@ resource "null_resource" "landing_zone_config" {
   triggers = {
     command    = "${var.landing_zone_command}"
     components = "${md5(jsonencode(var.landing_zone_components))}"
-    region     = "${var.region}"
-    account_id = "${var.account_id}"
+    aliases    = "${md5(jsonencode(var.provider_aliases))}"
   }
 
   "provisioner" "local-exec" {
@@ -14,8 +13,7 @@ resource "null_resource" "landing_zone_config" {
       ROOT_PATH  = "${var.root_path}"
       COMMAND    = "${var.landing_zone_command}"
       COMPONENTS = "${jsonencode(var.landing_zone_components)}"
-      REGION     = "${var.region}"
-      ACCOUNT_ID = "${var.account_id}"
+      ALIASES    = "${jsonencode(var.provider_aliases)}"
     }
   }
 
@@ -47,8 +45,6 @@ resource "null_resource" "landing_zone_apply" {
       ROOT_PATH  = "${var.root_path}"
       COMMAND    = "${var.landing_zone_command}"
       COMPONENTS = "${jsonencode(var.landing_zone_components)}"
-      REGION     = "${var.region}"
-      ACCOUNT_ID = "${var.account_id}"
     }
   }
 

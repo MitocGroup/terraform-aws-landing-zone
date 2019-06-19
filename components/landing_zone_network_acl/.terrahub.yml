@@ -8,14 +8,16 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_network_acl/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_network_acl/terraform.tfstate
     data:
       aws_vpc:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_vpc_cidr_blocks)}'
           cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
       aws_subnet_ids:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(data.aws_vpc.selected.*.id)}'
           vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
           filter:
@@ -27,6 +29,7 @@ component:
     resource:
       aws_network_acl:
         landing_zone_network_acl:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_network_acl_names)}'
           vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
           tags: >-

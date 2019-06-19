@@ -7,15 +7,17 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_security_group/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_security_group/terraform.tfstate
     data:
       aws_vpc:
         selected:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_vpc_cidr_blocks)}'
           cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
     resource:
       aws_security_group:
         landing_zone_security_group:
+          provider: '${tfvar.terrahub["provider_alias"]}'
           count: '${length(var.landing_zone_security_group_names)}'
           name: '${element(var.landing_zone_security_group_names, count.index)}'
           description: >-

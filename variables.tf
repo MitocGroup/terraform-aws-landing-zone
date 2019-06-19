@@ -1,11 +1,7 @@
-variable "account_id" {
-  type        = "string"
-  description = "AWS account ID to prevent you from mistakenly using an incorrect one (and potentially end up destroying a live environment)."
-}
-
-variable "region" {
-  type        = "string"
-  description = "This is the AWS region. It must be provided, but it can also be sourced from the AWS_DEFAULT_REGION environment variables, or via a shared credentials file if profile is specified."
+variable "provider_aliases" {
+  type        = "map"
+  default     = {}
+  description = "The list of AWS providers."
 }
 
 variable "landing_zone_components" {
