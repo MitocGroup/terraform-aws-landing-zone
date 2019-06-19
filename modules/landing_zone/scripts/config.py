@@ -12,21 +12,15 @@ def main():
         if k != 'default':
             index += 1
             default = 'template.provider[' + str(index) + ']'
-            processes.append(['terrahub', 'configure', '-c',
-                default +'={}'])
-            processes.append(['terrahub', 'configure', '-c',
-                default +'.aws={}'])
-            processes.append(['terrahub', 'configure', '-c',
-                default + '.aws.alias=' + k])
-            processes.append(['terrahub', 'configure', '-c',
-                default + '.aws.region=${var.'+ k + '_region}'])
-            processes.append(['terrahub', 'configure', '-c',
-                default + '.aws.assume_role[0]={}'])
+            default_processes = ['terrahub', 'configure', '-c']
+            processes.append(default_processes + [default +'={}'])
+            processes.append(default_processes + [default +'.aws={}'])
+            processes.append(default_processes + [default + '.aws.alias=' + k])
+            processes.append(default_processes + [default + '.aws.region=${var.'+ k + '_region}'])
+            processes.append(default_processes + [default + '.aws.assume_role[0]={}'])
             config = '\'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole\''
-            processes.append(['terrahub', 'configure', '-c',
-                default + '.aws.assume_role[0].role_arn=' + config])
-            processes.append(['terrahub', 'configure', '-c',
-                default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
+            processes.append(default_processes + [default + '.aws.assume_role[0].role_arn=' + config])
+            processes.append(default_processes + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
         for (key_sub, val_sub) in v.items():
             if k == 'default':
                 processes.append(['terrahub', 'configure', '-c',
