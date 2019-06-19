@@ -1,6 +1,6 @@
 import os
 import json
-from libs import cli
+from libs import execWithErrors, execWithoutErrors
 
 def main():
     components = eval(os.environ['components'])
@@ -40,19 +40,6 @@ def main():
         processes.append(['terrahub', 'configure', '-i', k, '-c', 'terraform.varFile[0]=' + str(v)])
     execWithErrors(processes)
     return 'Success'
-
-def execWithErrors(args_list):
-    for args in args_list:
-        (error, result) = cli(args, os.environ['root'])
-        if error != 0:
-            print("Error: failed to execute command:")
-            raise Exception(result)
-
-def execWithoutErrors(args_list):
-    (error, result) = cli(args_list, os.environ['root'])
-    if error != 0:
-        print("Error: failed to execute command:")
-        print(result)
 
 if __name__ == '__main__':
     RESP = main()

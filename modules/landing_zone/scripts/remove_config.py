@@ -1,6 +1,6 @@
 import os
 import json
-from libs import cli
+from libs import execWithoutErrors
 
 def main():
     components = eval(os.environ['components'])
@@ -25,12 +25,6 @@ def main():
     for (k, v) in components.items():
         execWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
     return 'Success'
-
-def execWithoutErrors(args_list):
-    (error, result) = cli(args_list, os.environ['root'])
-    if error != 0:
-        print("Error: failed to execute command:")
-        print(result)
 
 if __name__ == '__main__':
     RESP = main()

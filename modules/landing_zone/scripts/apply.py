@@ -1,6 +1,6 @@
 import os
 import json
-from libs import cli
+from libs import cli, execWithErrors
 from six import string_types
 
 def main():
@@ -48,13 +48,6 @@ def getOutputValueByType(value):
         return value
     else:
         return ','.join(map(str, value))
-
-def execWithErrors(args_list):
-    for args in args_list:
-        (error, result) = cli(args, os.environ['root'])
-        if error != 0:
-            print("Error: failed to execute command:")
-            raise Exception(result)
 
 if __name__ == '__main__':
     RESP = main()
