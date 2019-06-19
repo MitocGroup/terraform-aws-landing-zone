@@ -1,7 +1,7 @@
 variable "provider_aliases" {
   type        = "map"
   default     = {}
-  description = "The list of aws providers."
+  description = "The list of AWS providers."
 }
 
 variable "root_path" {
