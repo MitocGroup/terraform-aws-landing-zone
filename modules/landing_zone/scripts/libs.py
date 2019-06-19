@@ -1,4 +1,3 @@
-
 import subprocess
 
 def cli(args, root_path):
