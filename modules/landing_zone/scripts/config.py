@@ -7,12 +7,12 @@ def main():
     aliases    = eval(os.environ['aliases'])
 
     processes = []
+    default_processes = ['terrahub', 'configure', '-c']
     index = 1
     for (k, v) in aliases.items():
         if k != 'default':
             index += 1
             default = 'template.provider[' + str(index) + ']'
-            default_processes = ['terrahub', 'configure', '-c']
             processes.append(default_processes + [default +'={}'])
             processes.append(default_processes + [default +'.aws={}'])
             processes.append(default_processes + [default + '.aws.alias=' + k])
@@ -23,15 +23,13 @@ def main():
             processes.append(default_processes + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
         for (key_sub, val_sub) in v.items():
             if k == 'default':
-                processes.append(['terrahub', 'configure', '-c',
-                    'template.tfvars.' + key_sub + '=' + val_sub])
+                processes.append(default_processes + ['template.tfvars.' + key_sub + '=' + val_sub])
             else:
-                processes.append(['terrahub', 'configure', '-c',
-                    'template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
+                processes.append(default_processes + ['template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
 
     for (k, v) in components.items():
-        execWithoutErrors(['terrahub', 'configure', '-i', k, '-c', 'terraform', '-D', '-y'])
-        processes.append(['terrahub', 'configure', '-i', k, '-c', 'terraform.varFile[0]=' + str(v)])
+        execWithoutErrors(default_processes + ['terraform', '-D', '-y', '-i', k])
+        processes.append(default_processes +['terraform.varFile[0]=' + str(v), '-i', k])
     execWithErrors(processes)
     return 'Success'
 
