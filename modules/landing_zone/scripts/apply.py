@@ -4,8 +4,8 @@ from libs import cli, execWithErrors
 from six import string_types
 
 def main():
-    components = eval(os.environ['components'])
     processes = []
+    components = eval(os.environ['components'])
     
     include = []
     for (k, v) in components.items():

@@ -1,8 +1,8 @@
 resource "null_resource" "landing_zone_config" {
   triggers = {
     command    = "${var.landing_zone_command}"
+    providers  = "${md5(jsonencode(var.landing_zone_providers))}"
     components = "${md5(jsonencode(var.landing_zone_components))}"
-    aliases    = "${md5(jsonencode(var.provider_aliases))}"
   }
 
   "provisioner" "local-exec" {
@@ -12,8 +12,8 @@ resource "null_resource" "landing_zone_config" {
     environment = {
       ROOT_PATH  = "${var.root_path}"
       COMMAND    = "${var.landing_zone_command}"
+      PROVIDERS  = "${jsonencode(var.landing_zone_providers)}"
       COMPONENTS = "${jsonencode(var.landing_zone_components)}"
-      ALIASES    = "${jsonencode(var.provider_aliases)}"
     }
   }
 

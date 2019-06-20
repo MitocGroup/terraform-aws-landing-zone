@@ -3,33 +3,33 @@ import json
 from libs import execWithErrors, execWithoutErrors
 
 def main():
-    components = eval(os.environ['components'])
-    aliases    = eval(os.environ['aliases'])
-
     processes = []
-    default_processes = ['terrahub', 'configure', '-c']
+    providers = eval(os.environ['providers'])
+    components = eval(os.environ['components'])
+
     index = 1
-    for (k, v) in aliases.items():
+    thub_cfg = ['terrahub', 'configure', '-c']
+    for (k, v) in providers.items():
         if k != 'default':
             index += 1
             default = 'template.provider[' + str(index) + ']'
-            processes.append(default_processes + [default +'={}'])
-            processes.append(default_processes + [default +'.aws={}'])
-            processes.append(default_processes + [default + '.aws.alias=' + k])
-            processes.append(default_processes + [default + '.aws.region=${var.'+ k + '_region}'])
-            processes.append(default_processes + [default + '.aws.assume_role[0]={}'])
-            config = '\'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole\''
-            processes.append(default_processes + [default + '.aws.assume_role[0].role_arn=' + config])
-            processes.append(default_processes + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
+            processes.append(thub_cfg + [default + '={}'])
+            processes.append(thub_cfg + [default + '.aws={}'])
+            processes.append(thub_cfg + [default + '.aws.alias=' + k])
+            processes.append(thub_cfg + [default + '.aws.region=${var.'+ k + '_region}'])
+            processes.append(thub_cfg + [default + '.aws.assume_role[0]={}'])
+            role_arn = '\'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole\''
+            processes.append(thub_cfg + [default + '.aws.assume_role[0].role_arn=' + role_arn])
+            processes.append(thub_cfg + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
         for (key_sub, val_sub) in v.items():
             if k == 'default':
-                processes.append(default_processes + ['template.tfvars.' + key_sub + '=' + val_sub])
+                processes.append(thub_cfg + ['template.tfvars.' + key_sub + '=' + val_sub])
             else:
-                processes.append(default_processes + ['template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
+                processes.append(thub_cfg + ['template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
 
     for (k, v) in components.items():
-        execWithoutErrors(default_processes + ['terraform', '-D', '-y', '-i', k])
-        processes.append(default_processes +['terraform.varFile[0]=' + str(v), '-i', k])
+        execWithoutErrors(thub_cfg + ['terraform', '-D', '-y', '-i', k])
+        processes.append(thub_cfg +['terraform.varFile[0]=' + str(v), '-i', k])
     execWithErrors(processes)
     return 'Success'
 

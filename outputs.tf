@@ -183,8 +183,8 @@ output "landing_zone_route_ids" {
   description = "The ID's of the Route."
 }
 
-output "landing_zone_route_igx_ids" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_route_igx_ids"]}"
+output "landing_zone_route_igw_ids" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_route_igw_ids"]}"
   description = "The ID's of the Local Route."
 }
 

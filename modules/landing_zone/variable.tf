@@ -1,12 +1,12 @@
-variable "provider_aliases" {
+variable "root_path" {
+  type        = "string"
+  description = "The path of root directory."
+}
+
+variable "landing_zone_providers" {
   type        = "map"
   default     = {}
   description = "The list of AWS providers."
-}
-
-variable "root_path" {
-  type = "string"
-  description = "The path of root directory."
 }
 
 variable "landing_zone_components" {
