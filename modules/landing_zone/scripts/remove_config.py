@@ -6,22 +6,22 @@ def main():
     components = eval(os.environ['components'])
     thub_cfg = ['terrahub', 'configure', '-c']
 
-    execWithoutErrors(thub_cfg + ['template.tfvars', '-D', '-y'])
-    execWithoutErrors(thub_cfg + ['template.provider', '-D', '-y'])
-    execWithoutErrors(thub_cfg + ['template.provider[0]={}'])
-    execWithoutErrors(thub_cfg + ['template.provider[0].aws={}'])
-    execWithoutErrors(thub_cfg + ['template.provider[0].aws.region=${var.region}'])
-    execWithoutErrors(thub_cfg + ['template.provider[0].aws.allowed_account_ids[]=${var.account_id}'])
-    execWithoutErrors(thub_cfg + ['template.provider[1]={}'])
-    execWithoutErrors(thub_cfg + ['template.provider[1].aws={}'])
-    execWithoutErrors(thub_cfg + ['template.provider[1].aws.alias=default'])
-    execWithoutErrors(thub_cfg + ['template.provider[1].aws.region=${var.region}'])
-    execWithoutErrors(thub_cfg + ['template.provider[1].aws.allowed_account_ids[]=${var.account_id}'])
+    execWithoutErrors(thub_cfg + ['template.tfvars', '-D', '-y'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider', '-D', '-y'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[0]={}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[0].aws={}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[0].aws.region=${var.region}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[0].aws.allowed_account_ids[]=${var.account_id}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[1]={}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[1].aws={}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[1].aws.alias=default'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[1].aws.region=${var.region}'], os.environ['root'])
+    execWithoutErrors(thub_cfg + ['template.provider[1].aws.allowed_account_ids[]=${var.account_id}'], os.environ['root'])
     execWithoutErrors(thub_cfg + ['template.tfvars.tfstate_path='
-        + '/tmp/.terrahub/tfstate_local/terraform-aws-landing-zone'])
+        + '/tmp/.terrahub/tfstate_local/terraform-aws-landing-zone'], os.environ['root'])
     
     for (k, v) in components.items():
-        execWithoutErrors(thub_cfg + ['terraform', '-i', k, '-D', '-y'])
+        execWithoutErrors(thub_cfg + ['terraform', '-i', k, '-D', '-y'], os.environ['root'])
     return 'Success'
 
 if __name__ == '__main__':

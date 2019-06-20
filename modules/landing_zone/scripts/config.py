@@ -28,9 +28,9 @@ def main():
                 processes.append(thub_cfg + ['template.tfvars.'+ k + '_' + key_sub + '=' + val_sub])
 
     for (k, v) in components.items():
-        execWithoutErrors(thub_cfg + ['terraform', '-D', '-y', '-i', k])
+        execWithoutErrors(thub_cfg + ['terraform', '-D', '-y', '-i', k], os.environ['root'])
         processes.append(thub_cfg +['terraform.varFile[0]=' + str(v), '-i', k])
-    execWithErrors(processes)
+    execWithErrors(processes, os.environ['root'])
     return 'Success'
 
 if __name__ == '__main__':

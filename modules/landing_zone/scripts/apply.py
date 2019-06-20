@@ -13,7 +13,7 @@ def main():
     includeStr = ','.join(include)
     processes.append(['terrahub', 'init', '-i', includeStr])
     processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
-    execWithErrors(processes)
+    execWithErrors(processes, os.environ['root'])
     return terrahubOutput(include)
 
 def terrahubOutput(include):

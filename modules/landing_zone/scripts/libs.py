@@ -8,15 +8,15 @@ def cli(args, root_path):
     else:
         return (0, result)
 
-def execWithErrors(args_list):
+def execWithErrors(args_list, root_path):
     for args in args_list:
-        (error, result) = cli(args, os.environ['root'])
+        (error, result) = cli(args, root_path)
         if error != 0:
             print("Error: failed to execute command:")
             raise Exception(result)
 
-def execWithoutErrors(args_list):
-    (error, result) = cli(args_list, os.environ['root'])
+def execWithoutErrors(args_list, root_path):
+    (error, result) = cli(args_list, root_path)
     if error != 0:
         print("Error: failed to execute command:")
         print(result)
