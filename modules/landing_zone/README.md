@@ -5,6 +5,8 @@ AWS environment based on AWS best practices. This repository contains one
 terraform module that dynamically deploys components of AWS Landing Zone
 solution based on input list of `.tfvars` files.
 
+Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Components Are Available](#what-components-are-available) | [Why to Use This Solution](#why-to-use-this-solution)
+
 
 ## How Does This Module Work
 Based on terraform's [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
@@ -107,3 +109,26 @@ Based on the user access architecture, here below are currently available compon
 
 Based on the notifications architecture, here below are currently available components:
 1. Coming soon ...
+
+<br clear="right" />
+
+
+## Why to Use This Solution
+
+### No need for code changes
+Terraform Module for AWS Landing Zone solution is up to 10 lines of code that receives a list of `.tfvars` files as input variables which describe providers (aka AWS accounts and AWS regions) and configs (aka AWS resources)
+
+### No need for code rewrites
+This implementation engages microservices architecture, allowing any component to be replaced with another component (or multiple components)
+
+### No need for hard-coded values
+Already created AWS resources by other teams can be reused programmatically by your team as terraform configurations
+
+### No need to exclude components from AWS accounts baseline anymore
+Some customers where avoiding in the past AWS Landing Zone because it doesn't support some kind of 3rd party SSO solution or 3rd party Logging solution. By using terraform, we can easily bring those solutions into AWS Landing Zone as a set of components and empower customers to continue using best practices of both worlds
+
+### Additionally, this module helps enforce best practices
+- By removing the need for access to AWS root account(s)
+- By using IAM cross-account roles and/or STS temporary credentials
+- By enabling centralized Cloudtrail logs and cross-account replication of Cloudtrail logs
+- By empowering complex organizations to separate roles and responsibilities (e.g. InfoSec team can place explicit deny on IAM, VPC, SG and STS for other teams and/or other environments like production or pre-production)
