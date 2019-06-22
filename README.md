@@ -129,8 +129,8 @@ Existing AWS resources created by your team can be reused programmatically as re
 ### No need to rebuild from scratch
 Existing AWS resources in your current AWS account(s) can be imported and reused without downtime by this terraform module via `terraform import` command
 
-### No need to exclude components from AWS accounts baseline anymore
-Some customers where avoiding in the past AWS Landing Zone because it doesn't support some kind of 3rd party SSO solution or 3rd party Logging solution. By using terraform, we can easily bring those solutions into AWS Landing Zone as a set of components and empower customers to continue using best practices of both worlds
+### No need to exclude pieces of account(s) baseline
+Some customers were avoiding in the past AWS Landing Zone because it doesn't support some kind of 3rd party SSO solution or 3rd party Logging solution. By using terraform, we can easily bring those solutions into AWS Landing Zone as a set of components and empower customers to continue using best practices of both worlds
 
 ### Additionally, this module helps enforce best practices
 - By removing the need for access to AWS root account(s)
