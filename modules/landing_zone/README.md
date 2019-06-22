@@ -121,11 +121,11 @@ Terraform Module for AWS Landing Zone solution is up to 10 lines of code that re
 ### No need for code rewrites
 This implementation engages microservices architecture, allowing any component to be replaced with another component (or multiple components)
 
+### No need for hard-coded values
+Already created AWS resources by other teams can be reused programmatically as read only values by your team's terraform configurations
+
 ### No need to rebuild from scratch
 Already created AWS resources can be reused by this terraform module using `terraform import` command
-
-### No need for hard-coded values
-Already created AWS resources by other teams can be reused programmatically by your team as terraform configurations
 
 ### No need to exclude components from AWS accounts baseline anymore
 Some customers where avoiding in the past AWS Landing Zone because it doesn't support some kind of 3rd party SSO solution or 3rd party Logging solution. By using terraform, we can easily bring those solutions into AWS Landing Zone as a set of components and empower customers to continue using best practices of both worlds
