@@ -3,13 +3,14 @@ import json
 from libs import cli
 
 def main():
-    components = eval(os.environ['components'])
+    root_path = os.environ['ROOT_PATH']
+    components = eval(os.environ['COMPONENTS'])
 
     include = []
     for (k, v) in components.items():
         include.append(k)
     include = ','.join(include)
-    (error, result) = cli(['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore'], os.environ['root'])
+    (error, result) = cli(['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore'], root_path)
     if error != 0:
         print("Error: failed to execute command:")
         raise Exception(result)
