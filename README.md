@@ -116,10 +116,13 @@ Based on the notifications architecture, here below are currently available comp
 ## Why to Use This Solution
 
 ### No need for code changes
-Terraform Module for AWS Landing Zone solution is up to 10 lines of code that receives a list of `.tfvars` files as input variables which describe providers (aka AWS accounts and AWS regions) and configs (aka AWS resources)
+Terraform Module for AWS Landing Zone solution is up to 10 lines of code that receives a list of `.tfvars` files as input variables which describe providers (to be read: AWS accounts and AWS regions) and configs (to be read: AWS resources)
 
 ### No need for code rewrites
 This implementation engages microservices architecture, allowing any component to be replaced with another component (or multiple components)
+
+### No need to rebuild from scratch
+Already created AWS resources can be reused by this terraform module using `terraform import` command
 
 ### No need for hard-coded values
 Already created AWS resources by other teams can be reused programmatically by your team as terraform configurations
