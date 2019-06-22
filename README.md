@@ -102,6 +102,8 @@ Based on the account vending machine architecture, here below are currently avai
 Based on the user access architecture, here below are currently available components:
 1. Coming soon ...
 
+> NOTE: This solution is relying on cross-account role called `OrganizationAccountAccessRole`. Follow [this link](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role) to learn more and/or create missing IAM role(s)...
+
 <br clear="right" />
 
 ### Monitoring and Notifications
