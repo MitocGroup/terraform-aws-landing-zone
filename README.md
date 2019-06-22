@@ -122,10 +122,10 @@ Terraform Module for AWS Landing Zone solution is up to 10 lines of code that re
 This implementation engages microservices architecture, allowing any component to be replaced with another component (or multiple components)
 
 ### No need for hard-coded values
-Already created AWS resources by other teams can be reused programmatically as read only values by your team's terraform configurations
+Existing AWS resources created by your team can be reused programmatically as read only values by other teams' terraform configurations
 
 ### No need to rebuild from scratch
-Already created AWS resources can be reused by this terraform module using `terraform import` command
+Existing AWS resources in your current AWS account(s) can be imported and reused without downtime by this terraform module via `terraform import` command
 
 ### No need to exclude components from AWS accounts baseline anymore
 Some customers where avoiding in the past AWS Landing Zone because it doesn't support some kind of 3rd party SSO solution or 3rd party Logging solution. By using terraform, we can easily bring those solutions into AWS Landing Zone as a set of components and empower customers to continue using best practices of both worlds
@@ -133,5 +133,5 @@ Some customers where avoiding in the past AWS Landing Zone because it doesn't su
 ### Additionally, this module helps enforce best practices
 - By removing the need for access to AWS root account(s)
 - By using IAM cross-account roles and/or STS temporary credentials
-- By enabling centralized Cloudtrail logs and cross-account replication of Cloudtrail logs
+- By enabling centralized Cloudtrail logs and cross-region replication of Cloudtrail logs
 - By empowering complex organizations to separate roles and responsibilities (e.g. InfoSec team can place explicit deny on IAM, VPC, SG and STS for other teams and/or other environments like production or pre-production)
