@@ -14,7 +14,7 @@ terraform:
 template:
   provider:
     - aws:
-        region: '${var.region}'
+        region: '${var.region")'
         allowed_account_ids:
           - '${var.account_id}'
     - aws:
@@ -23,6 +23,8 @@ template:
         allowed_account_ids:
           - '${var.account_id}'
   tfvars:
+    account_id: 123456789012
+    region: us-east-1
     tfstate_path: /tmp/.terrahub/tfstate_local/terraform-aws-landing-zone
     region: us-east-1
     account_id: 722084099005
