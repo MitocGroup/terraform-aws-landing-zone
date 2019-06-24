@@ -22,8 +22,8 @@ resource "null_resource" "landing_zone_config" {
     command = "python ${path.module}/scripts/remove_config.py"
 
     environment = {
-      root       = "${var.root_path}"
-      components = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = "${var.root_path}"
+      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
     }
   }
 }
@@ -71,8 +71,8 @@ resource "null_resource" "landing_zone_destroy" {
     command = "python ${path.module}/scripts/destroy.py"
 
     environment = {
-      root       = "${var.root_path}"
-      components = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = "${var.root_path}"
+      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
     }
   }
 }
