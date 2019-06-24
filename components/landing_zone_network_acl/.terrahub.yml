@@ -44,3 +44,6 @@ component:
         value: '${aws_network_acl.landing_zone_network_acl.*.id}'
       landing_zone_network_acl_ids:
         value: '${aws_network_acl.landing_zone_network_acl.*.id}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_network_acl/default.tfvars

@@ -35,3 +35,6 @@ component:
         value: '${aws_vpc.landing_zone_vpc.*.id}'
       landing_zone_vpc_arns:
         value: '${aws_vpc.landing_zone_vpc.*.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_vpc/default.tfvars

@@ -46,3 +46,6 @@ component:
         value: '${aws_route.landing_zone_route.*.id}'
       landing_zone_route_ids:
         value: '${aws_route.landing_zone_route.*.id}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_route/default.tfvars

@@ -59,3 +59,7 @@ component:
       landing_zone_directory_service_directory_alias:
         value: >-
           ${aws_directory_service_directory.landing_zone_directory_service_directory.alias}
+terraform:
+  varFile:
+    - >-
+      ../mitocgroup_tfvars/landing_zone_directory_service_directory/default.tfvars

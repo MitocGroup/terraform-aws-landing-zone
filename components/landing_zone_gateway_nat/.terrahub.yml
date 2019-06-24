@@ -48,3 +48,6 @@ component:
         value: '${aws_nat_gateway.landing_zone_gateway_nat.*.id}'
       landing_zone_gateway_nat_network_interface_ids:
         value: '${aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_gateway_nat/default.tfvars

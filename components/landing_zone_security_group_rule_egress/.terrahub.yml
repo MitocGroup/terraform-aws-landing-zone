@@ -53,3 +53,7 @@ component:
       thub_ids:
         value: >-
           ${aws_security_group_rule.landing_zone_security_group_rule_egress.*.id}
+terraform:
+  varFile:
+    - >-
+      ../mitocgroup_tfvars/landing_zone_security_group_rule_egress/default.tfvars

@@ -44,3 +44,6 @@ component:
         value: '${aws_subnet.landing_zone_subnet.*.availability_zone_id}'
       landing_zone_subnet_arns:
         value: '${aws_subnet.landing_zone_subnet.*.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_subnet/default.tfvars

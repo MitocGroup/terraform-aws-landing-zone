@@ -30,3 +30,6 @@ component:
         value: '${aws_iam_role.landing_zone_code_pipeline_role.name}'
       landing_zone_code_pipeline_role_arn:
         value: '${aws_iam_role.landing_zone_code_pipeline_role.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_code_pipeline_role/default.tfvars

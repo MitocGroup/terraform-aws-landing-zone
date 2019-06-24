@@ -25,3 +25,6 @@ component:
         value: '${aws_eip.landing_zone_eip.*.id}'
       landing_zone_eip_public_ips:
         value: '${aws_eip.landing_zone_eip.*.public_ip}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_eip/default.tfvars

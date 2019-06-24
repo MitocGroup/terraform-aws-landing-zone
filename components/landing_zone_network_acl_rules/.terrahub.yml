@@ -41,3 +41,6 @@ component:
           cidr_block: >-
             ${element(var.landing_zone_network_acl_rules_cidr_blocks,
             count.index)}
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_network_acl_rules/default.tfvars

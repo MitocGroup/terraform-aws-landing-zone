@@ -19,3 +19,6 @@ component:
         value: '${aws_organizations_policy.landing_zone_organization_policy.id}'
       arn:
         value: '${aws_organizations_policy.landing_zone_organization_policy.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_organization_policy/default.tfvars

@@ -55,3 +55,6 @@ component:
         value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
       landing_zone_code_build_arn:
         value: '${aws_codebuild_project.landing_zone_code_build.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_code_build/default.tfvars

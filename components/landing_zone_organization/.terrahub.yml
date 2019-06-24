@@ -28,3 +28,6 @@ component:
         value: '${aws_organizations_organization.landing_zone_organization.accounts}'
       landing_zone_organization_roots:
         value: '${aws_organizations_organization.landing_zone_organization.roots}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_organization/default.tfvars

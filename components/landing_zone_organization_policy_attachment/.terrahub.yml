@@ -31,3 +31,7 @@ component:
       thub_id:
         value: >-
           ${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}
+terraform:
+  varFile:
+    - >-
+      ../mitocgroup_tfvars/landing_zone_organization_policy_attachment/default.tfvars

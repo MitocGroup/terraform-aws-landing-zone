@@ -43,3 +43,6 @@ component:
         value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
       landing_zone_cloudtrail_arn:
         value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_cloudtrail/default.tfvars

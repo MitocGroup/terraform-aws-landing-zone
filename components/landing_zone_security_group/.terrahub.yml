@@ -34,3 +34,6 @@ component:
         value: '${aws_security_group.landing_zone_security_group.*.id}'
       landing_zone_security_group_ids:
         value: '${aws_security_group.landing_zone_security_group.*.id}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_security_group/default.tfvars

@@ -36,3 +36,6 @@ component:
         value: '${aws_organizations_account.landing_zone_organization_unit.arn}'
       landing_zone_organization_unit_accounts:
         value: '${aws_organizations_account.landing_zone_organization_unit.accounts}'
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_organization_unit/default.tfvars
