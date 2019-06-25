@@ -188,13 +188,13 @@ output "landing_zone_route_igw_ids" {
   description = "The ID's of the Local Route."
 }
 
-output "landing_zone_network_acl_private_ids" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_network_acl_private_ids"]}"
+output "landing_zone_network_acl_ids" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_network_acl_ids"]}"
   description = "The ID's of the Network ACL Private."
 }
 
-output "landing_zone_security_group_private_ids" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_security_group_private_ids"]}"
+output "landing_zone_security_group_ids" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_security_group_ids"]}"
   description = "The ID's of the Private Security Group."
 }
 
