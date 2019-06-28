@@ -9,7 +9,7 @@ component:
     resource:
       aws_iam_role:
         landing_zone_code_pipeline_role:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           assume_role_policy: '${file("${local.component["path"]}/iam_trust_policy.json.tpl")}'
           description: '${var.landing_zone_code_pipeline_role_description}'
           force_detach_policies: '${var.landing_zone_code_pipeline_role_force_detach_policies}'
@@ -30,6 +30,3 @@ component:
         value: '${aws_iam_role.landing_zone_code_pipeline_role.name}'
       landing_zone_code_pipeline_role_arn:
         value: '${aws_iam_role.landing_zone_code_pipeline_role.arn}'
-terraform:
-  varFile:
-    - ../mitocgroup_tfvars/landing_zone_code_pipeline_role/default.tfvars

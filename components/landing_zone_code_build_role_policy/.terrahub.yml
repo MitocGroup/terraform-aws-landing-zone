@@ -32,7 +32,7 @@ component:
     resource:
       aws_iam_role_policy:
         landing_zone_code_build_role_policy:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           name: '${var.landing_zone_code_build_role_policy_name}'
           policy: '${data.template_file.landing_zone_code_build_role_policy.rendered}'
           role: '${data.terraform_remote_state.landing_zone_code_build_role.id}'
@@ -43,6 +43,3 @@ component:
         value: '${aws_iam_role_policy.landing_zone_code_build_role_policy.id}'
       name:
         value: '${aws_iam_role_policy.landing_zone_code_build_role_policy.name}'
-terraform:
-  varFile:
-    - ../mitocgroup_tfvars/landing_zone_code_build_role_policy/default.tfvars

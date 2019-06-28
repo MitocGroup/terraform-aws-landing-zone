@@ -18,7 +18,7 @@ component:
     resource:
       aws_cloudtrail:
         landing_zone_cloudtrail:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           s3_bucket_name: >-
             ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
           name: '${var.landing_zone_cloudtrail_name}'
@@ -43,6 +43,3 @@ component:
         value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
       landing_zone_cloudtrail_arn:
         value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
-terraform:
-  varFile:
-    - ../mitocgroup_tfvars/landing_zone_cloudtrail/default.tfvars

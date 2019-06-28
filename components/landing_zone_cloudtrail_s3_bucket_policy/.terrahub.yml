@@ -25,12 +25,8 @@ component:
     resource:
       aws_s3_bucket_policy:
         landing_zone_cloudtrail_s3_bucket_policy:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           bucket: >-
             ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
           policy: >-
             ${data.template_file.landing_zone_cloudtrail_s3_bucket_policy.rendered}
-terraform:
-  varFile:
-    - >-
-      ../mitocgroup_tfvars/landing_zone_cloudtrail_s3_bucket_policy/default.tfvars

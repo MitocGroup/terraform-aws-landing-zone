@@ -21,7 +21,7 @@ component:
     resource:
       aws_organizations_policy_attachment:
         landing_zone_organization_policy_attachment:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           policy_id: '${data.terraform_remote_state.landing_zone_organization_policy.id}'
           target_id: '${data.terraform_remote_state.landing_zone_organization_unit.id}'
     output:
@@ -31,7 +31,3 @@ component:
       thub_id:
         value: >-
           ${aws_organizations_policy_attachment.landing_zone_organization_policy_attachment.id}
-terraform:
-  varFile:
-    - >-
-      ../mitocgroup_tfvars/landing_zone_organization_policy_attachment/default.tfvars
