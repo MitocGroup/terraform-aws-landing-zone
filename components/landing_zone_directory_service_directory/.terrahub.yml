@@ -6,56 +6,90 @@ component:
         local:
           path: >-
             ${tfvar.terrahub["tfstate_path"]}/landing_zone_directory_service_directory/terraform.tfstate
+    locals:
+      elements_landing_zone_subnet_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]}
+      elements_landing_zone_subnet_data_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])}
+      elements_landing_zone_directory_service_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"]}
+      elements_landing_zone_directory_service_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"])}
     data:
       aws_vpc:
         default_vpc:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           default: true
       aws_subnet:
         default_subnet:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: >-
-            ${length(var.landing_zone_directory_service_directory_availability_zones)}
-          vpc_id: '${data.aws_vpc.default_vpc.id}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_subnet_data_count}'
           availability_zone: >-
-            ${element(var.landing_zone_directory_service_directory_availability_zones,
-            count.index)}
+            ${lookup(local.elements_landing_zone_subnet_data_map["config_${count.index}"],
+            "availability_zone")}
+          vpc_id: '${data.aws_vpc.default_vpc.id}'
     resource:
       aws_directory_service_directory:
         landing_zone_directory_service_directory:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          name: '${var.landing_zone_directory_service_directory_name}'
-          short_name: '${var.landing_zone_directory_service_directory_short_name}'
-          password: '${var.landing_zone_directory_service_directory_password}'
-          alias: '${var.landing_zone_directory_service_directory_alias}'
-          description: '${var.landing_zone_directory_service_directory_description}'
-          edition: '${var.landing_zone_directory_service_directory_edition}'
-          enable_sso: '${var.landing_zone_directory_service_directory_enable_sso}'
-          size: '${var.landing_zone_directory_service_directory_size}'
-          type: '${var.landing_zone_directory_service_directory_type}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_directory_service_count}'
+          name: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "name")}
+          short_name: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "short_name")}
+          password: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "password")}
+          alias: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "alias")}
+          description: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "description")}
+          edition: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "edition")}
+          enable_sso: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "enable_sso")}
+          size: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "size")}
+          type: >-
+            ${lookup(local.elements_landing_zone_directory_service_map["config_${count.index}"],
+            "type")}
           vpc_settings:
             vpc_id: '${data.aws_vpc.default_vpc.id}'
             subnet_ids:
               - '${data.aws_subnet.default_subnet.*.id}'
     output:
-      id:
+      ids:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.id}
-      thub_id:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)}
+      thub_ids:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.id}
-      access_url:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)}
+      access_urls:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}
-      alias:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.access_url)}
+      aliases:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.alias}
-      landing_zone_directory_service_directory_id:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.alias)}
+      landing_zone_directory_service_directory_ids:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.id}
-      landing_zone_directory_service_directory_access_url:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)}
+      landing_zone_directory_service_directory_access_urls:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.access_url}
-      landing_zone_directory_service_directory_alias:
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.access_url)}
+      landing_zone_directory_service_directory_aliases:
         value: >-
-          ${aws_directory_service_directory.landing_zone_directory_service_directory.alias}
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.alias)}

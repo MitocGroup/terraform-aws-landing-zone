@@ -5,23 +5,40 @@ component:
       backend:
         local:
           path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_eip/terraform.tfstate'
+    locals:
+      elements_landing_zone_eip_tag_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]}
+      elements_landing_zone_eip_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"]}
+      elements_landing_zone_eip_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])}
     resource:
       aws_eip:
         landing_zone_eip:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${var.landing_zone_eip_names}'
-          tags: >-
-            ${merge(var.landing_zone_eip_tags, map("Name",
-            "${element(var.landing_zone_eip_names, count.index)}"))}
-          vpc: '${var.landing_zone_eip_vpc}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_eip_count}'
+          tags: '${local.elements_landing_zone_eip_tag_map["config_${count.index}"]}'
+          vpc: >-
+            ${lookup(local.elements_landing_zone_eip_map["config_${count.index}"],
+            "vpc")}
     output:
       ids:
-        value: '${aws_eip.landing_zone_eip.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)}
       thub_ids:
-        value: '${aws_eip.landing_zone_eip.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)}
       public_ips:
-        value: '${aws_eip.landing_zone_eip.*.public_ip}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.public_ip)}
       landing_zone_eip_ids:
-        value: '${aws_eip.landing_zone_eip.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)}
       landing_zone_eip_public_ips:
-        value: '${aws_eip.landing_zone_eip.*.public_ip}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.public_ip)}

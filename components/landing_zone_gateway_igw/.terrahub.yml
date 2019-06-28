@@ -8,25 +8,41 @@ component:
         local:
           path: >-
             ${tfvar.terrahub["tfstate_path"]}/landing_zone_gateway_igw/terraform.tfstate
+    locals:
+      elements_landing_zone_vpc_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]}
+      elements_landing_zone_vpc_data_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])}
+      elements_landing_zone_gateway_igw_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_resource"]}
+      elements_landing_zone_gateway_igw_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_resource"])}
     data:
       aws_vpc:
-        selected:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_vpc_data_count}'
+          cidr_block: >-
+            ${lookup(local.elements_landing_zone_vpc_data_map["config_${count.index}"],
+            "cidr_block")}
     resource:
       aws_internet_gateway:
         landing_zone_gateway_igw:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_gateway_igw_names)}'
-          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_gateway_igw_count}'
+          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
           tags: >-
-            ${merge(var.landing_zone_gateway_igw_tags, map("Name",
-            "${element(var.landing_zone_gateway_igw_names, count.index)}"))}
+            ${local.elements_landing_zone_gateway_igw_map["config_${count.index}"]}
     output:
       ids:
-        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_internet_gateway.landing_zone_gateway_igw.*.id)}
       thub_ids:
-        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_internet_gateway.landing_zone_gateway_igw.*.id)}
       landing_zone_gateway_igw_ids:
-        value: '${aws_internet_gateway.landing_zone_gateway_igw.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_internet_gateway.landing_zone_gateway_igw.*.id)}

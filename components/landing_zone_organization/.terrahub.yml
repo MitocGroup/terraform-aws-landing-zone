@@ -9,7 +9,7 @@ component:
     resource:
       aws_organizations_organization:
         landing_zone_organization:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           aws_service_access_principals: '${var.landing_zone_organization_service_access_principals}'
           enabled_policy_types: '${var.landing_zone_organization_enabled_policy_types}'
           feature_set: '${var.landing_zone_organization_feature_set}'

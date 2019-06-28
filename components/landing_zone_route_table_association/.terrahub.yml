@@ -9,56 +9,70 @@ component:
         local:
           path: >-
             ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_table_association/terraform.tfstate
+    locals:
+      elements_vpc_selected_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_selected_data"]}
+      elements_vpc_selected_data_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_selected_data"])}
+      elements_subnet_selected_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_selected_data"]}
+      elements_subnet_selected_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_selected_data"])}
+      elements_route_table_selected_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_selected_data"]}
+      elements_route_table_selected_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_selected_data"])}
     data:
       aws_vpc:
-        selected:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_vpc_selected_data_count}'
+          cidr_block: >-
+            ${lookup(local.elements_vpc_selected_data_map["config_${count.index}"],
+            "cidr_block")}
       aws_subnet:
-        selected:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_subnet_cidr_blocks)}'
-          cidr_block: '${element(var.landing_zone_subnet_cidr_blocks, count.index)}'
-          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+        subnet_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_subnet_selected_count}'
+          cidr_block: >-
+            ${lookup(local.elements_subnet_selected_data_map["config_${count.index}"],
+            "cidr_block")}
+          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
       aws_route_table:
-        selected:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_route_table_filters)}'
-          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+        route_table_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_route_table_selected_count}'
+          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
           filter:
             - name: 'tag:Name'
               values:
                 - >-
-                  ${element(split("|",
-                  element(var.landing_zone_route_table_filters, count.index)),
-                  0)}
+                  ${lookup(local.elements_route_table_selected_data_map["config_${count.index}"],
+                  "filter_tag_name")}
             - name: association.main
               values:
                 - >-
-                  ${element(split("|",
-                  element(var.landing_zone_route_table_filters, count.index)),
-                  1)}
+                  ${lookup(local.elements_route_table_selected_data_map["config_${count.index}"],
+                  "filter_association_main")}
     resource:
       aws_route_table_association:
         landing_zone_route_table_association:
-          provider: '${tfvar.terrahub["provider_alias"]}'
-          count: '${length(var.landing_zone_route_table_association_relation)}'
-          subnet_id: >-
-            ${element(data.aws_subnet.selected.*.id, element(split("|",
-            element(var.landing_zone_route_table_association_relation,
-            count.index)), 0))}
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_subnet_selected_count}'
+          subnet_id: '${element(data.aws_subnet.subnet_selected.*.id, count.index)}'
           route_table_id: >-
-            ${element(data.aws_route_table.selected.*.id, element(split("|",
-            element(var.landing_zone_route_table_association_relation,
-            count.index)), 1))}
+            ${element(data.aws_route_table.route_table_selected.*.id,
+            count.index)}
     output:
       ids:
         value: >-
-          ${aws_route_table_association.landing_zone_route_table_association.*.id}
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table_association.landing_zone_route_table_association.*.id)}
       thub_ids:
         value: >-
-          ${aws_route_table_association.landing_zone_route_table_association.*.id}
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table_association.landing_zone_route_table_association.*.id)}
       landing_zone_route_table_association_ids:
         value: >-
-          ${aws_route_table_association.landing_zone_route_table_association.*.id}
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table_association.landing_zone_route_table_association.*.id)}

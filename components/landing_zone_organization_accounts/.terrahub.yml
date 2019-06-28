@@ -18,7 +18,7 @@ component:
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: '${length(var.landing_zone_organization_accounts_emails)}'
           name: >-
             ${element(var.landing_zone_organization_accounts_names,

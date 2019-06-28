@@ -190,12 +190,12 @@ output "landing_zone_route_igw_ids" {
 
 output "landing_zone_network_acl_ids" {
   value       = "${module.landing_zone.landing_zone["landing_zone_network_acl_ids"]}"
-  description = "The ID's of the Network ACL Private."
+  description = "The ID's of the Network ACL."
 }
 
 output "landing_zone_security_group_ids" {
   value       = "${module.landing_zone.landing_zone["landing_zone_security_group_ids"]}"
-  description = "The ID's of the Private Security Group."
+  description = "The ID's of the Security Group."
 }
 
 output "landing_zone_cloudtrail_s3_bucket_id" {
@@ -223,17 +223,17 @@ output "landing_zone_cloudtrail_arn" {
   description = "The ARN of the Landing Zone CloudTrail."
 }
 
-output "landing_zone_directory_service_directory_id" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_id"]}"
-  description = "The ID of the Landing Zone Directory Service."
+output "landing_zone_directory_service_directory_ids" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_ids"]}"
+  description = "The ID's of the Landing Zone Directory Service."
 }
 
-output "landing_zone_directory_service_directory_access_url" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_access_url"]}"
-  description = "The access url of the Landing Zone Directory Service."
+output "landing_zone_directory_service_directory_access_urls" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_access_urls"]}"
+  description = "The access url's of the Landing Zone Directory Service."
 }
 
-output "landing_zone_directory_service_directory_alias" {
-  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_alias"]}"
-  description = "The alias of the Landing Zone Directory Service."
+output "landing_zone_directory_service_directory_aliases" {
+  value       = "${module.landing_zone.landing_zone["landing_zone_directory_service_directory_aliases"]}"
+  description = "The aliases of the Landing Zone Directory Service."
 }

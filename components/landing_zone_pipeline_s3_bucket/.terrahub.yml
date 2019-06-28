@@ -9,7 +9,7 @@ component:
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_s3_bucket:
-          provider: '${tfvar.terrahub["provider_alias"]}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           bucket: >-
             ${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}
           versioning:
