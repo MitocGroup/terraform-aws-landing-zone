@@ -1,6 +1,6 @@
 landing_zone_providers = {
   default = {
-    account_id = "722084099005"
+    account_id = "123456789012"
     region     = "us-east-1"
   }
   # ,
