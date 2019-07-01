@@ -54,7 +54,7 @@ component:
             - >-
               ${slice(data.aws_subnet_ids.subnet_selected.ids,
               lookup(local.elements_landing_zone_subnet_data_map["config_${count.index}"],
-              "subnets_form_index"),
+              "subnets_from_index"),
               lookup(local.elements_landing_zone_subnet_data_map["config_${count.index}"],
               "subnets_to_index"))}
     output:
