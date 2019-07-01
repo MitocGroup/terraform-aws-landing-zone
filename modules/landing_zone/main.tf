@@ -37,7 +37,7 @@ resource "null_resource" "landing_zone_apply" {
     timestamp  = "${timestamp()}"
   }
 
-  "provisioner" "local-exec" {
+   provisioner "local-exec" {
     when    = "create"
     command = "sh ${path.module}/scripts/apply.sh"
 
