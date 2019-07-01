@@ -18,7 +18,7 @@ def main():
             processes.append(thub_cfg + [default + '.aws.alias=' + k])
             processes.append(thub_cfg + [default + '.aws.region=${var.'+ k + '_region}'])
             processes.append(thub_cfg + [default + '.aws.assume_role[0]={}'])
-            role_arn = '\'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole\''
+            role_arn = 'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole'
             processes.append(thub_cfg + [default + '.aws.assume_role[0].role_arn=' + role_arn])
             processes.append(thub_cfg + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
         for (key_sub, val_sub) in v.items():
