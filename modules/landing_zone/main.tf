@@ -66,7 +66,7 @@ resource "null_resource" "landing_zone_destroy" {
     command = "echo 'info: apply ignored because part of destroy'"
   }
 
-  "provisioner" "local-exec" {
+   provisioner "local-exec" {
     when    = "destroy"
     command = "python ${path.module}/scripts/destroy.py"
 
