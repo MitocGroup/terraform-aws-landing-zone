@@ -51,7 +51,7 @@ def getOutputValueByType(value):
     else:
         response = []
         for (key, val) in value.items():
-            response.append(key+'='+getOutputValueByType(val))
+            response.append(key + '=' + getOutputValueByType(val))
         return '|'.join(response)
 
 if __name__ == '__main__':
