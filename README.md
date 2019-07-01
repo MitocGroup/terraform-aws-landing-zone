@@ -135,5 +135,5 @@ Some customers were avoiding in the past AWS Landing Zone because it doesn't sup
 ### Additionally, this module helps enforce best practices
 - By removing the need for access to AWS root account(s)
 - By using IAM cross-account roles and/or STS temporary credentials
-- By enabling centralized Cloudtrail logs and cross-region replication of Cloudtrail logs
+- By enabling centralized CloudTrail logs and cross-region replication of CloudTrail logs
 - By empowering complex organizations to separate roles and responsibilities (e.g. InfoSec team can place explicit deny on IAM, VPC, SG and STS for other teams and/or other environments like production or pre-production)
