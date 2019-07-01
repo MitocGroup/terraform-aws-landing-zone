@@ -5,7 +5,7 @@ resource "null_resource" "landing_zone_config" {
     components = "${md5(jsonencode(var.landing_zone_components))}"
   }
 
-  "provisioner" "local-exec" {
+   provisioner "local-exec" {
     when    = "create"
     command = "sh ${path.module}/scripts/config.sh"
 
