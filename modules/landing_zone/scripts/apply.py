@@ -1,19 +1,19 @@
 import os
 import json
-import subprocess
+from libs import cli, execWithErrors
 from six import string_types
 
 def main():
-    components = eval(os.environ['components'])
     processes = []
+    components = eval(os.environ['COMPONENTS'])
     
     include = []
     for (k, v) in components.items():
         include.append(k)
     includeStr = ','.join(include)
     processes.append(['terrahub', 'init', '-i', includeStr])
-    processes.append(['terrahub', os.environ['command'], '-i', includeStr, '-y'])
-    execWithErrors(processes)
+    processes.append(['terrahub', os.environ['COMMAND'], '-i', includeStr, '-y'])
+    execWithErrors(processes, os.environ['ROOT_PATH'])
     return terrahubOutput(include)
 
 def terrahubOutput(include):
@@ -21,16 +21,11 @@ def terrahubOutput(include):
 
     for include_item in include:
         result = ''
-        p = subprocess.Popen(
-            ['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=os.environ['root'])
-        (result, error) = p.communicate()
-        if p.wait() == 0:
+        (error, result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
+        if error == 0:
             response.update(extractOutputValues(result))
 
-    output_file_path = os.path.join(os.environ['root'], 'output.json')
+    output_file_path = os.path.join(os.environ['ROOT_PATH'], 'output.json')
     open(output_file_path, 'a').close()
     with open(output_file_path, 'wb') as json_file:
         json_file.write(json.dumps(response).encode("utf-8"))
@@ -51,16 +46,13 @@ def extractOutputValues(result):
 def getOutputValueByType(value):
     if isinstance(value, string_types):
         return value
-    else:
+    elif isinstance(value, list):
         return ','.join(map(str, value))
-
-def execWithErrors(args_list):
-    for args in args_list:
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-        (result, error) = p.communicate()
-        if p.wait() != 0:
-            print("Error: failed to execute command:")
-            raise Exception(error)
+    else:
+        response = []
+        for (key, val) in value.items():
+            response.append(key + '=' + getOutputValueByType(val))
+        return '|'.join(response)
 
 if __name__ == '__main__':
     RESP = main()

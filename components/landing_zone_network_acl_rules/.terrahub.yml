@@ -7,35 +7,49 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_network_acl_rules/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_network_acl_rules/terraform.tfstate
+    locals:
+      elements_landing_zone_vpc_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]}
+      elements_landing_zone_vpc_data_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])}
+      elements_landing_zone_landing_zone_network_acl_rules_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_rule_resource"]}
+      elements_landing_zone_landing_zone_network_acl_rules_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_rule_resource"])}
     data:
       aws_vpc:
-        selected:
-          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_vpc_data_count}'
+          cidr_block: >-
+            ${lookup(local.elements_landing_zone_vpc_data_map["config_${count.index}"],
+            "cidr_block")}
       aws_network_acls:
-        selected:
-          count: '${length(data.aws_vpc.selected.*.id)}'
-          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+        network_acls_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${length(data.aws_vpc.vpc_selected.*.id)}'
+          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
     resource:
       aws_network_acl_rule:
         landing_zone_network_acl_rules:
-          count: '${length(var.landing_zone_network_acl_rules_rule_numbers)}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_landing_zone_network_acl_rules_count}'
           network_acl_id: >-
-            ${element(data.aws_network_acls.selected.ids,
-            element(split("|",
-            element(var.landing_zone_network_acl_association_vpcs,
-            count.index)), 1))}
+            ${element(data.aws_network_acls.network_acls_selected.ids,
+            count.index)}
           rule_number: >-
-            ${element(var.landing_zone_network_acl_rules_rule_numbers,
-            count.index)}
+            ${lookup(local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"],
+            "rule_number")}
           protocol: >-
-            ${element(var.landing_zone_network_acl_rules_protocols,
-            count.index)}
+            ${lookup(local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"],
+            "protocol")}
           rule_action: >-
-            ${element(var.landing_zone_network_acl_rules_rule_actions,
-            count.index)}
-          egress: '${element(var.landing_zone_network_acl_rules_egress, count.index)}'
+            ${lookup(local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"],
+            "rule_action")}
+          egress: >-
+            ${lookup(local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"],
+            "egress")}
           cidr_block: >-
-            ${element(var.landing_zone_network_acl_rules_cidr_blocks,
-            count.index)}
+            ${lookup(local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"],
+            "cidr_block")}

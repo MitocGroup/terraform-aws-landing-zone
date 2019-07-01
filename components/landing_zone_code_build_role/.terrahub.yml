@@ -5,10 +5,11 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_code_build_role/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_code_build_role/terraform.tfstate
     resource:
       aws_iam_role:
         landing_zone_code_build_role:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           assume_role_policy: '${file("${local.component["path"]}/iam_trust_policy.json.tpl")}'
           description: '${var.landing_zone_code_build_role_description}'
           force_detach_policies: '${var.landing_zone_code_build_role_force_detach_policies}'

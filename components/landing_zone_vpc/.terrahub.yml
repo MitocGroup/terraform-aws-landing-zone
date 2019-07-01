@@ -4,33 +4,59 @@ component:
     terraform:
       backend:
         local:
-          path: '${local.component["local"]}/landing_zone_vpc/terraform.tfstate'
+          path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_vpc/terraform.tfstate'
+    locals:
+      elements_landing_zone_vpc_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_resource"]}
+      elements_landing_zone_vpc_tags_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_tags_element"]}
+      elements_landing_zone_vpc_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_resource"])}
     resource:
       aws_vpc:
         landing_zone_vpc:
-          count: '${length(var.landing_zone_vpc_names)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
-          tags: >-
-            ${merge(var.landing_zone_vpc_tags, map("Name",
-            "${element(var.landing_zone_vpc_names, count.index)}"))}
-          instance_tenancy: '${element(var.landing_zone_vpc_instance_tenancies, count.index)}'
-          enable_dns_support: '${element(var.landing_zone_vpc_enable_dns_supports, count.index)}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_vpc_count}'
+          cidr_block: >-
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "cidr_block")}
+          tags: '${local.elements_landing_zone_vpc_tags_map["config_${count.index}"]}'
+          instance_tenancy: >-
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "instance_tenancy")}
+          enable_dns_support: >-
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "enable_dns_support")}
           assign_generated_ipv6_cidr_block: >-
-            ${element(var.landing_zone_vpc_assign_generated_ipv6_cidr_blocks,
-            count.index)}
-          enable_classiclink: '${element(var.landing_zone_vpc_enable_classiclinks, count.index)}'
-          enable_dns_hostnames: '${element(var.landing_zone_vpc_enable_dns_hostnames, count.index)}'
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "assign_generated_ipv6_cidr_block")}
+          enable_classiclink: >-
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "enable_classiclink")}
+          enable_dns_hostnames: >-
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "enable_dns_hostnames")}
           enable_classiclink_dns_support: >-
-            ${element(var.landing_zone_vpc_enable_classiclink_dns_supports,
-            count.index)}
+            ${lookup(local.elements_landing_zone_vpc_map["config_${count.index}"],
+            "enable_classiclink_dns_support")}
     output:
       ids:
-        value: '${aws_vpc.landing_zone_vpc.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc.landing_zone_vpc.*.id)}
       thub_ids:
-        value: '${aws_vpc.landing_zone_vpc.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc.landing_zone_vpc.*.id)}
       arns:
-        value: '${aws_vpc.landing_zone_vpc.*.arn}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc.landing_zone_vpc.*.arn)}
       landing_zone_vpc_ids:
-        value: '${aws_vpc.landing_zone_vpc.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc.landing_zone_vpc.*.id)}
       landing_zone_vpc_arns:
-        value: '${aws_vpc.landing_zone_vpc.*.arn}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc.landing_zone_vpc.*.arn)}

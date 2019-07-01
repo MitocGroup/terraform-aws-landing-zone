@@ -10,9 +10,19 @@ project:
 terraform:
   varFile:
     - default.tfvars
+    - config.tfvars
 template:
   provider:
-    aws:
-      region: '${var.region}'
-      allowed_account_ids:
-        - '${var.account_id}'
+    - aws:
+        region: '${var.region}'
+        allowed_account_ids:
+          - '${var.account_id}'
+    - aws:
+        alias: default
+        region: '${var.region}'
+        allowed_account_ids:
+          - '${var.account_id}'
+  tfvars:
+    account_id: 123456789012
+    region: us-east-1
+    tfstate_path: /tmp/.terrahub/tfstate_local/terraform-aws-landing-zone

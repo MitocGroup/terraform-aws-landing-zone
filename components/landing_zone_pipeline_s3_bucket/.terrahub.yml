@@ -5,10 +5,11 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_pipeline_s3_bucket/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_pipeline_s3_bucket/terraform.tfstate
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_s3_bucket:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           bucket: >-
             ${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}
           versioning:

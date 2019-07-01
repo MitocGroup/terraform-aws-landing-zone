@@ -1,20 +1,19 @@
 import os
 import json
-import subprocess
+from libs import cli
 
 def main():
-    components = eval(os.environ['components'])
+    root_path = os.environ['ROOT_PATH']
+    components = eval(os.environ['COMPONENTS'])
 
     include = []
     for (k, v) in components.items():
         include.append(k)
     include = ','.join(include)
-    args_to_destroy = ['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore']
-    p = subprocess.Popen(args_to_destroy, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.environ['root'])
-    (result, error) = p.communicate()
-    if p.wait() != 0:
+    (error, result) = cli(['terrahub', 'destroy', '-i', include, '-y', '-p', 'ignore'], root_path)
+    if error != 0:
         print("Error: failed to execute command:")
-        raise Exception(error)
+        raise Exception(result)
 
     return 'Success'
 

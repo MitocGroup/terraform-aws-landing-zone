@@ -7,17 +7,18 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_cloudtrail/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_cloudtrail/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_cloudtrail_s3_bucket:
           backend: local
           config:
             path: >-
-              ${local.component["local"]}/landing_zone_cloudtrail_s3_bucket/terraform.tfstate
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_cloudtrail_s3_bucket/terraform.tfstate
     resource:
       aws_cloudtrail:
         landing_zone_cloudtrail:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           s3_bucket_name: >-
             ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
           name: '${var.landing_zone_cloudtrail_name}'

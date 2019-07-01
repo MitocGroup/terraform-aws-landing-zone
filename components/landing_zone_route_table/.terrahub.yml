@@ -7,25 +7,48 @@ component:
       backend:
         local:
           path: >-
-            ${local.component["local"]}/landing_zone_route_table/terraform.tfstate
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_table/terraform.tfstate
+    locals:
+      elements_landing_zone_vpc_data_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]}
+      elements_landing_zone_vpc_data_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])}
+      elements_landing_zone_route_table_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_resource"]}
+      elements_landing_zone_route_table_tags_map: >-
+        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_tags_element"]}
+      elements_landing_zone_route_table_count: >-
+        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_resource"])}
     data:
       aws_vpc:
-        selected:
-          count: '${length(var.landing_zone_vpc_cidr_blocks)}'
-          cidr_block: '${element(var.landing_zone_vpc_cidr_blocks, count.index)}'
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_vpc_data_count}'
+          cidr_block: >-
+            ${lookup(local.elements_landing_zone_vpc_data_map["config_${count.index}"],
+            "cidr_block")}
     resource:
       aws_route_table:
         landing_zone_route_table:
-          count: '${length(var.landing_zone_route_table_names)}'
-          vpc_id: '${element(data.aws_vpc.selected.*.id, count.index)}'
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: '${local.elements_landing_zone_route_table_count}'
+          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
           tags: >-
-            ${merge(var.landing_zone_route_table_tags, map("Name",
-            "${element(var.landing_zone_route_table_names, count.index)}"))}
-          propagating_vgws: '${var.landing_zone_route_table_propagating_vgws}'
+            ${local.elements_landing_zone_route_table_tags_map["config_${count.index}"]}
+          propagating_vgws: >-
+            ${split("|",
+            lookup(local.elements_landing_zone_route_table_map["config_${count.index}"],
+            "propagating_vgws"))}
     output:
       ids:
-        value: '${aws_route_table.landing_zone_route_table.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table.landing_zone_route_table.*.id)}
       thub_ids:
-        value: '${aws_route_table.landing_zone_route_table.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table.landing_zone_route_table.*.id)}
       landing_zone_route_table_ids:
-        value: '${aws_route_table.landing_zone_route_table.*.id}'
+        value: >-
+          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_route_table.landing_zone_route_table.*.id)}
