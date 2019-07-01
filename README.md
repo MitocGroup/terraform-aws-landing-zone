@@ -51,12 +51,12 @@ landing_zone_components = {
 This means that when you use this terraform module, you will need to:
 1. Change `landing_zone_providers` to values that describe your AWS Organization account
     * `default` reflects the default setup corresponding to AWS Organization account; add more providers by extending `landing_zone_providers` map with extra AWS accounts and/or AWS regions
-    * `region` reflects the AWS region used to deploy AWS resources; create 2 different providers for the same AWS account, but different AWS regions
-    * `account_id` reflects the AWS account used to deploy AWS resources; prevents provisioning AWS resources into wrong AWS account in case of valid AWS credentials
+        * `region` reflects the AWS region used to deploy AWS resources; create 2 different providers for the same AWS account, but different AWS regions
+        * `account_id` reflects the AWS account used to deploy AWS resources; prevents provisioning AWS resources into wrong AWS account in case of valid AWS credentials
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
     * each key from `landing_zone_components` map represents the name of the component from [this list of components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 and/or local disk
-    * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
+        * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
 
 > NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` map variable will be ignored.
 
