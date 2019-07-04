@@ -73,3 +73,6 @@ component:
         value: >-
           ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_subnet.landing_zone_subnet.*.arn)}
+terraform:
+  varFile:
+    - ../mitocgroup_tfvars/landing_zone_subnet/config.tfvars

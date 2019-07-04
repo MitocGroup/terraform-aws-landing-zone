@@ -13,7 +13,7 @@ def execWithErrors(args_list, root_path):
         (error, result) = cli(args, root_path)
         if error != 0:
             print("Error: failed to execute command:")
-        #     raise Exception(result)
+            raise Exception(result)
 
 def execWithoutErrors(args_list, root_path):
     (error, result) = cli(args_list, root_path)

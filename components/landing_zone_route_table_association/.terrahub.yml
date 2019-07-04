@@ -76,3 +76,8 @@ component:
         value: >-
           ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_route_table_association.landing_zone_route_table_association.*.id)}
+
+terraform:
+  varFile:
+    - >-
+      ../mitocgroup_tfvars/landing_zone_route_table_association/config.tfvars

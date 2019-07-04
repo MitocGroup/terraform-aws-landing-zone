@@ -14,3 +14,4 @@ variable "landing_zone_command" {
   default     = "apply"
   description = "The command that will be executed by `terrahub` in this component."
 }
+

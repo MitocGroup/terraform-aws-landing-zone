@@ -1,78 +1,78 @@
 resource "null_resource" "landing_zone_config" {
   triggers = {
-    command    = "${var.landing_zone_command}"
-    providers  = "${md5(jsonencode(var.landing_zone_providers))}"
-    components = "${md5(jsonencode(var.landing_zone_components))}"
+    command    = var.landing_zone_command
+    providers  = md5(jsonencode(var.landing_zone_providers))
+    components = md5(jsonencode(var.landing_zone_components))
   }
 
-  "provisioner" "local-exec" {
-    when    = "create"
-    command = "sh ${path.module}/scripts/config.sh"
+  provisioner "local-exec" {
+    when    = create
+    command = "sh ${path.cwd}/${path.module}/scripts/config.sh"
 
     environment = {
-      ROOT_PATH  = "${var.root_path}"
-      COMMAND    = "${var.landing_zone_command}"
-      PROVIDERS  = "${jsonencode(var.landing_zone_providers)}"
-      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = var.root_path
+      COMMAND    = var.landing_zone_command
+      PROVIDERS  = jsonencode(var.landing_zone_providers)
+      COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
-    command = "python ${path.module}/scripts/remove_config.py"
+    when    = destroy
+    command = "python ${path.cwd}/${path.module}/scripts/remove_config.py"
 
     environment = {
-      ROOT_PATH  = "${var.root_path}"
-      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = var.root_path
+      COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }
 }
 
 resource "null_resource" "landing_zone_apply" {
-  depends_on = ["null_resource.landing_zone_config"]
+  depends_on = [null_resource.landing_zone_config]
 
   triggers = {
-    command    = "${var.landing_zone_command}"
-    components = "${md5(jsonencode(var.landing_zone_components))}"
-    timestamp  = "${timestamp()}"
+    command    = var.landing_zone_command
+    components = md5(jsonencode(var.landing_zone_components))
+    timestamp  = timestamp()
   }
 
-  "provisioner" "local-exec" {
-    when    = "create"
-    command = "sh ${path.module}/scripts/apply.sh"
+  provisioner "local-exec" {
+    when    = create
+    command = "sh ${path.cwd}/${path.module}/scripts/apply.sh"
 
     environment = {
-      ROOT_PATH  = "${var.root_path}"
-      COMMAND    = "${var.landing_zone_command}"
-      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = var.root_path
+      COMMAND    = var.landing_zone_command
+      COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "echo 'info: destroy ignored because part of apply'"
   }
 }
 
 resource "null_resource" "landing_zone_destroy" {
-  depends_on = ["null_resource.landing_zone_apply"]
+  depends_on = [null_resource.landing_zone_apply]
 
   triggers = {
     components = "any component (or all components)"
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "echo 'info: apply ignored because part of destroy'"
   }
 
-  "provisioner" "local-exec" {
-    when    = "destroy"
-    command = "python ${path.module}/scripts/destroy.py"
+  provisioner "local-exec" {
+    when    = destroy
+    command = "python ${path.cwd}/${path.module}/scripts/destroy.py"
 
     environment = {
-      ROOT_PATH  = "${var.root_path}"
-      COMPONENTS = "${jsonencode(var.landing_zone_components)}"
+      ROOT_PATH  = var.root_path
+      COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }
 }
