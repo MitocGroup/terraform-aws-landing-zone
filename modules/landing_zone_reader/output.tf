@@ -1,6 +1,8 @@
 output "landing_zone_reader" {
-  depends_on  = [data.local_file.landing_zone_reader_output_file]
+  depends_on  = [
+    "module.read"
+  ]
   sensitive   = true
-  value       = jsondecode(data.local_file.landing_zone_reader_output_file.content)
+  value       = "${module.read.landing_zone_reader}"
   description = "The map of all output variables from components."
 }

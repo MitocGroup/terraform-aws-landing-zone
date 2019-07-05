@@ -11,7 +11,6 @@ terraform:
   varFile:
     - default.tfvars
     - config.tfvars
-  version: 0.11.11
 template:
   provider:
     - aws:
