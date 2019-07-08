@@ -1,5 +1,7 @@
 import os
 import json
+import sys
+sys.path.insert(0, '../../scripts/')
 from libs import cli
 
 def main():

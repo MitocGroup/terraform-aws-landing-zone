@@ -6,7 +6,7 @@ resource "null_resource" "landing_zone_reader_config" {
 
   provisioner "local-exec" {
     when    = create
-    command = "sh ${path.module}/scripts/config.sh"
+    command = "sh ${path.module}/../scripts/config.sh"
 
     environment = {
       ROOT_PATH  = var.root_path
@@ -17,7 +17,7 @@ resource "null_resource" "landing_zone_reader_config" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "python ${path.module}/scripts/remove_config.py"
+    command = "python ${path.module}/../scripts/remove_config.py"
 
     environment = {
       ROOT_PATH  = var.root_path

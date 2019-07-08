@@ -29,7 +29,7 @@ def main():
 
     for (k, v) in components.items():
         execWithoutErrors(thub_cfg + ['terraform', '-D', '-y', '-i', k], os.environ['ROOT_PATH'])
-        processes.append(thub_cfg +['terraform.varFile[0]=' + str(v), '-i', k])
+        processes.append(thub_cfg + ['terraform.varFile[0]=' + str(v), '-i', k])
     execWithErrors(processes, os.environ['ROOT_PATH'])
     return 'Success'
 
