@@ -10,5 +10,5 @@ if [ -z "${OUTPUT_FILE_PATH}" ]; then
   exit 1
 fi
 
-if [ -f ${OUTPUT_FILE_PATH} ]; then jq . ${OUTPUT_FILE_PATH}; fi
+if [ -f ${OUTPUT_FILE_PATH} ]; then cat ${OUTPUT_FILE_PATH}; fi
 if [ -f ${OUTPUT_FILE_PATH} ]; then rm ${OUTPUT_FILE_PATH}; fi

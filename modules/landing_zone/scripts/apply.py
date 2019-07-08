@@ -1,7 +1,5 @@
 import os
-import sys
 import json
-sys.path.insert(0, '../../scripts/')
 from libs import cli, execWithErrors, terrahubOutput
 from six import string_types
 
