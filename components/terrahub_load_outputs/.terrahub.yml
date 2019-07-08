@@ -9,4 +9,4 @@ component:
     output:
       terrahub_reader:
         value: >-
-          ${map("OUTPUT_KEY_NAME", "OUTPUT_VALUE")}
+          ${map("OUTPUT_KEY", "OUTPUT_VALUE")}
