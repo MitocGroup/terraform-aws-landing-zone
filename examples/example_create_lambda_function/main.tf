@@ -1,9 +1,7 @@
-data "terraform_remote_state" "landing_zone" {
-  backend = "local"
-  config = {
-    path = "../../terraform.tfstate"
-  }
+module "landing_zone_reader" {
+  source = "../../modules/landing_zone_reader"
 }
+
 resource "aws_lambda_function" "my_demo" {
   function_name = "My_Lambda_Demo"
   description = "Managed by TerraHub"
@@ -15,7 +13,7 @@ resource "aws_lambda_function" "my_demo" {
   s3_key = ""
   timeout = "30"
   vpc_config = {
-    subnet_ids = ["${split(",", element(split("=", data.terraform_remote_state.landing_zone.landing_zone_subnet_ids), 1))}"]
-    security_group_ids = ["${split(",", element(split("=", data.terraform_remote_state.landing_zone.landing_zone_security_group_ids), 1))}"]
+    subnet_ids = ["${local.landing_zone_subnet_ids["default"]}"]
+    security_group_ids = ["${local.landing_zone_security_group_ids["default"]}"]
   }
 }
