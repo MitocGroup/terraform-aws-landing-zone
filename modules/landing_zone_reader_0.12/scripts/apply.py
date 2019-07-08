@@ -13,19 +13,19 @@ def main():
         include.append(k)
     return terrahubOutput(include)
 
-def terrahubOutput(include):
-    response = {}
+def terrahubOutput(include_components):
+    response_output = {}
 
-    for include_item in include:
-        output_result = ''
-        (error, output_result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
+    for include_component in include_components:
+        result_output = ''
+        (error, result_output) = cli(['terrahub', 'output', '-o', 'json', '-i', include_component, '-y'], os.environ['ROOT_PATH'])
         if error == 0:
-            response.update(extractOutputValues(output_result))
+            response_output.update(extractOutputValues(result_output))
 
     output_file_path = os.path.join(os.environ['ROOT_PATH'], 'output.json')
     open(output_file_path, 'a').close()
     with open(output_file_path, 'wb') as json_file:
-        json_file.write(json.dumps(response).encode("utf-8"))
+        json_file.write(json.dumps(response_output).encode("utf-8"))
 
     return 'Success'
 
