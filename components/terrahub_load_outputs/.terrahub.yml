@@ -9,33 +9,4 @@ component:
     output:
       terrahub_reader:
         value: >-
-          '${map("arns",data.terraform_remote_state.landing_zone_vpc.arns,"landing_zone_vpc_arns",data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_arns,"thub_ids",data.terraform_remote_state.landing_zone_vpc.thub_ids,"ids",data.terraform_remote_state.landing_zone_vpc.ids,"landing_zone_vpc_ids",data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_ids)}'
-    data:
-      terraform_remote_state:
-        landing_zone_subnet:
-          backend: local
-          config:
-            path: >-
-              '${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate'
-        landing_zone_vpc:
-          backend: local
-          config:
-            path: >-
-              '${tfvar.terrahub["tfstate_path"]}/landing_zone_vpc/terraform.tfstate'
-template:
-  output:
-    terrahub_reader:
-      value: >-
-        '${map("arns",data.terraform_remote_state.landing_zone_vpc.arns,"landing_zone_vpc_arns",data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_arns,"thub_ids",data.terraform_remote_state.landing_zone_vpc.thub_ids,"ids",data.terraform_remote_state.landing_zone_vpc.ids,"landing_zone_vpc_ids",data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_ids)}'
-  data:
-    terraform_remote_state:
-      landing_zone_subnet:
-        backend: local
-        config:
-          path: >-
-            '${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate'
-      landing_zone_vpc:
-        backend: local
-        config:
-          path: >-
-            '${tfvar.terrahub["tfstate_path"]}/landing_zone_vpc/terraform.tfstate'
+          ${map("OUTPUT_KEY_NAME", "OUTPUT_VALUE")}

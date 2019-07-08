@@ -13,14 +13,19 @@ def main():
 
 def terrahubOutput(include):
     response = {}
+    output_map = []
 
     execWithoutErrors(['terrahub', 'configure', '-c', 'component.template.data', '-D', '-y', '-i', 'terrahub_load_outputs'], os.environ['ROOT_PATH'])
     for include_item in include:
         result = ''
         (error, result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
         if error == 0:
-            extractOutputValues(result)
-    
+            prepare_output = 'map(' + ','.join(extractOutputValues(result)) + ')'
+            output_map = output_map + [prepare_output]
+
+    (error, result) = cli(['terrahub', 'configure', '-i', 'terrahub_load_outputs', '-c', 'component.template.output.terrahub_reader.value=${merge(' + ','.join(output_map) + ')}'], os.environ['ROOT_PATH'])
+    if error != 0:
+        print('Error')
     (error, result) = cli(['terrahub', 'run', '-i', 'terrahub_load_outputs', '-a', '-y'], os.environ['ROOT_PATH'])
     if error != 0:
         print('Error')
@@ -38,12 +43,13 @@ def extractOutputValues(result):
     output_map = []
     for (key, val) in json.loads(result).items():
         processes.append(thub_cfg + ['component.template.data.terraform_remote_state.'+ key + '.backend=local'])
-        processes.append(thub_cfg + ['component.template.data.terraform_remote_state.'+ key + '.config.path=\'${tfvar.terrahub["tfstate_path"]}/' + key + '/terraform.tfstate\''])
+        processes.append(thub_cfg + ['component.template.data.terraform_remote_state.'+ key + '.config.path=${tfvar.terrahub["tfstate_path"]}/' + key + '/terraform.tfstate'])
         for key_sub in val.keys():
-            output_map = output_map + ['"' + key_sub + '"', 'list(data.terraform_remote_state.' + key + '.' + key_sub + ')']
+            output_map = output_map + ['"' + key_sub + '"', 'data.terraform_remote_state.' + key + '.' + key_sub]
     
-    processes.append(thub_cfg + ['component.template.output.terrahub_reader.value=\'${map(' + ','.join(output_map) + ')}\''])
     execWithErrors(processes, os.environ['ROOT_PATH'])
+
+    return output_map
 
 if __name__ == '__main__':
     RESP = main()

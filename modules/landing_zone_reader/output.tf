@@ -1,8 +1,8 @@
 output "landing_zone_reader" {
   depends_on  = [
-    "module.read"
+    "data.terraform_remote_state.terrahub_load_outputs"
   ]
   sensitive   = true
-  value       = "${module.read.landing_zone_reader}"
+  value       = "${data.terraform_remote_state.terrahub_load_outputs.terrahub_reader}"
   description = "The map of all output variables from components."
 }
