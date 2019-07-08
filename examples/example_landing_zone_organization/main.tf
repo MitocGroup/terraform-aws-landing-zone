@@ -1,4 +1,4 @@
-module "example_create_organization" {
+module "example_landing_zone_organization" {
   source    = "../../modules/landing_zone"
   version   = "0.0.7"
   root_path = "${path.module}"
@@ -11,6 +11,6 @@ module "example_create_organization" {
   }
 
   landing_zone_components = {
-    landing_zone_organization = "s3://terraform-aws-landing-zone/example/landing_zone_organization/config.tfvars"
+    landing_zone_organization = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization/config.tfvars"
   }
 }

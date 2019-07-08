@@ -1,4 +1,4 @@
-module "landing_zone_reader" {
+module "example_landing_zone_reader_config" {
   source                  = "../../modules/landing_zone_reader_config"
   version                 = "0.0.7"
   root_path               = "${path.cwd}/../.."
