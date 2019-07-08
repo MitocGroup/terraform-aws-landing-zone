@@ -8,24 +8,18 @@ from six import string_types
 def main():
     components = eval(os.environ['COMPONENTS'])
     
-    include = []
-    for (k, v) in components.items():
-        include.append(k)
-    return terrahubOutput(include)
+    response = {}
 
-def terrahubOutput(include_components):
-    response_output = {}
-
-    for include_component in include_components:
-        result_output = ''
-        (error, result_output) = cli(['terrahub', 'output', '-o', 'json', '-i', include_component, '-y'], os.environ['ROOT_PATH'])
+    for include_item in components.keys():
+        result = ''
+        (error, result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
         if error == 0:
-            response_output.update(extractOutputValues(result_output))
+            response.update(extractOutputValues(result))
 
     output_file_path = os.path.join(os.environ['ROOT_PATH'], 'output.json')
     open(output_file_path, 'a').close()
     with open(output_file_path, 'wb') as json_file:
-        json_file.write(json.dumps(response_output).encode("utf-8"))
+        json_file.write(json.dumps(response).encode("utf-8"))
 
     return 'Success'
 
