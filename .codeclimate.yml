@@ -4,3 +4,6 @@ checks:
   method-complexity:
     config:
       threshold: 10
+plugins:
+  duplication:
+    enabled: false

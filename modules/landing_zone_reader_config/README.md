@@ -1,4 +1,4 @@
-# terraform-aws-landing-zone
+# landing_zone
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
 AWS environment based on AWS best practices. This repository contains one
@@ -18,16 +18,17 @@ guidelines, this repository contains the following folders:
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
-* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L22)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L21)
+* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L33)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L34)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.7"
+  version    = "0.0.6"
   root_path  = "${path.module}"
-  landing_zone_providers  = "${var.landing_zone_providers}"
+  account_id = "${var.account_id}"
+  region     = "${var.region}"
   landing_zone_components = "${var.landing_zone_components}"
 }
 ```
@@ -35,28 +36,21 @@ module "landing_zone" {
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
 ```hcl
-landing_zone_providers = {
-  default = {
-    account_id = "123456789012"
-    region = "us-east-1"
-  }
-}
+account_id = "123456789012"
+region = "us-east-1"
 landing_zone_components = {
-  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/config.tfvars"
+  landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
   [...]
 }
 
 ```
 
 This means that when you use this terraform module, you will need to:
-1. Change `landing_zone_providers` to values that describe your AWS Organization account
-    * `default` reflects the default setup corresponding to AWS Organization account; add more providers by extending `landing_zone_providers` map with extra AWS accounts and/or AWS regions
-        * `region` reflects the AWS region used to deploy AWS resources; create 2 different providers for the same AWS account, but different AWS regions
-        * `account_id` reflects the AWS account used to deploy AWS resources; prevents provisioning AWS resources into wrong AWS account in case of valid AWS credentials
+1. Change `account_id` and `region` to values that correspond to your AWS Organization
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
-    * each key from `landing_zone_components` map represents the name of the component from [this list of components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
-    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 and/or local disk
-        * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
+    * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
+    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 (or local disk)
+3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files (or absolute path to `.tfvars` files on local disk)
 
 > NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` map variable will be ignored.
 
@@ -141,5 +135,5 @@ Some customers were avoiding in the past AWS Landing Zone because it doesn't sup
 ### Additionally, this module helps enforce best practices
 - By removing the need for access to AWS root account(s)
 - By using IAM cross-account roles and/or STS temporary credentials
-- By enabling centralized CloudTrail logs and cross-region replication of CloudTrail logs
+- By enabling centralized Cloudtrail logs and cross-region replication of Cloudtrail logs
 - By empowering complex organizations to separate roles and responsibilities (e.g. InfoSec team can place explicit deny on IAM, VPC, SG and STS for other teams and/or other environments like production or pre-production)
