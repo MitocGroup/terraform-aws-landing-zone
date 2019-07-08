@@ -3,7 +3,6 @@ output "landing_zone_vpc_ids" {
   description = "The ID's of the VPC."
 }
 
-
 output "landing_zone_vpc_arns" {
   value       = "${module.landing_zone_reader.landing_zone_reader["landing_zone_vpc_arns"]}"
   description = "The ARN's of the VPC."
