@@ -22,4 +22,4 @@ terrahub --version > /dev/null 2>&1 || { echo >&2 'terrahub is missing. aborting
 python --version > /dev/null 2>&1 || { echo >&2 'python is missing. aborting...'; exit 1; }
 jq --version > /dev/null 2>&1 || { echo >&2 'jq is missing. aborting...'; exit 1; }
 
-python ${ROOT_PATH}/modules/landing_zone/config.py
+python ${ROOT_PATH}/modules/landing_zone/scripts/config.py

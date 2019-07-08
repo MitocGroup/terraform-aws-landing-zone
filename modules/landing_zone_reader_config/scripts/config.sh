@@ -21,4 +21,4 @@ fi
 terrahub --version > /dev/null 2>&1 || { echo >&2 'terrahub is missing. aborting...'; exit 1; }
 python --version > /dev/null 2>&1 || { echo >&2 'python is missing. aborting...'; exit 1; }
 
-python ${ROOT_PATH}/modules/landing_zone_reader_config/config.py
+python ${ROOT_PATH}/modules/landing_zone_reader_config/scripts/config.py
