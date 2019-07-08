@@ -17,10 +17,10 @@ def terrahubOutput(include):
     response = {}
 
     for include_item in include:
-        result = ''
-        (error, result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
+        output_result = ''
+        (error, output_result) = cli(['terrahub', 'output', '-o', 'json', '-i', include_item, '-y'], os.environ['ROOT_PATH'])
         if error == 0:
-            response.update(extractOutputValues(result))
+            response.update(extractOutputValues(output_result))
 
     output_file_path = os.path.join(os.environ['ROOT_PATH'], 'output.json')
     open(output_file_path, 'a').close()
