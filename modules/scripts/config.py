@@ -20,7 +20,8 @@ def main():
             processes.append(thub_cfg + [default + '.aws.assume_role[0]={}'])
             role_arn = 'arn:aws:iam::${var.' + k + '_account_id}:role/OrganizationAccountAccessRole'
             processes.append(thub_cfg + [default + '.aws.assume_role[0].role_arn=' + role_arn])
-            processes.append(thub_cfg + [default + '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'])
+            account_id_config = '.aws.assume_role[0].session_name=${var.' + k + '_account_id}'
+            processes.append(thub_cfg + [default + account_id_config])
         for (key_sub, val_sub) in v.items():
             if k == 'default':
                 processes.append(thub_cfg + ['template.tfvars.' + key_sub + '=' + val_sub])
