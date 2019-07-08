@@ -5,7 +5,7 @@ resource "null_resource" "landing_zone_config" {
     components = "${md5(jsonencode(var.landing_zone_components))}"
   }
 
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = "create"
     command = "sh ${path.module}/scripts/config.sh"
 
@@ -37,7 +37,7 @@ resource "null_resource" "landing_zone_apply" {
     timestamp  = "${timestamp()}"
   }
 
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = "create"
     command = "sh ${path.module}/scripts/apply.sh"
 
@@ -66,7 +66,7 @@ resource "null_resource" "landing_zone_destroy" {
     command = "echo 'info: apply ignored because part of destroy'"
   }
 
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = "destroy"
     command = "python ${path.module}/scripts/destroy.py"
 
