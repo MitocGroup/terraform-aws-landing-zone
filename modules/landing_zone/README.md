@@ -5,8 +5,8 @@ AWS environment based on AWS best practices. This repository contains one
 terraform module that dynamically deploys components of AWS Landing Zone
 solution based on input list of `.tfvars` files.
 
-> NOTE: Current implementation is fully compatible with terraform v0.11.x
-and below, but not functional yet with terraform v0.12+ (work in progress)
+> NOTE: Current implementation is fully compatible with terraform v0.11.x and
+below, but not yet fully functional with terraform v0.12+ (work in progress)
 
 Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Components Are Available](#what-components-are-available) | [Why to Use This Solution](#why-to-use-this-solution)
 
