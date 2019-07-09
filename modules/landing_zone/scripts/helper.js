@@ -72,7 +72,7 @@ class Helper {
 
       console.log(result);
     } catch (error) {
-      console.log('Error: failed to execute command:', error.message);
+      console.log('Error: failed to execute command: ', error.message);
     }
   }
 
@@ -86,7 +86,9 @@ class Helper {
       try {
         result = await this.cli('terrahub', ['output', '-o', 'json', '-i', item, '-y'], ROOT_PATH);
         response = { ...this.extractOutputValues(result, compressing) };
-      } catch (error) {}
+      } catch (error) {
+        console.log('Error: failed to execute command: ', error.message);
+      }
     });
 
     const outputFilePath = path.join(ROOT_PATH, this.outputFileName);
@@ -116,7 +118,7 @@ class Helper {
             response[subKey] = json[key][subKey]['value'];
           }
         } else {
-          console.log(`Warning: The key \' ${subKey} \' does NOT have any value defined`);
+          console.log(`Warning: The key ' ${subKey} ' does NOT have any value defined`);
         }
       });
     });

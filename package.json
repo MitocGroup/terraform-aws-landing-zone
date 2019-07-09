@@ -7,5 +7,10 @@
   "dependencies": {
     "child-process-promise": "^2.2.1",
     "command-exists": "^1.2.8"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0"
   }
 }
