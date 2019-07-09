@@ -1,5 +1,5 @@
 # example_landing_zone_reader_and_lambda_function
-This example implements fully functional terraform configuration that can create `hello_world` function using subnets and security groups programmatically retrived by `landing_zone_reader` module.
+This example implements fully functional terraform configuration that can create `hello_world` function using subnets and security groups programmatically retrieved by `landing_zone_reader` module.
 
 ## Example Usage
 

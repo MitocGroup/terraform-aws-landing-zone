@@ -1,5 +1,5 @@
 # example_landing_zone_reader
-This example implements fully functional terraform configuration that can programmatically retrive resources' output parameters created (or updated) by `landing_zone` module.
+This example implements fully functional terraform configuration that can programmatically retrieve resources' output parameters created (or updated) by `landing_zone` module.
 
 ## Example Usage
 
@@ -25,4 +25,4 @@ The following attributes / output parameters are produced by `landing_zone_reade
 
 Name | Description
 -----|------------
-landing_zone_reader | To be updated.
+landing_zone_reader | This map ( to be exact: map(map(map(any))) ) consolidates all outputs for each AWS resource created (or updated) in each AWS account (defined by `provider`) for each landing zone component (defined by `landing_zone_components`)
