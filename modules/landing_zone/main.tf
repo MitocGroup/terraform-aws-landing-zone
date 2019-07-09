@@ -7,7 +7,7 @@ resource "null_resource" "landing_zone_config" {
 
   provisioner "local-exec" {
     when    = "create"
-    command = "sh ${path.module}/scripts/config.sh"
+    command = "node ${path.module}/scripts/config.js"
 
     environment = {
       ROOT_PATH  = "${var.root_path}"

@@ -1,0 +1,11 @@
+{
+  "name": "terraform-aws-landing-zone",
+  "version": "0.0.7",
+  "author": "Mitoc Group Team",
+  "license": "MPL-2.0",
+  "private": true,
+  "dependencies": {
+    "child-process-promise": "^2.2.1",
+    "command-exists": "^1.2.8"
+  }
+}
