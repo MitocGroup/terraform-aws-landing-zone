@@ -46,10 +46,8 @@ async function main() {
   const terrahubConfig = ['configure', '-c'];
   const jsonProviders = JSON.parse(providers);
   const jsonComponents = JSON.parse(components);
-  const jsonProvidersKeys = Object.keys(jsonProviders);
-  const jsonComponentsKeys = Object.keys(jsonComponents);
 
-  jsonProvidersKeys.forEach(key => {
+  Object.keys(jsonProviders).forEach(key => {
     if (key !== 'default') {
       index += 1;
 
@@ -66,24 +64,19 @@ async function main() {
 
       processes.push([...terrahubConfig, ...[defaultConfig + '.aws.assume_role[0].role_arn=' + roleArn]]);
       processes.push([...terrahubConfig, ...[defaultConfig + accountIdConfig]]);
-
-      const jsonProvidersSubKeys = Object.keys(jsonProviders[key]);
-
-      jsonProvidersSubKeys.forEach(subKey => {
-        if (key === 'default') {
-          processes.push([...terrahubConfig, ...['template.tfvars.' + subKey + '=' + jsonProviders[key][subKey]]]);
-        } else {
-          processes.push([
-            ...terrahubConfig,
-            ...['template.tfvars.' + key + '_' + subKey + jsonProviders[key][subKey]]
-          ]);
-        }
-      });
     }
+
+    Object.keys(jsonProviders[key]).forEach(subKey => {
+      if (key === 'default') {
+        processes.push([...terrahubConfig, ...['template.tfvars.' + subKey + '=' + jsonProviders[key][subKey]]]);
+      } else {
+        processes.push([...terrahubConfig, ...['template.tfvars.' + key + '_' + subKey + jsonProviders[key][subKey]]]);
+      }
+    });
   });
 
   await Promise.all(
-    jsonComponentsKeys.map(key => {
+    Object.keys(jsonComponents).map(key => {
       processes.push([...terrahubConfig, ...['terraform.varFile[0]=' + jsonComponents[key].toString(), '-i', key]]);
 
       return Helper.executeWithoutErrors(
