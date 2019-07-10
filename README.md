@@ -69,9 +69,10 @@ Terraform Module for AWS Landing Zone can create, retrieve, update and destroy r
 Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
 ```hcl
 module "landing_zone_reader_config" {
-  source     = "./modules/landing_zone_reader_config"
-  version    = "0.0.7"
-  root_path  = "${path.module}"
+  source    = "./modules/landing_zone_reader_config"
+  version   = "0.0.7"
+  root_path = "${path.module}"
+
   landing_zone_providers  = "${var.landing_zone_providers}"
   landing_zone_components = "${var.landing_zone_components}"
 }
