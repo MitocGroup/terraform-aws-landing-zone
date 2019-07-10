@@ -1,9 +1,11 @@
 # terraform-aws-landing-zone
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
-AWS environment based on AWS best practices. This repository contains one
-terraform module that dynamically deploys components of AWS Landing Zone
-solution based on input list of `.tfvars` files.
+AWS environment based on AWS best practices. This repository contains terraform
+module `landing_zone` that dynamically deploys components of AWS Landing Zone
+solution based on input list of `.tfvars` files. Additionally, there are 2 more
+terraform modules `landing_zone_reader_config` and `landing_zone_reader` that
+allow AWS Landing Zone consumers to reuse terraform outputs programmatically.
 
 > NOTE: Current implementation is fully compatible with terraform v0.11.x and
 below, but not yet fully functional with terraform v0.12+ (work in progress)

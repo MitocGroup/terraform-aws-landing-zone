@@ -1,9 +1,11 @@
 # landing_zone
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
-AWS environment based on AWS best practices. This repository contains one
-terraform module that dynamically deploys components of AWS Landing Zone
-solution based on input list of `.tfvars` files.
+AWS environment based on AWS best practices. This repository contains terraform
+module `landing_zone` that dynamically deploys components of AWS Landing Zone
+solution based on input list of `.tfvars` files. Additionally, there are 2 more
+terraform modules `landing_zone_reader_config` and `landing_zone_reader` that
+allow AWS Landing Zone consumers to reuse terraform outputs programmatically.
 
 > NOTE: Current implementation is fully compatible with terraform v0.11.x and
 below, but not yet fully functional with terraform v0.12+ (work in progress)
@@ -64,14 +66,15 @@ This means that when you use this terraform module, you will need to:
 > NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` map variable will be ignored.
 
 ### Landing Zone Reader
-Terraform Module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy. In order to achieve this feature, we have created 2 extra modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
+Terraform Module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
 
 Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
 ```hcl
 module "landing_zone_reader_config" {
-  source     = "./modules/landing_zone_reader_config"
-  version    = "0.0.7"
-  root_path  = "${path.module}"
+  source    = "./modules/landing_zone_reader_config"
+  version   = "0.0.7"
+  root_path = "${path.module}"
+
   landing_zone_providers  = "${var.landing_zone_providers}"
   landing_zone_components = "${var.landing_zone_components}"
 }
@@ -85,7 +88,7 @@ module "landing_zone_reader" {
 }
 ```
 
-IMPORTANT: `landing_zone_reader_config` module must write output results into tfstates before `landing_zone_reader` module can initialize terraform configuration successfully. Therefore it can't be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
+IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can run `terraform init` successfully. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
 
 
 ## What Components Are Available
