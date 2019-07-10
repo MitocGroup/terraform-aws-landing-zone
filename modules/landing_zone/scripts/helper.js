@@ -6,7 +6,7 @@ const { spawn } = require('child-process-promise');
 
 class Helper {
   /**
-   *
+   * Spawn CLI process
    * @param {String} command
    * @param {Array} args
    * @param {String} rootPath
@@ -76,6 +76,11 @@ class Helper {
     }
   }
 
+  /**
+   * Output data
+   * @param {String} include
+   * @param {Boolean} compressing
+   */
   output(include, compressing) {
     const { ROOT_PATH } = process.env;
     let response = {};
