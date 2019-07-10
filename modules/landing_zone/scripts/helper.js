@@ -78,27 +78,35 @@ class Helper {
 
   /**
    * Output data
-   * @param {String} include
+   * @param {Array} include
    * @param {Boolean} compressing
+   * @return {String}
    */
   output(include, compressing) {
-    const { ROOT_PATH } = process.env;
+    const { ROOT_PATH: rootPath } = process.env;
     let response = {};
 
     include.forEach(async item => {
       let result = '';
 
       try {
-        result = await this.cli('terrahub', ['output', '-o', 'json', '-i', item, '-y'], ROOT_PATH);
-        response = { ...this.extractOutputValues(result, compressing) };
+        result = await this.cli(
+          'terrahub',
+          ['output', '--format', 'json', '--include', item, '--auto-approve'],
+          rootPath
+        );
+
+        response = { ...response, ...this.extractOutputValues(result, compressing) };
+
+        const outputFilePath = path.join(rootPath, this.outputFileName);
+
+        fs.writeFileSync(outputFilePath, JSON.stringify(response), { encoding: 'utf-8', flag: 'w' });
       } catch (error) {
         console.log('Error: failed to execute command: ', error.message);
       }
     });
 
-    const outputFilePath = path.join(ROOT_PATH, this.outputFileName);
-
-    fs.writeFileSync(outputFilePath, response, { encoding: 'utf-8' });
+    return 'Success';
   }
 
   /**

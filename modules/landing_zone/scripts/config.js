@@ -37,13 +37,13 @@ async function checkIfTerrahubIsInstalled() {
 
 /**
  * Execute
- * @return {Promise<string>}
+ * @return {Promise}
  */
 async function main() {
   const processes = [];
 
   let index = 1;
-  const terrahubConfig = ['configure', '-c'];
+  const terrahubConfig = ['configure', '--config'];
   const jsonProviders = JSON.parse(providers);
   const jsonComponents = JSON.parse(components);
 
@@ -81,7 +81,7 @@ async function main() {
 
       return Helper.executeWithoutErrors(
         'terrahub',
-        [...terrahubConfig, ...['terraform', '-D', '-y', '-i', key]],
+        [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]],
         rootPath
       );
     })
@@ -106,6 +106,6 @@ async function main() {
 
     console.log(resp);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 })();
