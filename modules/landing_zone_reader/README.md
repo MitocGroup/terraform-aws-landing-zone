@@ -14,8 +14,9 @@ Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Com
 
 
 ## How Does This Module Work
-Based on terraform's [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
-guidelines, this repository contains the following folders:
+Terraform module [landing_zone](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone)
+is based on [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
+guidelines and contains the following folders:
 * root folder - module's standard terraform configuration
 * [components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
 * [examples](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
@@ -44,7 +45,7 @@ To simplify and make it easier to understand, we included default values in `ter
 landing_zone_providers = {
   default = {
     account_id = "123456789012"
-    region = "us-east-1"
+    region     = "us-east-1"
   }
 }
 landing_zone_components = {
