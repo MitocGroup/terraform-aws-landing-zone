@@ -29,9 +29,10 @@ This terraform module requires the following dependencies:
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
-  source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.7"
-  root_path  = "${path.module}"
+  source    = "TerraHubCorp/landing-zone/aws"
+  version   = "0.0.7"
+  root_path = "${path.module}"
+
   landing_zone_providers  = "${var.landing_zone_providers}"
   landing_zone_components = "${var.landing_zone_components}"
 }
@@ -43,7 +44,7 @@ To simplify and make it easier to understand, we included default values in `ter
 landing_zone_providers = {
   default = {
     account_id = "123456789012"
-    region = "us-east-1"
+    region     = "us-east-1"
   }
 }
 landing_zone_components = {
