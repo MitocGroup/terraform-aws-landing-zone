@@ -86,7 +86,7 @@ module "landing_zone_reader" {
 }
 ```
 
-IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can run `terraform init` successfully. Therefore it can't be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
+IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can run `terraform init` successfully. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
 
 
 ## What Components Are Available
