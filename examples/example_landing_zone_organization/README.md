@@ -24,7 +24,7 @@ module "example_landing_zone_organization" {
 ```
 
 ## Input / Arguments Reference
-The following arguments / input parameters are expected by `landing_zone_reader` module:
+The following arguments / input parameters are expected by `landing_zone` module:
 
 Name | Required? | Description
 -----|-----------|------------
@@ -36,7 +36,7 @@ landing_zone_providers | Required | The map of providers. Each provider must spe
 landing_zone_components | Required | The map of components. Each component must specify the component name as key and the path to component's `tfvars` file that describes resource(s) configurations.
 
 ## Output / Attributes Reference
-The following attributes / output parameters are produced by `landing_zone_reader` module:
+The following attributes / output parameters are produced by `landing_zone` module:
 
 Name | Description
 -----|------------
