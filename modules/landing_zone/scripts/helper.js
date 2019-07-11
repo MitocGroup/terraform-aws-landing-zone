@@ -51,7 +51,10 @@ class Helper {
    */
   async executeWithErrors(command, argsList, rootPath) {
     try {
-      await Promise.all(argsList.map(args => this.cli(command, args, rootPath)));
+      argsList.reduce(async (accumulator, args) => {
+        await accumulator;
+        return this.cli(command, args, rootPath);
+      }, Promise.resolve());
     } catch (error) {
       console.log('Error: failed to execute command:');
 

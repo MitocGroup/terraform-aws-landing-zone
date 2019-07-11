@@ -14,7 +14,7 @@ package-lock.json
 **/.backup/*
 
 # .tfstate files
-*.tfstate
+*.tfstate*
 # .tfvars files
 *.tfvars
 !/terraform.tfvars

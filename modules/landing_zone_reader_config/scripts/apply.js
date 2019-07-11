@@ -52,17 +52,19 @@ async function terrahubOutput(include) {
     rootPath
   );
 
-  include.forEach(async item => {
-    const result = await Helper.cli(
-      'terrahub',
-      ['output', '--format', 'json', '--include', item, '--auto-approve'],
-      rootPath
-    );
-    const outputValues = await extractOutputValues(result);
-    const prepareOutput = `map(${outputValues.join(',')})`;
+  await Promise.all(
+    include.map(async item => {
+      const result = await Helper.cli(
+        'terrahub',
+        ['output', '--format', 'json', '--include', item, '--auto-approve'],
+        rootPath
+      );
+      const outputValues = await extractOutputValues(result);
+      const prepareOutput = `map(${outputValues.join(',')})`;
 
-    outputMap = [...outputMap, ...prepareOutput];
-  });
+      outputMap = [...outputMap, ...[prepareOutput]];
+    })
+  );
 
   try {
     await Helper.cli(
@@ -72,7 +74,7 @@ async function terrahubOutput(include) {
         '--include',
         'terrahub_load_outputs',
         '--config',
-        'component.template.output.terrahub_reader.value=${merge(' + outputMap.join(',') + ')}'
+        `component.template.output.terrahub_reader.value=$\{merge(${outputMap.join(',')})}`
       ],
       rootPath
     );
