@@ -1,16 +1,22 @@
 # landing_zone_reader_config
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
-AWS environment based on AWS best practices. This repository contains one
-terraform module that dynamically deploys components of AWS Landing Zone
-solution based on input list of `.tfvars` files.
+AWS environment based on AWS best practices. This repository contains terraform
+module `landing_zone` that dynamically deploys components of AWS Landing Zone
+solution based on input list of `.tfvars` files. Additionally, there are 2 more
+terraform modules `landing_zone_reader_config` and `landing_zone_reader` that
+allow AWS Landing Zone consumers to reuse terraform outputs programmatically.
+
+> NOTE: Current implementation is fully compatible with terraform v0.11.x and
+below, but not yet fully functional with terraform v0.12+ (work in progress)
 
 Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Components Are Available](#what-components-are-available) | [Why to Use This Solution](#why-to-use-this-solution)
 
 
 ## How Does This Module Work
-Based on terraform's [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
-guidelines, this repository contains the following folders:
+Terraform module [landing_zone](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone)
+is based on [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
+guidelines and contains the following folders:
 * root folder - module's standard terraform configuration
 * [components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
 * [examples](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
@@ -18,17 +24,17 @@ guidelines, this repository contains the following folders:
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following dependencies:
-* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L33)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L34)
+* [python](https://www.python.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L22)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/apply.sh#L21)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
-  source     = "TerraHubCorp/landing-zone/aws"
-  version    = "0.0.6"
-  root_path  = "${path.module}"
-  account_id = "${var.account_id}"
-  region     = "${var.region}"
+  source    = "TerraHubCorp/landing-zone/aws"
+  version   = "0.0.7"
+  root_path = "${path.module}"
+
+  landing_zone_providers  = "${var.landing_zone_providers}"
   landing_zone_components = "${var.landing_zone_components}"
 }
 ```
@@ -36,23 +42,55 @@ module "landing_zone" {
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
 ```hcl
-account_id = "123456789012"
-region = "us-east-1"
+landing_zone_providers = {
+  default = {
+    account_id = "123456789012"
+    region     = "us-east-1"
+  }
+}
 landing_zone_components = {
-  landing_zone_pipeline_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/config.tfvars"
   [...]
 }
 
 ```
 
 This means that when you use this terraform module, you will need to:
-1. Change `account_id` and `region` to values that correspond to your AWS Organization
+1. Change `landing_zone_providers` to values that describe your AWS Organization account
+    * `default` reflects the default setup corresponding to AWS Organization account; add more providers by extending `landing_zone_providers` map with extra AWS accounts and/or AWS regions
+        * `account_id` reflects the AWS account used to deploy AWS resources; prevents provisioning AWS resources into wrong AWS account in case of valid AWS credentials
+        * `region` reflects the AWS region used to deploy AWS resources; create 2 different providers for the same AWS account, but different AWS regions
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
-    * each key from `landing_zone_components` map represents the name of the component from [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
-    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 (or local disk)
-3. Change `s3://terraform-aws-landing-zone/mycompany/` to your S3 bucket and S3 key prefix where you will be storing `.tfvars` files (or absolute path to `.tfvars` files on local disk)
+    * each key from `landing_zone_components` map represents the name of the component from [this list of available components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
+    * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 and/or local disk
+        * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
 
 > NOTE: This module can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` map variable will be ignored.
+
+### Landing Zone Reader
+Terraform Module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
+
+Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
+```hcl
+module "landing_zone_reader_config" {
+  source    = "./modules/landing_zone_reader_config"
+  version   = "0.0.7"
+  root_path = "${path.module}"
+
+  landing_zone_providers  = "${var.landing_zone_providers}"
+  landing_zone_components = "${var.landing_zone_components}"
+}
+```
+
+After `landing_zone_reader_config` module configures everything, second step is to use the `landing_zone_reader` module as easy as:
+```hcl
+module "landing_zone_reader" {
+  source  = "./modules/landing_zone_reader"
+  version = "0.0.7"
+}
+```
+
+IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can run `terraform init` successfully. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
 
 
 ## What Components Are Available
@@ -66,7 +104,8 @@ AWS Landing Zone solution is defined by the following strategy:
 3. [User Access and Identity Management](#user-access-and-identity-management)
 4. [Monitoring and Notifications](#monitoring-and-notifications)
 
-> NOTE: This terraform module at this point in time covers only Multi-Account Structure.
+> NOTE: Current implementation of this terraform module covers only Multi-Account Structure
+components (work in progress).
 
 ### Multi-Account Structure
 <img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
@@ -135,5 +174,5 @@ Some customers were avoiding in the past AWS Landing Zone because it doesn't sup
 ### Additionally, this module helps enforce best practices
 - By removing the need for access to AWS root account(s)
 - By using IAM cross-account roles and/or STS temporary credentials
-- By enabling centralized Cloudtrail logs and cross-region replication of Cloudtrail logs
+- By enabling centralized CloudTrail logs and cross-region replication of CloudTrail logs
 - By empowering complex organizations to separate roles and responsibilities (e.g. InfoSec team can place explicit deny on IAM, VPC, SG and STS for other teams and/or other environments like production or pre-production)
