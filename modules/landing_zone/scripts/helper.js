@@ -16,7 +16,7 @@ class Helper {
     const stdout = [];
     const stderr = [];
 
-    const promise = spawn(command, args, { cwd: rootPath });
+    const promise = spawn(command, args, { cwd: rootPath, env: process.env });
     const { childProcess } = promise;
 
     childProcess.stdout.on('data', data => {

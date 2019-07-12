@@ -31,7 +31,7 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.0.7"
+  version   = "0.0.8"
   root_path = "${path.module}"
 
   landing_zone_providers  = "${var.landing_zone_providers}"
@@ -74,7 +74,7 @@ Module `landing_zone_reader_config` must be executed first by passing the same p
 ```hcl
 module "landing_zone_reader_config" {
   source    = "./modules/landing_zone_reader_config"
-  version   = "0.0.7"
+  version   = "0.0.8"
   root_path = "${path.module}"
 
   landing_zone_providers  = "${var.landing_zone_providers}"
@@ -86,7 +86,7 @@ After `landing_zone_reader_config` module configures everything, second step is 
 ```hcl
 module "landing_zone_reader" {
   source  = "./modules/landing_zone_reader"
-  version = "0.0.7"
+  version = "0.0.8"
 }
 ```
 
