@@ -4,6 +4,9 @@ checks:
   method-complexity:
     config:
       threshold: 10
+  method-lines:
+    config:
+      threshold: 55
 plugins:
   duplication:
     enabled: false

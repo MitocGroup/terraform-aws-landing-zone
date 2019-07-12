@@ -1,6 +1,6 @@
 module "example_landing_zone_s3_and_codepipeline" {
   source    = "../../modules/landing_zone"
-  version   = "0.0.7"
+  version   = "0.0.8"
   root_path = "${path.module}"
 
   landing_zone_providers = {

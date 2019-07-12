@@ -7,7 +7,7 @@ resource "null_resource" "landing_zone_config" {
 
   provisioner "local-exec" {
     when    = "create"
-    command = "sh ${path.module}/scripts/config.sh"
+    command = "node ${path.module}/scripts/config.js"
 
     environment = {
       ROOT_PATH  = "${var.root_path}"
@@ -19,7 +19,7 @@ resource "null_resource" "landing_zone_config" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "python ${path.module}/scripts/remove_config.py"
+    command = "node ${path.module}/scripts/remove-config.js"
 
     environment = {
       ROOT_PATH  = "${var.root_path}"
@@ -39,7 +39,7 @@ resource "null_resource" "landing_zone_apply" {
 
   provisioner "local-exec" {
     when    = "create"
-    command = "sh ${path.module}/scripts/apply.sh"
+    command = "node ${path.module}/scripts/apply.js"
 
     environment = {
       ROOT_PATH  = "${var.root_path}"
@@ -68,7 +68,7 @@ resource "null_resource" "landing_zone_destroy" {
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "python ${path.module}/scripts/destroy.py"
+    command = "node ${path.module}/scripts/destroy.js"
 
     environment = {
       ROOT_PATH  = "${var.root_path}"

@@ -1,6 +1,6 @@
 module "example_landing_zone_reader" {
   source  = "../../modules/landing_zone_reader"
-  version = "0.0.7"
+  version = "0.0.8"
 }
 
 resource "aws_lambda_function" "hello_world" {
