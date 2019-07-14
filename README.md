@@ -99,6 +99,12 @@ module "landing_zone_reader" {
 
 IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can execute successfully `terraform init`. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
 
+More Examples:
+* [Terraform module for AWS Landing Zone (one component: AWS Organization)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_organization)
+* [Terraform module for AWS Landing Zone (multiple components: S3, CodePipeline and CodeBuild)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_s3_and_codepipeline)
+* [Terraform module for AWS Landing Zone reader config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader_config)
+* [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
+
 
 ## What Components Are Available
 AWS Landing Zone solution is defined by the following strategy:

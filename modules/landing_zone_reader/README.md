@@ -28,7 +28,7 @@ module "landing_zone" {
 is executed first!
 
 More Examples:
-[x] [AWS Lambda function using AWS Landing Zone reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
+* [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
 
 
 ## Why to Use This Solution
