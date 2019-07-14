@@ -51,6 +51,7 @@ landing_zone_providers = {
     account_id = "123456789012"
     region     = "us-east-1"
   }
+  [...]
 }
 landing_zone_components = {
   landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/config.tfvars"
@@ -58,6 +59,8 @@ landing_zone_components = {
 }
 
 ```
+
+> NOTE: Placeholder `[...]` from above is used to suggest that similar syntax can be added. Remove it or update in order to have valid HCL / terraform configuration.
 
 This means that before you use this terraform module, you will need to:
 1. Change `landing_zone_providers` to values that describe your AWS Organization account

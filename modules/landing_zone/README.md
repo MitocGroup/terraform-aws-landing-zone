@@ -28,6 +28,7 @@ module "landing_zone" {
       account_id = "123456789012"
       region     = "us-east-1"
     }
+    [...]
   }
 
   landing_zone_components = {
@@ -36,6 +37,8 @@ module "landing_zone" {
   }
 }
 ```
+
+> NOTE: Placeholder `[...]` from above is used to suggest that similar syntax can be added. Remove it or update in order to have valid HCL / terraform configuration.
 
 Before you use this terraform module, you will need to:
 1. Change `landing_zone_providers` to values that describe your AWS Organization account
