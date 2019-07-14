@@ -72,7 +72,7 @@ This means that before you use this terraform module, you will need to:
 > NOTE: Terraform module `landing_zone` can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` variable will be ignored.
 
 ### Landing Zone Reader
-Terraform module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
+Terraform module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra terraform modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
 
 Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
 ```hcl

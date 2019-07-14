@@ -19,7 +19,7 @@ below, but not yet fully functional with terraform v0.12+ (work in progress)
 To get started, simply include the following terraform codebase:
 ```hcl
 module "landing_zone" {
-  source  = "TerraHubCorp/landing-zone/aws"
+  source  = "./modules/landing_zone_reader"
   version = "0.0.8"
 }
 ```
