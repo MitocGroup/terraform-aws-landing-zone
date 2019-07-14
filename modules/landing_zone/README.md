@@ -52,7 +52,7 @@ Before you use this terraform module, you will need to:
 
 > NOTE: Terraform module `landing_zone` can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` variable will be ignored.
 
-More Examples:
+## More Examples
 * [Terraform module for AWS Landing Zone (one component: AWS Organization)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_organization)
 * [Terraform module for AWS Landing Zone (multiple components: S3, CodePipeline and CodeBuild)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_s3_and_codepipeline)
 

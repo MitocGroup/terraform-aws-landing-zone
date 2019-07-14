@@ -27,7 +27,7 @@ module "landing_zone" {
 > NOTE: Before using this module, make sure that `landing_zone_reader_config` module
 is executed first!
 
-More Examples:
+## More Examples
 * [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
 
 
