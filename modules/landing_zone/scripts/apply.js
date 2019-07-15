@@ -1,7 +1,6 @@
 'use strict';
 
 const Helper = require('./helper');
-const commandExists = require('command-exists');
 
 const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components } = process.env;
 
@@ -20,18 +19,6 @@ async function checkEnvironmentVars() {
 
   if (!components) {
     return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
-  }
-}
-
-/**
- * Check if terrahub cli is installed
- * @return {Promise}
- */
-async function checkIfTerrahubIsInstalled() {
-  try {
-    await commandExists('terrahub');
-  } catch (error) {
-    return Promise.reject(Error('terrahub is missing. aborting...'));
   }
 }
 
@@ -61,7 +48,7 @@ async function main() {
   try {
     await checkEnvironmentVars();
 
-    await checkIfTerrahubIsInstalled();
+    await Helper.checkIfTerrahubIsInstalled();
 
     const resp = await main();
 
