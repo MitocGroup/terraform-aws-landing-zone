@@ -1,10 +1,20 @@
+# Node related
+**/node_modules
+**npm-debug.log*
+package-lock.json
+
+# IDEs and editors
+.idea/*
+.vscode/*
+/venv/*
+.prettierrc.json
+
 #  Local .terraform directories
 **/.terraform/*
 **/.backup/*
 
 # .tfstate files
-*.tfstate
-*.tfstate.*
-
+*.tfstate*
 # .tfvars files
 *.tfvars
+!/terraform.tfvars

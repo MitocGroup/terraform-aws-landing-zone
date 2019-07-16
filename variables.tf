@@ -1,6 +1,5 @@
 variable "landing_zone_providers" {
   type        = "map"
-  default     = {}
   description = "The list of AWS providers."
 }
 

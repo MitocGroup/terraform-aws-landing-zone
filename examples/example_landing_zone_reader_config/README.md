@@ -7,7 +7,7 @@ This module can be used as easy as:
 ```hcl
 module "example_landing_zone_reader_config" {
   source    = "../../modules/landing_zone_reader_config"
-  version   = "0.0.7"
+  version   = "0.0.8"
   root_path = "${path.cwd}/../.."
 
   landing_zone_providers  = "${var.landing_zone_providers}"
