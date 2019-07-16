@@ -2,7 +2,8 @@
 
 const path = require('path');
 const fs = require('fs');
-const { spawn } = require('child-process-promise');
+const os = require('os');
+const { execSync, spawnSync } = require('child_process');
 
 class Helper {
   /**
@@ -13,32 +14,27 @@ class Helper {
    * @return {Promise}
    */
   async cli(command, args, rootPath) {
-    const stdout = [];
-    const stderr = [];
+    const execute = spawnSync(command, args, { cwd: rootPath, env: process.env });
 
-    const promise = spawn(command, args, { cwd: rootPath, env: process.env });
-    const { childProcess } = promise;
+    if (execute.status === 0) {
+      return execute.stdout.toString();
+    }
 
-    childProcess.stdout.on('data', data => {
-      stdout.push(data);
-    });
+    return Promise.reject(Error(execute.stderr.toString()));
+  }
 
-    childProcess.stderr.on('data', data => {
-      if (data.toString() !== '\n') {
-        stderr.push(data);
-      }
-    });
+  /**
+   * Check if terrahub cli is installed
+   * @return {Promise}
+   */
+  async checkIfTerrahubIsInstalled() {
+    const isWin = os.platform().indexOf('win') > -1;
+    const where = isWin ? 'where' : 'which';
 
     try {
-      await promise;
-
-      return Buffer.concat(stdout).toString();
+      execSync(`${where} terrahub`, { encoding: 'utf8', shell: true, cwd: process.cwd(), stdio: 'ignore' });
     } catch (error) {
-      error.message = Buffer.concat(stderr).toString();
-
-      if (error) {
-        return Promise.reject(Error(error.message));
-      }
+      return Promise.reject(Error('terrahub is missing. aborting...'));
     }
   }
 
