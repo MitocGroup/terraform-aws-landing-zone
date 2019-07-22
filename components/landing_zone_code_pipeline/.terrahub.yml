@@ -37,11 +37,11 @@ component:
       aws_codepipeline:
         landing_zone_code_pipeline:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          name: '${var.landing_zone_code_pipeline_name}'
-          role_arn: '${data.terraform_remote_state.landing_zone_code_pipeline_role.arn}'
+          name: var.landing_zone_code_pipeline_name
+          role_arn: data.terraform_remote_state.landing_zone_code_pipeline_role.arn
           artifact_store:
             - location: >-
-                ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}
+                data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket
               type: S3
           stage:
             - action: null
@@ -55,7 +55,7 @@ component:
                     - Name: SourceApp
                   configuration:
                     - S3Bucket: >-
-                        ${data.terraform_remote_state.landing_zone_pipeline_s3_bucket.bucket}
+                        data.terraform_remote_state.landing_zone_pipeline_s3_bucket.bucket
                       S3ObjectKey: aws-landing-zone-configuration.zip
               run_order: '1'
             - name: Build
@@ -67,16 +67,15 @@ component:
                   output_artifacts:
                     - Name: SourceApp
                   configuration:
-                    - ProjectName: >-
-                        ${data.terraform_remote_state.landing_zone_code_build.id}
+                    - ProjectName: data.terraform_remote_state.landing_zone_code_build.id
     output:
       id:
-        value: '${aws_codepipeline.landing_zone_code_pipeline.id}'
+        value: aws_codepipeline.landing_zone_code_pipeline.id
       thub_id:
-        value: '${aws_codepipeline.landing_zone_code_pipeline.id}'
+        value: aws_codepipeline.landing_zone_code_pipeline.id
       arn:
-        value: '${aws_codepipeline.landing_zone_code_pipeline.arn}'
+        value: aws_codepipeline.landing_zone_code_pipeline.arn
       landing_zone_code_pipeline_id:
-        value: '${aws_codepipeline.landing_zone_code_pipeline.id}'
+        value: aws_codepipeline.landing_zone_code_pipeline.id
       landing_zone_code_pipeline_arn:
-        value: '${aws_codepipeline.landing_zone_code_pipeline.arn}'
+        value: aws_codepipeline.landing_zone_code_pipeline.arn

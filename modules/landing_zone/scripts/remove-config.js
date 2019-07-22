@@ -32,12 +32,12 @@ async function main() {
   await Helper.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']], rootPath);
   await Helper.executeWithoutErrors(
     'terrahub',
-    [...terrahubConfig, ...['template.provider[0].aws.region=${var.region}']],
+    [...terrahubConfig, ...['template.provider[0].aws.region=var.region']],
     rootPath
   );
   await Helper.executeWithoutErrors(
     'terrahub',
-    [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=${var.account_id}']],
+    [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']],
     rootPath
   );
   await Helper.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1]={}']], rootPath);
@@ -49,12 +49,12 @@ async function main() {
   );
   await Helper.executeWithoutErrors(
     'terrahub',
-    [...terrahubConfig, ...['template.provider[1].aws.region=${var.region}']],
+    [...terrahubConfig, ...['template.provider[1].aws.region=var.region']],
     rootPath
   );
   await Helper.executeWithoutErrors(
     'terrahub',
-    [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=${var.account_id}']],
+    [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']],
     rootPath
   );
   await Helper.executeWithoutErrors(

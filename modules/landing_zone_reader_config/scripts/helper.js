@@ -28,8 +28,8 @@ class Helper {
    * @return {Promise}
    */
   async checkIfTerrahubIsInstalled() {
-    const isWin = os.platform().indexOf('win') > -1;
-    const where = isWin ? 'where' : 'which';
+    const platform = os.platform();
+    const where = platform === 'win' ? 'where' : 'which';
 
     try {
       execSync(`${where} terrahub`, { encoding: 'utf8', shell: true, cwd: process.cwd(), stdio: 'ignore' });
@@ -78,10 +78,9 @@ class Helper {
   /**
    * Output data
    * @param {Array} include
-   * @param {Boolean} compressing
    * @return {String}
    */
-  output(include, compressing) {
+  output(include) {
     const { ROOT_PATH: rootPath } = process.env;
     let response = {};
 
@@ -95,7 +94,7 @@ class Helper {
           rootPath
         );
 
-        response = { ...response, ...this.extractOutputValues(result, compressing) };
+        response = { ...response, ...this.extractOutputValues(result) };
 
         const outputFilePath = path.join(rootPath, this.outputFileName);
 
@@ -111,9 +110,8 @@ class Helper {
   /**
    * Extract output values
    * @param result
-   * @param compressing
    */
-  extractOutputValues(result, compressing) {
+  extractOutputValues(result) {
     const json = JSON.parse(result);
     let response = {};
 
@@ -124,11 +122,7 @@ class Helper {
 
       subKeys.forEach(subKey => {
         if (json[key][subKey]['value']) {
-          if (compressing) {
-            response[subKey] = this.getOutputValueByType(json[key][subKey]['value']);
-          } else {
-            response[subKey] = json[key][subKey]['value'];
-          }
+          response[subKey] = json[key][subKey]['value'];
         } else {
           console.log(`Warning: The key ' ${subKey} ' does NOT have any value defined`);
         }

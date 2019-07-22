@@ -20,26 +20,26 @@ component:
         landing_zone_cloudtrail:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           s3_bucket_name: >-
-            ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
-          name: '${var.landing_zone_cloudtrail_name}'
-          is_multi_region_trail: '${var.landing_zone_cloudtrail_is_multi_region_trail}'
-          is_organization_trail: '${var.landing_zone_cloudtrail_is_organization_trail}'
+            data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucketZ
+          name: var.landing_zone_cloudtrail_name
+          is_multi_region_trail: var.landing_zone_cloudtrail_is_multi_region_trail
+          is_organization_trail: var.landing_zone_cloudtrail_is_organization_trail
           event_selector:
             data_resource:
-              type: '${var.landing_zone_event_selector_data_resource_type}'
-              values: '${var.landing_zone_event_selector_data_resource_values}'
+              type: var.landing_zone_event_selector_data_resource_type
+              values: var.landing_zone_event_selector_data_resource_values
     output:
       id:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.id
       thub_id:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.id
       home_region:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.home_region
       arn:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.arn
       landing_zone_cloudtrail_id:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.id}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.id
       landing_zone_cloudtrail_home_region:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.home_region}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.home_region
       landing_zone_cloudtrail_arn:
-        value: '${aws_cloudtrail.landing_zone_cloudtrail.arn}'
+        value: aws_cloudtrail.landing_zone_cloudtrail.arn

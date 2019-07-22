@@ -7,38 +7,36 @@ component:
           path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_eip/terraform.tfstate'
     locals:
       elements_landing_zone_eip_tag_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]
       elements_landing_zone_eip_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"]
       elements_landing_zone_eip_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])
     resource:
       aws_eip:
         landing_zone_eip:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_eip_count}'
-          tags: '${local.elements_landing_zone_eip_tag_map["config_${count.index}"]}'
-          vpc: >-
-            ${lookup(local.elements_landing_zone_eip_map["config_${count.index}"],
-            "vpc")}
+          count: local.elements_landing_zone_eip_count
+          tags: 'local.elements_landing_zone_eip_tag_map["config_${count.index}"]'
+          vpc: 'local.elements_landing_zone_eip_map["config_${count.index}"]["vpc"]'
     output:
       ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)
       thub_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)
       public_ips:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.public_ip)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.public_ip)
       landing_zone_eip_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.id)
       landing_zone_eip_public_ips:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.public_ip)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_eip.landing_zone_eip.*.public_ip)

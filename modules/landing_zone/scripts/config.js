@@ -43,11 +43,11 @@ async function main() {
       processes.push([...terrahubConfig, ...[`${defaultConfig}={}`]]);
       processes.push([...terrahubConfig, ...[`${defaultConfig}.aws={}`]]);
       processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.alias=${key}`]]);
-      processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=$\{var.${key}_region}`]]);
+      processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=var.${key}_region`]]);
       processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0]={}`]]);
 
-      const roleArn = `arn:aws:iam::$\{var.${key}_account_id}:role/OrganizationAccountAccessRole`;
-      const accountIdConfig = `.aws.assume_role[0].session_name=$\{var.${key}_account_id}`;
+      const roleArn = `arn:aws:iam::var.${key}_account_id:role/OrganizationAccountAccessRole`;
+      const accountIdConfig = `.aws.assume_role[0].session_name=var.${key}_account_id`;
 
       processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0].role_arn=${roleArn}`]]);
       processes.push([...terrahubConfig, ...[`${defaultConfig}${accountIdConfig}`]]);

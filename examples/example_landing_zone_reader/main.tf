@@ -1,6 +1,5 @@
 module "example_landing_zone_reader" {
   source  = "../../modules/landing_zone_reader"
-  version = "0.0.8"
 }
 
 resource "aws_lambda_function" "hello_world" {
@@ -15,7 +14,7 @@ resource "aws_lambda_function" "hello_world" {
   s3_key        = "/hello-world/nodejs10.x.zip"
 
   vpc_config = {
-    subnet_ids         = ["${local.landing_zone_subnet_ids["default"]}"]
-    security_group_ids = ["${local.landing_zone_security_group_ids["default"]}"]
+    subnet_ids         = [local.landing_zone_subnet_ids["default"]]
+    security_group_ids = [local.landing_zone_security_group_ids["default"]]
   }
 }

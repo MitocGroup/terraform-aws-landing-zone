@@ -9,4 +9,21 @@ component:
     output:
       terrahub_reader:
         value: >-
-          ${map("OUTPUT_KEY", "OUTPUT_VALUE")}
+          merge(map("ids","${data.terraform_remote_state.landing_zone_security_group.ids}","landing_zone_security_group_ids","${data.terraform_remote_state.landing_zone_security_group.landing_zone_security_group_ids}","thub_ids","${data.terraform_remote_state.landing_zone_security_group.thub_ids}"),map("arns","${data.terraform_remote_state.landing_zone_subnet.arns}","availability_zone_ids","${data.terraform_remote_state.landing_zone_subnet.availability_zone_ids}","ids","${data.terraform_remote_state.landing_zone_subnet.ids}","landing_zone_subnet_arns","${data.terraform_remote_state.landing_zone_subnet.landing_zone_subnet_arns}","landing_zone_subnet_availability_zone_ids","${data.terraform_remote_state.landing_zone_subnet.landing_zone_subnet_availability_zone_ids}","landing_zone_subnet_ids","${data.terraform_remote_state.landing_zone_subnet.landing_zone_subnet_ids}","thub_ids","${data.terraform_remote_state.landing_zone_subnet.thub_ids}"),map("arns","${data.terraform_remote_state.landing_zone_vpc.arns}","ids","${data.terraform_remote_state.landing_zone_vpc.ids}","landing_zone_vpc_arns","${data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_arns}","landing_zone_vpc_ids","${data.terraform_remote_state.landing_zone_vpc.landing_zone_vpc_ids}","thub_ids","${data.terraform_remote_state.landing_zone_vpc.thub_ids}"))
+    data:
+      terraform_remote_state:
+        landing_zone_security_group:
+          backend: local
+          config:
+            path: >-
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_security_group/terraform.tfstate
+        landing_zone_subnet:
+          backend: local
+          config:
+            path: >-
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: >-
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_vpc/terraform.tfstate

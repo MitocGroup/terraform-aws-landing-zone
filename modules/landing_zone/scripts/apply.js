@@ -41,7 +41,7 @@ async function main() {
     return Promise.reject(error);
   }
 
-  return Helper.output(include, true);
+  return Helper.output(include);
 }
 
 (async () => {
