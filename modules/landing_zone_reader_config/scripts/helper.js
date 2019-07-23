@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { execSync,spawnSync } = require('child_process');
+const { execSync, spawnSync } = require('child_process');
 
 class Helper {
   /**
@@ -28,7 +28,8 @@ class Helper {
    * @return {Promise}
    */
   async checkIfTerrahubIsInstalled() {
-    const where = (os.platform() === "win32") ? 'where' : 'which';
+    const where = os.platform() === 'win32' ? 'where' : 'which';
+
     try {
       execSync(`${where} terrahub`, { encoding: 'utf8', shell: true, cwd: process.cwd(), stdio: 'ignore' });
     } catch (error) {
