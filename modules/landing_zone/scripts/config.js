@@ -57,7 +57,7 @@ async function main() {
       if (key === 'default') {
         processes.push([...terrahubConfig, ...[`template.tfvars.${subKey}=${jsonProviders[key][subKey]}`]]);
       } else {
-        processes.push([...terrahubConfig, ...[`template.tfvars.${key}_${subKey}${jsonProviders[key][subKey]}`]]);
+        processes.push([...terrahubConfig, ...[`template.tfvars.${key}_${subKey}=${jsonProviders[key][subKey]}`]]);
       }
     });
   });
