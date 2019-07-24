@@ -3,6 +3,11 @@ variable "root_path" {
   description = "The path of root directory."
 }
 
+variable "output_path" {
+  type        = string
+  description = "The path to output file."
+}
+
 variable "landing_zone_providers" {
   type        = map(map(string))
   default     = {}

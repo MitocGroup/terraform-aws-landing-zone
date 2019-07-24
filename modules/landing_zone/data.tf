@@ -1,4 +1,4 @@
 data "local_file" "landing_zone_output_file" {
   depends_on = [null_resource.landing_zone_apply]
-  filename    = "${var.root_path}/output.json"
+  filename   = var.output_path
 }

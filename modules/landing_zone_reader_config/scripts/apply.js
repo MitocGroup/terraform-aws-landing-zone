@@ -102,7 +102,7 @@ async function extractOutputValues(result) {
     ]);
 
     Object.keys(jsonResult[key]).forEach(subKey => {
-      outputMap = [...outputMap, ...[`"${subKey}"`, `"\${data.terraform_remote_state.${key}.${subKey}}"`]];
+      outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.outputs.${subKey}`]];
     });
   });
 

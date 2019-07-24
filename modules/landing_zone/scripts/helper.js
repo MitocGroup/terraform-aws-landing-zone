@@ -81,7 +81,7 @@ class Helper {
    * @return {String}
    */
   output(include) {
-    const { ROOT_PATH: rootPath } = process.env;
+    const { ROOT_PATH: rootPath, OUTPUT_PATH: outputPath } = process.env;
     let response = {};
 
     include.forEach(async item => {
@@ -96,9 +96,9 @@ class Helper {
 
         response = { ...response, ...this.extractOutputValues(result) };
 
-        const outputFilePath = path.join(rootPath, this.outputFileName);
+        const outputFilePath = path.join(outputPath, this.outputFileName);
 
-        fs.writeFileSync(outputFilePath, JSON.stringify(response), { encoding: 'utf-8', flag: 'w' });
+        fs.writeFileSync(outputFilePath, response, { encoding: 'utf-8', flag: 'w' });
       } catch (error) {
         console.log('Error: failed to execute command: ', error.message);
       }

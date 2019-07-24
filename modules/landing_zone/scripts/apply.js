@@ -1,7 +1,6 @@
 'use strict';
 
 const Helper = require('./helper');
-
 const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components } = process.env;
 
 /**

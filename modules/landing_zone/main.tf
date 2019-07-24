@@ -42,9 +42,10 @@ resource "null_resource" "landing_zone_apply" {
     command = "node ${path.module}/scripts/apply.js"
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMMAND    = var.landing_zone_command
-      COMPONENTS = jsonencode(var.landing_zone_components)
+      OUTPUT_PATH = var.output_path
+      ROOT_PATH   = var.root_path
+      COMMAND     = var.landing_zone_command
+      COMPONENTS  = jsonencode(var.landing_zone_components)
     }
   }
 
