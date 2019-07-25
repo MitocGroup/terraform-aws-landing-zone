@@ -25,33 +25,33 @@ component:
       aws_codebuild_project:
         landing_zone_code_build:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          name: '${var.landing_zone_code_build_name}'
-          service_role: '${data.terraform_remote_state.landing_zone_code_build_role.arn}'
+          name: var.landing_zone_code_build_name
+          service_role: data.terraform_remote_state.landing_zone_code_build_role.arn
           artifacts:
-            - type: '${var.landing_zone_code_build_artifacts_type}'
+            - type: var.landing_zone_code_build_artifacts_type
           source:
-            - type: '${var.landing_zone_code_build_source_type}'
-              buildspec: '${file("${local.component["path"]}/buildspec.yml")}'
+            - type: var.landing_zone_code_build_source_type
+              buildspec: 'file("${local.component["path"]}/buildspec.yml")'
           environment:
-            - compute_type: '${var.landing_zone_code_build_environment_compute_type}'
-              image: '${var.landing_zone_code_build_environment_image}'
-              type: '${var.landing_zone_code_build_environment_type}'
+            - compute_type: var.landing_zone_code_build_environment_compute_type
+              image: var.landing_zone_code_build_environment_image
+              type: var.landing_zone_code_build_environment_type
               environment_variable:
                 - name: ARTIFACT_BUCKET
                   value: >-
-                    ${data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket}
+                    data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket
     output:
       id:
-        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+        value: aws_codebuild_project.landing_zone_code_build.id
       thub_id:
-        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+        value: aws_codebuild_project.landing_zone_code_build.id
       badge_url:
-        value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
+        value: aws_codebuild_project.landing_zone_code_build.badge_url
       arn:
-        value: '${aws_codebuild_project.landing_zone_code_build.arn}'
+        value: aws_codebuild_project.landing_zone_code_build.arn
       landing_zone_code_build_id:
-        value: '${aws_codebuild_project.landing_zone_code_build.id}'
+        value: aws_codebuild_project.landing_zone_code_build.id
       landing_zone_code_build_badge_url:
-        value: '${aws_codebuild_project.landing_zone_code_build.badge_url}'
+        value: aws_codebuild_project.landing_zone_code_build.badge_url
       landing_zone_code_build_arn:
-        value: '${aws_codebuild_project.landing_zone_code_build.arn}'
+        value: aws_codebuild_project.landing_zone_code_build.arn

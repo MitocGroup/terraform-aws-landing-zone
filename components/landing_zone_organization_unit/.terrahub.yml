@@ -19,20 +19,20 @@ component:
       aws_organizations_organizational_unit:
         landing_zone_organization_unit:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          name: '${var.landing_zone_organization_unit_name}'
-          parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
+          name: var.landing_zone_organization_unit_name
+          parent_id: data.terraform_remote_state.landing_zone_organization.roots.0.id
     output:
       id:
-        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+        value: aws_organizations_account.landing_zone_organization_unit.id
       thub_id:
-        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+        value: aws_organizations_account.landing_zone_organization_unit.id
       arn:
-        value: '${aws_organizations_account.landing_zone_organization_unit.arn}'
+        value: aws_organizations_account.landing_zone_organization_unit.arn
       accounts:
-        value: '${aws_organizations_account.landing_zone_organization_unit.accounts}'
+        value: aws_organizations_account.landing_zone_organization_unit.accounts
       landing_zone_organization_unit_id:
-        value: '${aws_organizations_account.landing_zone_organization_unit.id}'
+        value: aws_organizations_account.landing_zone_organization_unit.id
       landing_zone_organization_unit_arn:
-        value: '${aws_organizations_account.landing_zone_organization_unit.arn}'
+        value: aws_organizations_account.landing_zone_organization_unit.arn
       landing_zone_organization_unit_accounts:
-        value: '${aws_organizations_account.landing_zone_organization_unit.accounts}'
+        value: aws_organizations_account.landing_zone_organization_unit.accounts

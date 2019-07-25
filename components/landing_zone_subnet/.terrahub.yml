@@ -10,66 +10,61 @@ component:
             ${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
       elements_landing_zone_vpc_data_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
       elements_landing_zone_subnet_tags_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_tags_element"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_tags_element"]
       elements_landing_zone_subnet_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_resource"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_resource"]
       elements_landing_zone_subnet_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_resource"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_resource"])
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_vpc_data_count}'
+          count: local.elements_landing_zone_vpc_data_count
           cidr_block: >-
-            ${lookup(local.elements_landing_zone_vpc_data_map["config_${count.index}"],
-            "cidr_block")}
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
     resource:
       aws_subnet:
         landing_zone_subnet:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_subnet_count}'
-          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
+          count: local.elements_landing_zone_subnet_count
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           cidr_block: >-
-            ${lookup(local.elements_landing_zone_subnet_map["config_${count.index}"],
-            "cidr_block")}
+            local.elements_landing_zone_subnet_map["config_${count.index}"]["cidr_block"]
           availability_zone: >-
-            ${lookup(local.elements_landing_zone_subnet_map["config_${count.index}"],
-            "availability_zone")}
-          tags: >-
-            ${local.elements_landing_zone_subnet_tags_map["config_${count.index}"]}
+            local.elements_landing_zone_subnet_map["config_${count.index}"]["availability_zone"]
+          tags: 'local.elements_landing_zone_subnet_tags_map["config_${count.index}"]'
           assign_ipv6_address_on_creation: >-
-            ${lookup(local.elements_landing_zone_subnet_map["config_${count.index}"],
-            "assign_ipv6_address_on_creation")}
+            local.elements_landing_zone_subnet_map["config_${count.index}"]["assign_ipv6_address_on_creation"]
     output:
       ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.id)
       thub_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.id)
       availability_zone_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.availability_zone_id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.availability_zone_id)
       arns:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.arn)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.arn)
       landing_zone_subnet_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.id)
       landing_zone_subnet_availability_zone_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.availability_zone_id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.availability_zone_id)
       landing_zone_subnet_arns:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_subnet.landing_zone_subnet.*.arn)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_subnet.landing_zone_subnet.*.arn)

@@ -8,7 +8,7 @@ This module can be used as easy as:
 module "example_landing_zone_organization" {
   source    = "../../modules/landing_zone"
   version   = "0.0.8"
-  root_path = "${path.module}"
+  root_path = path.module
 
   landing_zone_providers = {
     default = {

@@ -41,11 +41,23 @@ async function terrahubOutput(include) {
 
   await Promise.all(
     include.map(async item => {
+      await Helper.cli(
+        'terrahub',
+        ['init', '--include', item],
+        rootPath
+      );
+
       const result = await Helper.cli(
         'terrahub',
         ['output', '--format', 'json', '--include', item, '--auto-approve'],
         rootPath
       );
+
+      if (!result.length) {
+        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
+          'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
+      }
+      
       const outputValues = await extractOutputValues(result);
       const prepareOutput = `map(${outputValues.join(',')})`;
 
@@ -61,14 +73,14 @@ async function terrahubOutput(include) {
         '--include',
         'terrahub_load_outputs',
         '--config',
-        `component.template.output.terrahub_reader.value=$\{merge(${outputMap.join(',')})}`
+        `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
       ],
       rootPath
     );
     await Helper.cli('terrahub', ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve'], rootPath);
     await Helper.cli('terrahub', ['refresh', '--include', 'terrahub_load_outputs'], rootPath);
   } catch (error) {
-    console.log('Error');
+    console.log('Error', error);
   }
 
   return 'Success';
@@ -96,7 +108,7 @@ async function extractOutputValues(result) {
     ]);
 
     Object.keys(jsonResult[key]).forEach(subKey => {
-      outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.${subKey}`]];
+      outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.outputs.${subKey}`]];
     });
   });
 

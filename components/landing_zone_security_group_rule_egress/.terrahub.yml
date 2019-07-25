@@ -10,65 +10,58 @@ component:
             ${tfvar.terrahub["tfstate_path"]}/landing_zone_security_group_rule_egress/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
       elements_landing_zone_vpc_data_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
       elements_landing_zone_security_group_data_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_data"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_data"]
       elements_landing_zone_security_group_data_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_data"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_data"])
       elements_landing_zone_security_group_rule_map: >-
-        ${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_rule_resource"]}
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_rule_resource"]
       elements_landing_zone_security_group_rule_count: >-
-        ${length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_rule_resource"])}
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_rule_resource"])
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_vpc_data_count}'
+          count: local.elements_landing_zone_vpc_data_count
           cidr_block: >-
-            ${lookup(local.elements_landing_zone_vpc_data_map["config_${count.index}"],
-            "cidr_block")}
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_security_group:
         security_group_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_security_group_data_count}'
-          vpc_id: '${element(data.aws_vpc.vpc_selected.*.id, count.index)}'
+          count: local.elements_landing_zone_security_group_data_count
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           name: >-
-            ${lookup(local.elements_landing_zone_security_group_data_map["config_${count.index}"],
-            "name")}
+            local.elements_landing_zone_security_group_data_map["config_${count.index}"]["name"]
     resource:
       aws_security_group_rule:
         landing_zone_security_group_rule_egress:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${local.elements_landing_zone_security_group_rule_count}'
+          count: local.elements_landing_zone_security_group_rule_count
           type: egress
           protocol: >-
-            ${lookup(local.elements_landing_zone_security_group_rule_map["config_${count.index}"],
-            "protocol")}
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["protocol"]
           from_port: >-
-            ${lookup(local.elements_landing_zone_security_group_rule_map["config_${count.index}"],
-            "from_port")}
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["from_port"]
           to_port: >-
-            ${lookup(local.elements_landing_zone_security_group_rule_map["config_${count.index}"],
-            "to_port")}
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["to_port"]
           cidr_blocks:
             - >-
-              ${split("|",
-              lookup(local.elements_landing_zone_security_group_rule_map["config_${count.index}"],
-              "cidr_blocks"))}
+              split("|",
+              local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["cidr_blocks"])
           security_group_id: >-
-            ${element(data.aws_security_group.security_group_selected.*.id,
-            count.index)}
+            element(data.aws_security_group.security_group_selected.*.id,
+            count.index)
           self: >-
-            ${lookup(local.elements_landing_zone_security_group_rule_map["config_${count.index}"],
-            "self")}
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["self"]
     output:
       ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_security_group_rule.landing_zone_security_group_rule_egress.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_security_group_rule.landing_zone_security_group_rule_egress.*.id)
       thub_ids:
         value: >-
-          ${map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_security_group_rule.landing_zone_security_group_rule_egress.*.id)}
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_security_group_rule.landing_zone_security_group_rule_egress.*.id)

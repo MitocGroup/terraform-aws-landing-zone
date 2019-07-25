@@ -19,22 +19,18 @@ component:
       aws_organizations_account:
         landing_zone_organization_accounts:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: '${length(var.landing_zone_organization_accounts_emails)}'
-          name: >-
-            ${element(var.landing_zone_organization_accounts_names,
-            count.index)}
-          email: >-
-            ${element(var.landing_zone_organization_accounts_emails,
-            count.index)}
-          parent_id: '${data.terraform_remote_state.landing_zone_organization.roots.0.id}'
+          count: length(var.landing_zone_organization_accounts_emails)
+          name: 'element(var.landing_zone_organization_accounts_names, count.index)'
+          email: 'element(var.landing_zone_organization_accounts_emails, count.index)'
+          parent_id: data.terraform_remote_state.landing_zone_organization.roots.0.id
     output:
       ids:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+        value: aws_organizations_account.landing_zone_organization_accounts.*.id
       thub_ids:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+        value: aws_organizations_account.landing_zone_organization_accounts.*.id
       arns:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
+        value: aws_organizations_account.landing_zone_organization_accounts.*.arn
       landing_zone_organization_accounts_ids:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.*.id}'
+        value: aws_organizations_account.landing_zone_organization_accounts.*.id
       landing_zone_organization_accounts_arns:
-        value: '${aws_organizations_account.landing_zone_organization_accounts.*.arn}'
+        value: aws_organizations_account.landing_zone_organization_accounts.*.arn

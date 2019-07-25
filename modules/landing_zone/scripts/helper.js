@@ -24,6 +24,124 @@ class Helper {
   }
 
   /**
+   * Execute
+   * @return {Promise}
+   */
+  async removeConfig(components, rootPath) {
+    const jsonComponents = JSON.parse(components);
+    const terrahubConfig = ['configure', '--config'];
+
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars', '-D', '-y']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider', '-D', '-y']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0]={}']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.region=var.region']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']],
+      rootPath
+    );
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1]={}']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1].aws={}']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.alias=default']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.region=var.region']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.tfvars.account_id=123456789012']],
+      rootPath
+    );
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars.region=us-east-1']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.tfvars.tfstate_path=/tmp/.terrahub/tfstate_local/terraform-aws-landing-zone']],
+      rootPath
+    );
+
+    for (const key of Object.keys(jsonComponents)) {
+      await this.executeWithoutErrors(
+        'terrahub',
+        [...terrahubConfig, ...['terraform', '--include', key, '--delete', '--auto-approve']],
+        rootPath
+      );
+    }
+
+    return 'Success';
+  }
+
+  /**
+   * @param {String} providers
+   * @param {String} components
+   * @param {String} rootPath
+   * @return {Promise}
+   */
+  async updateConfig(providers, components, rootPath) {
+    const processes = [];
+    let index = 1;
+    const terrahubConfig = ['configure', '--config'];
+    const jsonProviders = JSON.parse(providers);
+    const jsonComponents = JSON.parse(components);
+
+    Object.keys(jsonProviders).forEach(key => {
+      if (key !== 'default') {
+        index += 1;
+
+        const defaultConfig = `template.provider[${index.toString()}]`;
+
+        processes.push([...terrahubConfig, ...[`${defaultConfig}={}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws={}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.alias=${key}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=var.${key}_region`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0]={}`]]);
+
+        const roleArn = `arn:aws:iam::var.${key}_account_id:role/OrganizationAccountAccessRole`;
+        const accountIdConfig = `.aws.assume_role[0].session_name=var.${key}_account_id`;
+
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0].role_arn=${roleArn}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}${accountIdConfig}`]]);
+      }
+
+      Object.keys(jsonProviders[key]).forEach(subKey => {
+        if (key === 'default') {
+          processes.push([...terrahubConfig, ...[`template.tfvars.${subKey}=${jsonProviders[key][subKey]}`]]);
+        } else {
+          processes.push([...terrahubConfig, ...[`template.tfvars.${key}_${subKey}=${jsonProviders[key][subKey]}`]]);
+        }
+      });
+    });
+
+    await Promise.all(
+      Object.keys(jsonComponents).map(key => {
+        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+
+        return this.executeWithoutErrors(
+          'terrahub',
+          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]],
+          rootPath
+        );
+      })
+    );
+
+    return processes;
+  }
+
+  /**
    * Check if terrahub cli is installed
    * @return {Promise}
    */
@@ -77,11 +195,10 @@ class Helper {
   /**
    * Output data
    * @param {Array} include
-   * @param {Boolean} compressing
    * @return {String}
    */
-  output(include, compressing) {
-    const { ROOT_PATH: rootPath } = process.env;
+  output(include) {
+    const { ROOT_PATH: rootPath, OUTPUT_PATH: outputPath } = process.env;
     let response = {};
 
     include.forEach(async item => {
@@ -94,11 +211,11 @@ class Helper {
           rootPath
         );
 
-        response = { ...response, ...this.extractOutputValues(result, compressing) };
+        response = { ...response, ...this.extractOutputValues(result) };
 
-        const outputFilePath = path.join(rootPath, this.outputFileName);
+        const outputFilePath = path.join(outputPath, this.outputFileName);
 
-        fs.writeFileSync(outputFilePath, JSON.stringify(response), { encoding: 'utf-8', flag: 'w' });
+        fs.writeFileSync(outputFilePath, response, { encoding: 'utf-8', flag: 'w' });
       } catch (error) {
         console.log('Error: failed to execute command: ', error.message);
       }
@@ -110,9 +227,8 @@ class Helper {
   /**
    * Extract output values
    * @param result
-   * @param compressing
    */
-  extractOutputValues(result, compressing) {
+  extractOutputValues(result) {
     const json = JSON.parse(result);
     let response = {};
 
@@ -123,11 +239,7 @@ class Helper {
 
       subKeys.forEach(subKey => {
         if (json[key][subKey]['value']) {
-          if (compressing) {
-            response[subKey] = this.getOutputValueByType(json[key][subKey]['value']);
-          } else {
-            response[subKey] = json[key][subKey]['value'];
-          }
+          response[subKey] = json[key][subKey]['value'];
         } else {
           console.log(`Warning: The key ' ${subKey} ' does NOT have any value defined`);
         }

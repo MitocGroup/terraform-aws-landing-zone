@@ -13,19 +13,19 @@ component:
           bucket: >-
             ${var.landing_zone_pipeline_s3_bucket_name}-${var.account_id}-${var.region}
           versioning:
-            enabled: '${var.landing_zone_pipeline_s3_bucket_versioning}'
+            enabled: var.landing_zone_pipeline_s3_bucket_versioning
     output:
       id:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.id}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.id
       thub_id:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.id}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.id
       arn:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn
       bucket:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket
       landing_zone_pipeline_s3_bucket_id:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.id}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.id
       landing_zone_pipeline_s3_bucket_arn:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn
       landing_zone_pipeline_s3_bucket_bucket:
-        value: '${aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket}'
+        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket
