@@ -24,7 +24,7 @@ resource "aws_lambda_function" "hello_world" {
   function_name = "my_hello_world"
   description   = "Managed by TerraHub"
   runtime       = "nodejs10.x"
-  handler       = "handler.index"
+  handler       = "index.handler"
   memory_size   = "128"
   timeout       = "30"
   role          = "arn:aws:iam::123456789012:role/ServiceRoleForLambdaEdge"

@@ -240,7 +240,7 @@ class Helper {
 
       subKeys.forEach(subKey => {
         if (json[key][subKey]['value']) {
-            response[subKey] = json[key][subKey]['value'];
+          response[subKey] = json[key][subKey]['value'];
         } else {
           console.log(`Warning: The key ' ${subKey} ' does NOT have any value defined`);
         }
