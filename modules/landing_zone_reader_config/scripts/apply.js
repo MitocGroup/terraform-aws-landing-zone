@@ -52,6 +52,11 @@ async function terrahubOutput(include) {
         ['output', '--format', 'json', '--include', item, '--auto-approve'],
         rootPath
       );
+
+      if (!result.length) {
+        throw new Error(`First you need to run LandingZone module, because you don't have resources in AWS`);
+      }
+      
       const outputValues = await extractOutputValues(result);
       const prepareOutput = `map(${outputValues.join(',')})`;
 

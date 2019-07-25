@@ -1,6 +1,7 @@
 module "example_landing_zone_s3_and_codepipeline" {
   source    = "../../modules/landing_zone"
   root_path = path.module
+  output_path = pathexpand("~/.terrahub/output.json")
 
   landing_zone_providers = {
     default = {
