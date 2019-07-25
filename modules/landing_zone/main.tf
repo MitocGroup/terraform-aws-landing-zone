@@ -42,7 +42,7 @@ resource "null_resource" "landing_zone_apply" {
     command = "node ${path.module}/scripts/apply.js"
 
     environment = {
-      OUTPUT_PATH = var.output_path
+      OUTPUT_PATH = pathexpand("~/.terrahub/cache/landing_zone/output.json")
       ROOT_PATH   = var.root_path
       COMMAND     = var.landing_zone_command
       COMPONENTS  = jsonencode(var.landing_zone_components)

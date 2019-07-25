@@ -1,8 +1,6 @@
 module "example_landing_zone_organization" {
   source    = "../../modules/landing_zone"
-  version   = "0.0.8"
   root_path = path.module
-  output_path = pathexpand("~/.terrahub/output.json")
 
   landing_zone_providers = {
     default = {
