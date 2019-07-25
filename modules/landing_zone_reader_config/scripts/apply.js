@@ -54,7 +54,8 @@ async function terrahubOutput(include) {
       );
 
       if (!result.length) {
-        throw new Error(`First you need to run LandingZone module, because you don't have resources in AWS`);
+        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
+          'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
       }
       
       const outputValues = await extractOutputValues(result);
