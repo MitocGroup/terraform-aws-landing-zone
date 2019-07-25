@@ -148,8 +148,7 @@ class Helper {
    * @return {Promise}
    */
   async checkIfTerrahubIsInstalled() {
-    const platform = os.platform();
-    const where = platform === 'win' ? 'where' : 'which';
+    const where = os.platform() === 'win32' ? 'where' : 'which';
 
     try {
       execSync(`${where} terrahub`, { encoding: 'utf8', shell: true, cwd: process.cwd(), stdio: 'ignore' });
