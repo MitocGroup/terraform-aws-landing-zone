@@ -34,8 +34,6 @@ async function main() {
   try {
     await Helper.executeWithErrors('terrahub', processes, rootPath);
   } catch (error) {
-    console.log(`ERR : `, error);
-
     return Promise.reject(error);
   }
 
