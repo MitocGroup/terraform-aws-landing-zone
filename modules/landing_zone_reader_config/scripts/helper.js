@@ -20,8 +20,128 @@ class Helper {
       return execute.stdout.toString();
     }
 
-    return Promise.reject(Error(execute.stderr.toString()));
+    return process.env.DEBUG ? await Promise.reject(Error(execute.stderr.toString())) : Promise.reject(Error('Error occurred!'));
   }
+
+  /**
+   * @param {Object} components
+   * @param {string} rootPath
+   * @return {Promise}
+   */
+  async removeConfig(components, rootPath) {
+    const jsonComponents = JSON.parse(components);
+    const terrahubConfig = ['configure', '--config'];
+
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars', '-D', '-y']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider', '-D', '-y']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0]={}']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.region=var.region']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']],
+      rootPath
+    );
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1]={}']], rootPath);
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1].aws={}']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.alias=default']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.region=var.region']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']],
+      rootPath
+    );
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.tfvars.account_id=123456789012']],
+      rootPath
+    );
+    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars.region=us-east-1']], rootPath);
+    await this.executeWithoutErrors(
+      'terrahub',
+      [...terrahubConfig, ...['template.tfvars.tfstate_path=/tmp/.terrahub/tfstate_local/terraform-aws-landing-zone']],
+      rootPath
+    );
+
+    for (const key of Object.keys(jsonComponents)) {
+      await this.executeWithoutErrors(
+        'terrahub',
+        [...terrahubConfig, ...['terraform', '--include', key, '--delete', '--auto-approve']],
+        rootPath
+      );
+    }
+
+    return 'Success';
+  }
+
+  /**
+   * @param {String} providers
+   * @param {String} components
+   * @param {String} rootPath
+   * @return {Promise}
+   */
+  async updateConfig(providers, components, rootPath) {
+    const processes = [];
+    let index = 1;
+    const terrahubConfig = ['configure', '--config'];
+    const jsonProviders = JSON.parse(providers);
+    const jsonComponents = JSON.parse(components);
+
+    Object.keys(jsonProviders).forEach(key => {
+      if (key !== 'default') {
+        index += 1;
+
+        const defaultConfig = `template.provider[${index.toString()}]`;
+
+        processes.push([...terrahubConfig, ...[`${defaultConfig}={}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws={}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.alias=${key}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=var.${key}_region`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0]={}`]]);
+
+        const roleArn = `arn:aws:iam::var.${key}_account_id:role/OrganizationAccountAccessRole`;
+        const accountIdConfig = `.aws.assume_role[0].session_name=var.${key}_account_id`;
+
+        processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0].role_arn=${roleArn}`]]);
+        processes.push([...terrahubConfig, ...[`${defaultConfig}${accountIdConfig}`]]);
+      }
+
+      Object.keys(jsonProviders[key]).forEach(subKey => {
+        if (key === 'default') {
+          processes.push([...terrahubConfig, ...[`template.tfvars.${subKey}=${jsonProviders[key][subKey]}`]]);
+        } else {
+          processes.push([...terrahubConfig, ...[`template.tfvars.${key}_${subKey}=${jsonProviders[key][subKey]}`]]);
+        }
+      });
+    });
+
+    await Promise.all(
+      Object.keys(jsonComponents).map(key => {
+        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+
+        return this.executeWithoutErrors(
+          'terrahub',
+          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]],
+          rootPath
+        );
+      })
+    );
+
+    return processes;
+  }
+
 
   /**
    * Check if terrahub cli is installed
@@ -133,6 +253,10 @@ class Helper {
     return response;
   }
 
+  /**
+   * @param {String || Array} value
+   * @return {string}
+   */
   getOutputValueByType(value) {
     if (typeof value === 'string') {
       return value;
