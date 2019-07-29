@@ -201,6 +201,13 @@ class Helper {
     const { ROOT_PATH: rootPath, OUTPUT_PATH: outputPath } = process.env;
     let response = {};
 
+    const outputFileName = path.basename(outputPath);
+    const outputFolder = outputPath.replace(outputFileName, '');
+
+    if (!fs.existsSync(outputFolder)) {
+      fs.mkdirSync(outputFolder, { recursive: true });
+    }
+
     include.forEach(async item => {
       let result = '';
 
@@ -213,9 +220,7 @@ class Helper {
 
         response = { ...response, ...this.extractOutputValues(result) };
 
-        const outputFilePath = path.join(outputPath, this.outputFileName);
-
-        fs.writeFileSync(outputFilePath, response, { encoding: 'utf-8', flag: 'w' });
+        fs.writeFileSync(outputPath, JSON.stringify(response), { encoding: 'utf-8', flag: 'w' });
       } catch (error) {
         console.log('Error: failed to execute command: ', error.message);
       }
@@ -262,14 +267,6 @@ class Helper {
     keys.forEach(key => response.push(`${key}=${this.getOutputValueByType(value[key])}`));
 
     return response.join('|');
-  }
-
-  /**
-   * Get name for output file
-   * @return {String}
-   */
-  get outputFileName() {
-    return 'output.json';
   }
 }
 
