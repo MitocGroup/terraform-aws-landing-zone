@@ -6,7 +6,12 @@ component:
         local:
           path: >-
             ${tfvar.terrahub["tfstate_path"]}/terrahub_load_outputs/terraform.tfstate
+    resource:
+      null_resource:
+        everytime:
+          triggers:
+            timestamp: timestamp()
     output:
       terrahub_reader:
         value: >-
-          ${map("OUTPUT_KEY", "OUTPUT_VALUE")}
+          merge(map("ids", "test"))

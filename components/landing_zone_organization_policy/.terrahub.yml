@@ -10,12 +10,12 @@ component:
       aws_organizations_policy:
         landing_zone_organization_policy:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          content: '${file("${local.component["path"]}/iam_trust_policy.json.tpl")}'
-          name: '${var.landing_zone_organization_policy_name}'
+          content: 'file("${local.component["path"]}/iam_trust_policy.json.tpl")'
+          name: var.landing_zone_organization_policy_name
     output:
       id:
-        value: '${aws_organizations_policy.landing_zone_organization_policy.id}'
+        value: aws_organizations_policy.landing_zone_organization_policy.id
       thub_id:
-        value: '${aws_organizations_policy.landing_zone_organization_policy.id}'
+        value: aws_organizations_policy.landing_zone_organization_policy.id
       arn:
-        value: '${aws_organizations_policy.landing_zone_organization_policy.arn}'
+        value: aws_organizations_policy.landing_zone_organization_policy.arn

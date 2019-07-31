@@ -1,7 +1,6 @@
 'use strict';
 
 const Helper = require('./helper');
-
 const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components } = process.env;
 
 /**
@@ -41,7 +40,7 @@ async function main() {
     return Promise.reject(error);
   }
 
-  return Helper.output(include, true);
+  return Helper.output(include);
 }
 
 (async () => {

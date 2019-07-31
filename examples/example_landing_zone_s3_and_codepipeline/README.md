@@ -5,10 +5,9 @@ This example implements fully functional terraform configuration that can progra
 
 This module can be used as easy as:
 ```hcl
-module "example_landing_zone_organization" {
+module "example_landing_zone_s3_and_codepipeline" {
   source    = "../../modules/landing_zone"
-  version   = "0.0.8"
-  root_path = "${path.module}"
+  root_path = path.module
 
   landing_zone_providers = {
     default = {
@@ -28,6 +27,7 @@ module "example_landing_zone_organization" {
     landing_zone_code_pipeline               = "s3://terraform-aws-landing-zone/mycompany/landing_zone_code_pipeline/config.tfvars"
   }
 }
+
 ```
 
 ## Input / Arguments Reference

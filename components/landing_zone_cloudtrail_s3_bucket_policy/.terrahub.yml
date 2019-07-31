@@ -17,16 +17,14 @@ component:
               ${tfvar.terrahub["tfstate_path"]}/landing_zone_cloudtrail_s3_bucket/terraform.tfstate
       template_file:
         landing_zone_cloudtrail_s3_bucket_policy:
-          template: '${file("${local.component["path"]}/policy.json.tpl")}'
+          template: 'file("${local.component["path"]}/policy.json.tpl")'
           vars:
             s3_bucket_name: >-
-              ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
-            account_id: '${var.account_id}'
+              data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket
+            account_id: var.account_id
     resource:
       aws_s3_bucket_policy:
         landing_zone_cloudtrail_s3_bucket_policy:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          bucket: >-
-            ${data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket}
-          policy: >-
-            ${data.template_file.landing_zone_cloudtrail_s3_bucket_policy.rendered}
+          bucket: data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket
+          policy: data.template_file.landing_zone_cloudtrail_s3_bucket_policy.rendered

@@ -3,11 +3,11 @@ landing_zone_providers = {
     account_id = "123456789012"
     region     = "us-east-1"
   }
-  # ,
-  # another_account = {
-  #   account_id = "987654321098"
-  #   region     = "us-east-1"
-  # }
+#  ,
+#  sample = {
+#    account_id = "987654321098"
+#    region     = "us-east-1"
+#  }
 }
 
 landing_zone_components = {
