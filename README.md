@@ -29,7 +29,7 @@ guidelines and contains the following folders:
 
 This terraform module requires the following prerequisites / dependencies:
 * [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L10)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L34)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L45)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
