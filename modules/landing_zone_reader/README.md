@@ -20,7 +20,6 @@ To get started, simply include the following terraform codebase:
 ```hcl
 module "landing_zone" {
   source  = "./modules/landing_zone_reader"
-  version = "0.1.0"
 }
 ```
 
