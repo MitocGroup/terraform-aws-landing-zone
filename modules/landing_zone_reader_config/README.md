@@ -31,7 +31,7 @@ module "landing_zone" {
   }
 
   landing_zone_components = {
-    landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/config.tfvars"
+    landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
     [...]
   }
 }

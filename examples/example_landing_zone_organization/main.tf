@@ -10,6 +10,6 @@ module "example_landing_zone_organization" {
   }
 
   landing_zone_components = {
-    landing_zone_organization = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization/config.tfvars"
+    landing_zone_organization = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization/default.tfvars"
   }
 }
