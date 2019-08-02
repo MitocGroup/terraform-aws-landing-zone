@@ -11,8 +11,8 @@ terraform outputs programmatically. This way administrators of AWS Landing Zone
 control who can manage `landing_zone` module and who can consume `landing_zone`
 module's outputs in read-only mode.
 
-> NOTE: Current implementation is fully compatible with terraform v0.11.x and
-below, but not yet fully functional with terraform v0.12+ (work in progress)
+> NOTE: Current implementation is fully compatible with terraform v0.12+.
+Switch to branch `v0.11` if you still using terraform v0.11.x and below.
 
 Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Components Are Available](#what-components-are-available) | [Why to Use This Solution](#why-to-use-this-solution)
 
@@ -29,13 +29,13 @@ guidelines and contains the following folders:
 
 This terraform module requires the following prerequisites / dependencies:
 * [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L10)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L34)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L45)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.0.8"
+  version   = "0.1.0"
   root_path = "${path.module}"
 
   landing_zone_providers  = "${var.landing_zone_providers}"
@@ -54,7 +54,7 @@ landing_zone_providers = {
   [...]
 }
 landing_zone_components = {
-  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/config.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
   [...]
 }
 
@@ -81,7 +81,6 @@ Module `landing_zone_reader_config` must be executed first by passing the same p
 ```hcl
 module "landing_zone_reader_config" {
   source    = "./modules/landing_zone_reader_config"
-  version   = "0.0.8"
   root_path = "${path.module}"
 
   landing_zone_providers  = "${var.landing_zone_providers}"
@@ -93,7 +92,6 @@ After `landing_zone_reader_config` module configures everything, second step is 
 ```hcl
 module "landing_zone_reader" {
   source  = "./modules/landing_zone_reader"
-  version = "0.0.8"
 }
 ```
 

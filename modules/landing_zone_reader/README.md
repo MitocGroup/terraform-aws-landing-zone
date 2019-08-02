@@ -11,8 +11,8 @@ terraform outputs programmatically. This way administrators of AWS Landing Zone
 control who can manage `landing_zone` module and who can consume `landing_zone`
 module's outputs in read-only mode.
 
-> NOTE: Current implementation is fully compatible with terraform v0.11.x and
-below, but not yet fully functional with terraform v0.12+ (work in progress)
+> NOTE: Current implementation is fully compatible with terraform v0.12+.
+Switch to branch `v0.11` if you still using terraform v0.11.x and below.
 
 
 ## Usage Example
@@ -20,7 +20,6 @@ To get started, simply include the following terraform codebase:
 ```hcl
 module "landing_zone" {
   source  = "./modules/landing_zone_reader"
-  version = "0.0.8"
 }
 ```
 

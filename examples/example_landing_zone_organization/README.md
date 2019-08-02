@@ -7,7 +7,6 @@ This module can be used as easy as:
 ```hcl
 module "example_landing_zone_organization" {
   source    = "../../modules/landing_zone"
-  version   = "0.0.8"
   root_path = path.module
 
   landing_zone_providers = {
@@ -18,7 +17,7 @@ module "example_landing_zone_organization" {
   }
 
   landing_zone_components = {
-    landing_zone_organization = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization/config.tfvars"
+    landing_zone_organization = "s3://terraform-aws-landing-zone/mycompany/landing_zone_organization/default.tfvars"
   }
 }
 ```
