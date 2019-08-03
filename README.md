@@ -36,10 +36,9 @@ To get started, simply include `main.tf` into your terraform codebase:
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
   version   = "0.1.0"
-  root_path = "${path.module}"
-
-  landing_zone_providers  = "${var.landing_zone_providers}"
-  landing_zone_components = "${var.landing_zone_components}"
+  root_path = path.module
+  landing_zone_providers  = var.landing_zone_providers
+  landing_zone_components = var.landing_zone_components
 }
 ```
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
@@ -83,8 +82,8 @@ module "landing_zone_reader_config" {
   source    = "./modules/landing_zone_reader_config"
   root_path = "${path.module}"
 
-  landing_zone_providers  = "${var.landing_zone_providers}"
-  landing_zone_components = "${var.landing_zone_components}"
+  landing_zone_providers  = var.landing_zone_providers
+  landing_zone_components = var.landing_zone_components
 }
 ```
 
