@@ -80,8 +80,7 @@ Module `landing_zone_reader_config` must be executed first by passing the same p
 ```hcl
 module "landing_zone_reader_config" {
   source    = "./modules/landing_zone_reader_config"
-  root_path = "${path.module}"
-
+  root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
 }
@@ -90,7 +89,7 @@ module "landing_zone_reader_config" {
 After `landing_zone_reader_config` module configures everything, second step is to use the `landing_zone_reader` module:
 ```hcl
 module "landing_zone_reader" {
-  source  = "./modules/landing_zone_reader"
+  source = "./modules/landing_zone_reader"
 }
 ```
 
