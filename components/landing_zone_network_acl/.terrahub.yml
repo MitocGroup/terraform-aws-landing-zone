@@ -36,10 +36,9 @@ component:
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
             name: cidr-block
-            values:
-              - >-
-                split("|",
-                local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"])
+            values: >-
+              split("|",
+              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"])
     resource:
       aws_network_acl:
         landing_zone_network_acl:
@@ -47,11 +46,10 @@ component:
           count: local.elements_landing_zone_network_acl_count
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: 'local.elements_landing_zone_network_acl_map["config_${count.index}"]'
-          subnet_ids:
-            - >-
-              slice(data.aws_subnet_ids.subnet_selected.ids,
-              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_from_index"],
-              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_to_index"])
+          subnet_ids: >-
+            slice(tolist(data.aws_subnet_ids.subnet_selected[count.index].ids),
+            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_from_index"],
+            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_to_index"])
     output:
       ids:
         value: >-
