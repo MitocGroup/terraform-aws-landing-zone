@@ -47,10 +47,9 @@ component:
             local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["from_port"]
           to_port: >-
             local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["to_port"]
-          cidr_blocks:
-            - >-
-              split("|",
-              local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["cidr_blocks"])
+          cidr_blocks: >-
+            split("|",
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["cidr_blocks"])
           security_group_id: >-
             element(data.aws_security_group.security_group_selected.*.id,
             count.index)

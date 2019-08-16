@@ -10,7 +10,7 @@ project:
 terraform:
   varFile:
     - default.tfvars
-    - config.tfvars
+  version: 0.12.6
 template:
   provider:
     - aws:
