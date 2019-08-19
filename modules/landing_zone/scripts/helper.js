@@ -162,17 +162,19 @@ class Helper {
    * @param {String} rootPath
    * @return {Promise}
    */
-  async executeWithErrors(command, argsList, rootPath) {
-    try {
-      argsList.reduce(async (accumulator, args) => {
-        await accumulator;
-        return this.cli(command, args, rootPath);
-      }, Promise.resolve());
-    } catch (error) {
-      console.log('Error: failed to execute command:');
-
-      return Promise.reject(error);
-    }
+  executeWithErrors(command, argsList, rootPath) {
+    argsList.forEach(async args => {
+      try {
+        const result = await this.cli(
+          command, args, rootPath
+        );
+        console.log(result);
+      } catch (error) {
+        console.log('Error: failed to execute command:');
+        return Promise.reject(error);
+      }
+    });
+    return Promise.resolve();
   }
 
   /**
