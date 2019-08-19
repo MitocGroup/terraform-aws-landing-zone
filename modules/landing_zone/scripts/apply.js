@@ -33,7 +33,7 @@ async function main() {
   Object.keys(jsonComponents).forEach(key => include.push(key));
 
   processes.push(['init', '--include', include.join(',')]);
-  processes.push(['apply', '--auto-approve', '--include', include.join(',')]);
+  processes.push(['apply', '--auto-approve', '--dependency', 'ignore', '--include', include.join(',')]);
 
   try {
     await Helper.executeWithErrors('terrahub', processes, rootPath);
