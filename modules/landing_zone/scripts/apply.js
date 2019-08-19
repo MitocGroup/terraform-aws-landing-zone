@@ -36,7 +36,7 @@ async function main() {
   processes.push(['apply', '--auto-approve', '--dependency', 'ignore', '--include', include.join(',')]);
 
   try {
-    await Helper.executeWithErrors('terrahub', processes, rootPath);
+    Helper.executeWithErrors('terrahub', processes, rootPath);
   } catch (error) {
     return Promise.reject(error);
   }
