@@ -43,11 +43,8 @@ async function main() {
 (async () => {
   try {
     await checkEnvironmentVars();
-
     await Helper.checkIfTerrahubIsInstalled();
-
     const resp = await main();
-
     console.log(resp);
   } catch (error) {
     console.log(error);

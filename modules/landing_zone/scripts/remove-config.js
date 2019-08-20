@@ -21,11 +21,8 @@ async function checkEnvironmentVars() {
 (async () => {
   try {
     await checkEnvironmentVars();
-
     await Helper.checkIfTerrahubIsInstalled();
-
     const resp = await Helper.removeConfig(components, rootPath);
-
     console.log(resp);
   } catch (error) {
     console.log(error);

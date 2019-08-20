@@ -30,6 +30,7 @@ async function main() {
   const processes = await Helper.updateConfig(providers, components, rootPath);
 
   try {
+    await Helper.removeConfig(components, rootPath);
     await Helper.executeWithErrors('terrahub', processes, rootPath);
   } catch (error) {
     return await Promise.reject(error);
@@ -41,11 +42,8 @@ async function main() {
 (async () => {
   try {
     await checkEnvironmentVars();
-
     await Helper.checkIfTerrahubIsInstalled();
-
     const resp = await main();
-
     console.log(resp);
   } catch (error) {
     console.log(error);
