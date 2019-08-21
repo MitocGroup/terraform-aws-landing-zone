@@ -1,0 +1,43 @@
+component:
+  name: landing_zone_gateway_cgw
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    terraform:
+      backend:
+        local:
+          path: >-
+            ${tfvar.terrahub["tfstate_path"]}/landing_zone_gateway_cgw/terraform.tfstate
+    locals:
+      elements_landing_zone_gateway_cgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_tags_element"]
+      elements_landing_zone_gateway_cgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_resource"]
+      elements_landing_zone_gateway_cgw_count: >-
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_resource"])
+    resource:
+      aws_customer_gateway:
+        landing_zone_gateway_cgw:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: local.elements_landing_zone_gateway_cgw_count
+          bgp_asn: >-
+            local.elements_landing_zone_gateway_cgw_map["config_${count.index}"]["bgp_asn"]
+          ip_address: >-
+            local.elements_landing_zone_gateway_cgw_map["config_${count.index}"]["ip_address"]
+          type: >-
+            local.elements_landing_zone_gateway_cgw_map["config_${count.index}"]["type"]
+          tags: >-
+            local.elements_landing_zone_gateway_cgw_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_customer_gateway.landing_zone_gateway_cgw.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_customer_gateway.landing_zone_gateway_cgw.*.id)
+      landing_zone_gateway_cgw_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_customer_gateway.landing_zone_gateway_cgw.*.id)
