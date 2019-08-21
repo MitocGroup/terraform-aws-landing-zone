@@ -27,7 +27,8 @@ component:
           event_selector:
             data_resource:
               type: var.landing_zone_event_selector_data_resource_type
-              values: var.landing_zone_event_selector_data_resource_values
+              values:
+                - var.landing_zone_event_selector_data_resource_values
     output:
       id:
         value: aws_cloudtrail.landing_zone_cloudtrail.id
