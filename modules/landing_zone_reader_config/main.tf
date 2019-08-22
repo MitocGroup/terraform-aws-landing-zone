@@ -1,6 +1,7 @@
 resource "null_resource" "landing_zone_reader_config" {
   triggers = {
     providers  = md5(jsonencode(var.landing_zone_providers))
+    backend    = md5(jsonencode(var.landing_zone_backend))
     components = md5(jsonencode(var.landing_zone_components))
   }
 
@@ -11,6 +12,7 @@ resource "null_resource" "landing_zone_reader_config" {
     environment = {
       ROOT_PATH  = var.root_path
       PROVIDERS  = jsonencode(var.landing_zone_providers)
+      BACKEND    = jsonencode(var.landing_zone_backend)
       COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }

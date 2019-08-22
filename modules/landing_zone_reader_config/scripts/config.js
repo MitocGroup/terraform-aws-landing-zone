@@ -2,7 +2,7 @@
 
 const Helper = require('./helper');
 
-const { ROOT_PATH: rootPath, PROVIDERS: providers, COMPONENTS: components } = process.env;
+const { ROOT_PATH: rootPath, PROVIDERS: providers, BACKEND: backend, COMPONENTS: components } = process.env;
 
 /**
  * Check if required env variables are defined
@@ -17,6 +17,10 @@ async function checkEnvironmentVars() {
     return Promise.reject(Error('ERROR: PROVIDERS variable is empty. Aborting...'));
   }
 
+  if (!backend) {
+    return Promise.reject(Error('ERROR: BACKEND variable is empty. Aborting...'));
+  }
+
   if (!components) {
     return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
   }
@@ -27,7 +31,7 @@ async function checkEnvironmentVars() {
  * @return {Promise}
  */
 async function main() {
-  const processes = await Helper.updateConfig(providers, components, rootPath);
+  const processes = await Helper.updateConfig(providers, backend, components, rootPath);
 
   try {
     await Helper.removeConfig(components, rootPath);
