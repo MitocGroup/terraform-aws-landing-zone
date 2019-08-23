@@ -32,6 +32,7 @@ resource "null_resource" "landing_zone_reader_apply" {
   depends_on = ["null_resource.landing_zone_reader_config"]
 
   triggers = {
+    backend    = md5(jsonencode(var.landing_zone_backend))
     components = md5(jsonencode(var.landing_zone_components))
     timestamp  = timestamp()
   }
@@ -42,6 +43,7 @@ resource "null_resource" "landing_zone_reader_apply" {
 
     environment = {
       ROOT_PATH  = var.root_path
+      BACKEND    = jsonencode(var.landing_zone_backend)
       COMPONENTS = jsonencode(var.landing_zone_components)
     }
   }

@@ -3,11 +3,6 @@ component:
   dependsOn:
     - ../landing_zone_vpc
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_subnet/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
@@ -68,3 +63,6 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_subnet.landing_zone_subnet.*.arn)
+terraform:
+  varFile:
+    - ../../../mitocgroup_tfvars/landing_zone_subnet/default.tfvars

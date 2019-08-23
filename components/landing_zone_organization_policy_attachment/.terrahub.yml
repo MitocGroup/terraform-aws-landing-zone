@@ -1,11 +1,6 @@
 component:
   name: landing_zone_organization_policy_attachment
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization_policy_attachment/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_organization_unit:

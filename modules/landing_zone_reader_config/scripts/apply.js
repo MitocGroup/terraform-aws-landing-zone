@@ -2,7 +2,7 @@
 
 const Helper = require('./helper');
 
-const { ROOT_PATH: rootPath, COMPONENTS: components } = process.env;
+const { ROOT_PATH: rootPath, BACKEND: backend, COMPONENTS: components } = process.env;
 
 /**
  * Check if required env variables are defined
@@ -13,6 +13,10 @@ async function checkEnvironmentVars() {
     return Promise.reject(Error('ERROR: ROOT_PATH variable is empty. Aborting...'));
   }
 
+  if (!backend) {
+    return Promise.reject(Error('ERROR: BACKEND variable is empty. Aborting...'));
+  }
+
   if (!components) {
     return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
   }
@@ -21,8 +25,9 @@ async function checkEnvironmentVars() {
 /**
  * Run terrahub output
  * @param {Array} include
+ * @param {JSON} jsonBackend
  */
-async function terrahubOutput(include) {
+async function terrahubOutput(include, jsonBackend) {
   let outputMap = [];
 
   await Helper.executeWithoutErrors(
@@ -39,49 +44,54 @@ async function terrahubOutput(include) {
     rootPath
   );
 
-  await Promise.all(
-    include.map(async item => {
-      await Helper.cli(
-        'terrahub',
-        ['init', '--include', item],
-        rootPath
-      );
-
-      const result = await Helper.cli(
-        'terrahub',
-        ['output', '--format', 'json', '--include', item, '--auto-approve'],
-        rootPath
-      );
-
-      if (!result.length) {
-        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
-          'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
-      }
-      
-      const outputValues = await extractOutputValues(result);
-      const prepareOutput = `map(${outputValues.join(',')})`;
-
-      outputMap = [...outputMap, ...[prepareOutput]];
-    })
-  );
-
-  try {
+  const promises = include.map(async item => {
     await Helper.cli(
       'terrahub',
-      [
-        'configure',
-        '--include',
-        'terrahub_load_outputs',
-        '--config',
-        `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
-      ],
+      ['init', '--include', item],
       rootPath
     );
-    await Helper.cli('terrahub', ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve'], rootPath);
-    await Helper.cli('terrahub', ['refresh', '--include', 'terrahub_load_outputs'], rootPath);
-  } catch (error) {
-    console.log('Error', error);
-  }
+
+    const result = await Helper.cli(
+      'terrahub',
+      ['output', '--format', 'json', '--include', item, '--auto-approve'],
+      rootPath
+    );
+
+    if (!result.length) {
+      throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
+        'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
+    }
+    
+    const outputValues = await extractOutputValues(result, jsonBackend);
+    const prepareOutput = `map(${outputValues.join(',')})`;
+
+    outputMap = [...outputMap, ...[prepareOutput]];
+  });
+
+  await Promise.all(promises);
+  
+  await Helper.cli(
+    'terrahub',
+    [
+      'configure',
+      '--include',
+      'terrahub_load_outputs',
+      '--config',
+      `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
+    ],
+    rootPath
+  );
+
+  await Helper.cli(
+    'terrahub',
+    [
+      'run',
+      '--include',
+      'terrahub_load_outputs',
+      '--apply',
+      '--auto-approve'],
+      rootPath
+  ); 
 
   return 'Success';
 }
@@ -89,9 +99,10 @@ async function terrahubOutput(include) {
 /**
  * Extract output values
  * @param {String} result
+ * @param {JSON} jsonBackend
  * @return {Promise<Array>}
  */
-async function extractOutputValues(result) {
+async function extractOutputValues(result, jsonBackend) {
   const processes = [];
   let outputMap = [];
   const terrahubConfig = ['configure', '--include', 'terrahub_load_outputs', '--config'];
@@ -99,13 +110,80 @@ async function extractOutputValues(result) {
 
   Object.keys(jsonResult).forEach(key => {
     processes.push([...terrahubConfig, ...[`component.template.data.terraform_remote_state.${key}.backend=local`]]);
-    processes.push([
-      ...terrahubConfig,
-      ...[
-        `component.template.data.terraform_remote_state.${key}` +
-          `.config.path=$\{tfvar.terrahub["tfstate_path"]}/${key}/terraform.tfstate`
-      ]
-    ]);
+    
+    const { backend, bucket, key_prefix } = jsonBackend;
+
+    switch(backend) {
+      case 's3':
+        const { region } = jsonBackend;
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.backend=s3`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config={}`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config.bucket=${bucket}`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config.region=${region}`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config.key=${key_prefix}/${key}/terraform.tfstate`
+          ]
+        ]);
+        break;
+      case 'gcs':
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.backend=gcs`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config={}`
+          ]
+        ]);
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config.prefix=${key_prefix}/${key}`
+          ]
+        ]);
+        break;
+      default:
+        processes.push([
+          ...terrahubConfig,
+          ...[
+            `component.template.data.terraform_remote_state.${key}` +
+              `.config.path=$\{tfvar.terrahub["tfstate_path"]}/${key}/terraform.tfstate`
+          ]
+        ]);
+    }
 
     Object.keys(jsonResult[key]).forEach(subKey => {
       outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.outputs.${subKey}`]];
@@ -126,12 +204,13 @@ async function extractOutputValues(result) {
  * @return {Promise}
  */
 async function main() {
+  const jsonBackend = JSON.parse(backend);
   const jsonComponents = JSON.parse(components);
   const include = [];
 
   Object.keys(jsonComponents).forEach(key => include.push(key));
 
-  return terrahubOutput(include);
+  return terrahubOutput(include, jsonBackend);
 }
 
 (async () => {

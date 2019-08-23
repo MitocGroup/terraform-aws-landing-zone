@@ -3,11 +3,6 @@ component:
   dependsOn:
     - ../landing_zone_cloudtrail_s3_bucket
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_cloudtrail_s3_bucket_policy/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_cloudtrail_s3_bucket:

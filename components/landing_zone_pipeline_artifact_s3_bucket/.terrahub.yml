@@ -1,11 +1,6 @@
 component:
   name: landing_zone_pipeline_artifact_s3_bucket
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_pipeline_artifact_s3_bucket/terraform.tfstate
     resource:
       aws_s3_bucket:
         landing_zone_pipeline_artifact_s3_bucket:
