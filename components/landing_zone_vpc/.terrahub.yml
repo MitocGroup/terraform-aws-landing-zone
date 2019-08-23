@@ -48,6 +48,3 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_vpc.landing_zone_vpc.*.arn)
-terraform:
-  varFile:
-    - ../../../mitocgroup_tfvars/landing_zone_vpc/default.tfvars
