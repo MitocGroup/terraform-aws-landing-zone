@@ -12,7 +12,7 @@ landing_zone_providers = {
 
 landing_zone_backend = {
   backend = "local"
-  path    = "/tmp/.terrahub/landing_zone/"
+  path    = "/tmp/.terrahub/landing_zone"
 }
 
 landing_zone_components = {
