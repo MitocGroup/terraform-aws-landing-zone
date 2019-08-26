@@ -20,7 +20,9 @@ class Helper {
       return execute.stdout.toString();
     }
 
-    return process.env.DEBUG ? await Promise.reject(Error(execute.stderr.toString())) : Promise.reject(Error('Error occurred!'));
+    return process.env.DEBUG
+      ? await Promise.reject(Error(execute.stderr.toString()))
+      : Promise.reject(Error(`${command} ${args.join(' ')} failed. Enable DEBUG=debug to learn more.`));
   }
 
   /**

@@ -18,7 +18,9 @@ class Helper {
       return execute.stdout.toString();
     }
 
-    return process.env.DEBUG ? await Promise.reject(Error(execute.stderr.toString())) : Promise.reject(Error('Error occurred!'));
+    return process.env.DEBUG
+      ? await Promise.reject(Error(execute.stderr.toString()))
+      : Promise.reject(Error(`${command} ${args.join(' ')} failed. Enable DEBUG=debug to learn more.`));
   }
 
   /**
@@ -90,7 +92,7 @@ class Helper {
 
     const jsonBackendKeysArray = Object.keys(jsonBackends);
     const { backend } = jsonBackends;
-    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
+    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach(backendKey => {
       if (['key', 'prefix', 'path'].indexOf(backendKey) > -1) {
         jsonBackends[backendKey] += `/\${tfvar.terrahub["component"]["name"]}` +
           (backend === 'prefix' ? '' : '/terraform.tfstate');
