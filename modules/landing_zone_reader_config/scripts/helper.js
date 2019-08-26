@@ -91,9 +91,9 @@ class Helper {
     const jsonBackendKeysArray = Object.keys(jsonBackends);
     const { backend } = jsonBackends;
     jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
-      if (backendKey === 'key' || backendKey === 'prefix') {
+      if (['key', 'prefix', 'path'].indexOf(backendKey) > -1) {
         jsonBackends[backendKey] += `/\${tfvar.terrahub["component"]["name"]}` +
-          (backend === 's3' ? '/terraform.tfstate' : '');
+          (backend === 'prefix' ? '' : '/terraform.tfstate');
       }
       processes.push([
         ...terrahubConfig,
