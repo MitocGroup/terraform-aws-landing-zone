@@ -35,7 +35,7 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.1.3"
+  version   = "0.1.4"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
