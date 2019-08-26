@@ -89,34 +89,13 @@ class Helper {
    * @return {Promise}
    */
   async updateConfig(providers, backends, components, rootPath) {
-    const processes = [];
     let index = 1;
     const terrahubConfig = ['configure', '--config'];
     const jsonProviders = JSON.parse(providers);
     const jsonBackends = JSON.parse(backends);
     const jsonComponents = JSON.parse(components);
 
-    const { backend, bucket, key_prefix, region, workspace_key_prefix, path_prefix } = jsonBackends;
-
-    switch(backend) {
-      case 's3':
-        const {  } = jsonBackends;
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.bucket=${bucket}`]]);
-        if (region) {
-          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.region=${region}`]]);
-        }
-        if (workspace_key_prefix) {
-          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.workspace_key_prefix=${workspace_key_prefix}`]]);
-        }
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.key=${key_prefix}/\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
-        break;
-      case 'gcs':
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.bucket=${bucket}`]]);
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.prefix=${key_prefix}/\${tfvar.terrahub["component"]["name"]}`]]);
-        break;
-      default:
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.local.path=${path_prefix}\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
-    }
+    const processes = this.updateBackend(jsonBackends, terrahubConfig);
 
     Object.keys(jsonProviders).forEach(key => {
       if (key !== 'default') {
@@ -157,6 +136,38 @@ class Helper {
         );
       })
     );
+
+    return processes;
+  }
+
+  /**
+   * Update Backend in .terrahub.yml
+   * @param {JSON} jsonBackends
+   * @param {Array} terrahubConfig
+   * @return {Array}
+   */
+  updateBackend(jsonBackends, terrahubConfig) {
+    const processes = [];
+    const { backend, bucket, key_prefix, region, workspace_key_prefix, path_prefix } = jsonBackends;
+    switch (backend) {
+      case 's3':
+        const { } = jsonBackends;
+        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.bucket=${bucket}`]]);
+        if (region) {
+          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.region=${region}`]]);
+        }
+        if (workspace_key_prefix) {
+          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.workspace_key_prefix=${workspace_key_prefix}`]]);
+        }
+        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.key=${key_prefix}/\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
+        break;
+      case 'gcs':
+        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.bucket=${bucket}`]]);
+        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.prefix=${key_prefix}/\${tfvar.terrahub["component"]["name"]}`]]);
+        break;
+      default:
+        processes.push([...terrahubConfig, ...[`template.terraform.backend.local.path=${path_prefix}\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
+    }
 
     return processes;
   }
