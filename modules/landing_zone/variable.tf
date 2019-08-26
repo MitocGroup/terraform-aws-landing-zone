@@ -12,6 +12,10 @@ variable "landing_zone_providers" {
 variable "landing_zone_backend" {
   type        = map(string)
   description = "This is the backend configure for all components."
+  default     = {
+    backend = "local"
+    path_prefix = "/tmp/.terrahub/landing_zone/"
+  }
 }
 
 variable "landing_zone_components" {

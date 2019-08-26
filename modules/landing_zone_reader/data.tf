@@ -1,9 +1,7 @@
 data "terraform_remote_state" "terrahub_load_outputs" {
-  backend = "s3"
+  backend = "local"
 
   config = {
-    bucket = "tfstates-euliancom"
-    region = "us-east-1"
-    key = "terraform/terrahub/api/terrahub_load_outputs/terraform.tfstate"
+    path = "/tmp/.terrahub/landing_zone/terrahub_load_outputs/terraform.tfstate"
   }
 }
