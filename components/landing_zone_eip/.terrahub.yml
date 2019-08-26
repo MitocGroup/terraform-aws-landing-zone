@@ -1,10 +1,6 @@
 component:
   name: landing_zone_eip
   template:
-    terraform:
-      backend:
-        local:
-          path: '${tfvar.terrahub["tfstate_path"]}/landing_zone_eip/terraform.tfstate'
     locals:
       elements_landing_zone_eip_tag_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]

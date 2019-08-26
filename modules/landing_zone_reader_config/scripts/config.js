@@ -2,7 +2,7 @@
 
 const Helper = require('./helper');
 
-const { ROOT_PATH: rootPath, PROVIDERS: providers, COMPONENTS: components } = process.env;
+const { ROOT_PATH: rootPath, PROVIDERS: providers, BACKEND: backend, COMPONENTS: components } = process.env;
 
 /**
  * Check if required env variables are defined
@@ -17,6 +17,10 @@ async function checkEnvironmentVars() {
     return Promise.reject(Error('ERROR: PROVIDERS variable is empty. Aborting...'));
   }
 
+  if (!backend) {
+    return Promise.reject(Error('ERROR: BACKEND variable is empty. Aborting...'));
+  }
+
   if (!components) {
     return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
   }
@@ -27,10 +31,11 @@ async function checkEnvironmentVars() {
  * @return {Promise}
  */
 async function main() {
-  const processes = await Helper.updateConfig(providers, components, rootPath);
+  const processes = await Helper.updateConfig(rootPath, providers, backend, components);
 
   try {
-    await Helper.executeWithErrors('terrahub', processes, rootPath);
+    await Helper.removeConfig(rootPath, components);
+    await Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
     return await Promise.reject(error);
   }
@@ -41,11 +46,8 @@ async function main() {
 (async () => {
   try {
     await checkEnvironmentVars();
-
     await Helper.checkIfTerrahubIsInstalled();
-
     const resp = await main();
-
     console.log(resp);
   } catch (error) {
     console.log(error);

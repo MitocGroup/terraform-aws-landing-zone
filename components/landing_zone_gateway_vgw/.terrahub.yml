@@ -1,0 +1,46 @@
+component:
+  name: landing_zone_gateway_vgw
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    locals:
+      elements_landing_zone_vpc_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_landing_zone_vpc_data_count: >-
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+      elements_landing_zone_gateway_vgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_vgw_tags_element"]
+      elements_landing_zone_gateway_vgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_vgw_resource"]
+      elements_landing_zone_gateway_vgw_count: >-
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_vgw_resource"])
+    data:
+      aws_vpc:
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: local.elements_landing_zone_vpc_data_count
+          cidr_block: >-
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
+    resource:
+      aws_vpn_gateway:
+        landing_zone_gateway_vgw:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: local.elements_landing_zone_gateway_vgw_count
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+          availability_zone: >-
+            local.elements_landing_zone_gateway_vgw_map["config_${count.index}"]["availability_zone"]
+          tags: >-
+            local.elements_landing_zone_gateway_vgw_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)
+      landing_zone_gateway_vgw_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)

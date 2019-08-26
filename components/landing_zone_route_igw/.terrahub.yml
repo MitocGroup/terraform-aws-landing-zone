@@ -5,11 +5,6 @@ component:
     - ../landing_zone_gateway_igw
     - ../landing_zone_route_table_association
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_igw/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]

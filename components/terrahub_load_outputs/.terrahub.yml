@@ -1,11 +1,6 @@
 component:
   name: terrahub_load_outputs
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/terrahub_load_outputs/terraform.tfstate
     resource:
       null_resource:
         everytime:

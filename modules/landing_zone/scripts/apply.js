@@ -36,7 +36,7 @@ async function main() {
   processes.push(['apply', '--auto-approve', '--dependency', 'ignore', '--include', include.join(',')]);
 
   try {
-    Helper.executeWithErrors('terrahub', processes, rootPath);
+    Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
     return Promise.reject(error);
   }
@@ -47,11 +47,8 @@ async function main() {
 (async () => {
   try {
     await checkEnvironmentVars();
-
     await Helper.checkIfTerrahubIsInstalled();
-
     const resp = await main();
-
     console.log(resp);
   } catch (error) {
     console.log(error);

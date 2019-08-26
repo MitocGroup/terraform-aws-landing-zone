@@ -1,11 +1,6 @@
 component:
   name: landing_zone_code_pipeline_role
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_code_pipeline_role/terraform.tfstate
     resource:
       aws_iam_role:
         landing_zone_code_pipeline_role:

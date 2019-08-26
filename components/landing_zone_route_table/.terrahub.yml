@@ -3,11 +3,6 @@ component:
   dependsOn:
     - ../landing_zone_vpc
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_route_table/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
@@ -34,9 +29,6 @@ component:
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
             local.elements_landing_zone_route_table_tags_map["config_${count.index}"]
-          propagating_vgws: >-
-            split("|",
-            local.elements_landing_zone_route_table_map["config_${count.index}"]["propagating_vgws"])
     output:
       ids:
         value: >-

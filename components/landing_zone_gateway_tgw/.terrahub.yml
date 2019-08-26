@@ -1,0 +1,46 @@
+component:
+  name: landing_zone_gateway_tgw
+  dependsOn:
+    - ../landing_zone_vpc
+  template:
+    locals:
+      elements_landing_zone_gateway_tgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_tags_element"]
+      elements_landing_zone_gateway_tgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"]
+      elements_landing_zone_gateway_tgw_count: >-
+        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"])
+    resource:
+      aws_ec2_transit_gateway:
+        landing_zone_gateway_tgw:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: local.elements_landing_zone_gateway_tgw_count
+          amazon_side_asn: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["amazon_side_asn"]
+          auto_accept_shared_attachments: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["auto_accept_shared_attachments"]
+          default_route_table_association: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["default_route_table_association"]
+          default_route_table_propagation: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["default_route_table_propagation"]
+          description: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["description"]
+          dns_support: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["dns_support"]
+          vpn_ecmp_support: >-
+            local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["vpn_ecmp_support"]
+          tags: >-
+            local.elements_landing_zone_gateway_tgw_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway.landing_zone_gateway_tgw.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway.landing_zone_gateway_tgw.*.id)
+      landing_zone_gateway_tgw_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway.landing_zone_gateway_tgw.*.id)

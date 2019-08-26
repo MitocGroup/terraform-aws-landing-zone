@@ -9,6 +9,14 @@ module "example_landing_zone_s3_and_codepipeline" {
     }
   }
 
+  landing_zone_backend = {
+    backend = "s3"
+    bucket  = "terraform-aws-landing-zone"
+    region  = "us-east-1"
+    key     = "tfstates/terraform-aws-landing-zone"
+    workspace_key_prefix = "tfstates_workspaces"
+  }
+
   landing_zone_components = {
     landing_zone_pipeline_s3_bucket          = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
     landing_zone_pipeline_artifact_s3_bucket = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_artifact_s3_bucket/default.tfvars"
