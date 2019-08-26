@@ -32,6 +32,5 @@ template:
   tfvars:
     account_id: 123456789012
     region: us-east-1
-    tfstate_path: /tmp/.terrahub/tfstate_local/terraform-aws-landing-zone
     sample_account_id: 987654321098
     sample_region: us-east-1

@@ -6,11 +6,6 @@ component:
     - ../landing_zone_pipeline_artifact_s3_bucket
     - ../landing_zone_code_build
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_code_pipeline/terraform.tfstate
     data:
       terraform_remote_state:
         landing_zone_code_pipeline_role:

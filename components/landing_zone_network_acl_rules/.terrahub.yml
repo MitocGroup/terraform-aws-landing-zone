@@ -3,11 +3,6 @@ component:
   dependsOn:
     - ../landing_zone_network_acl
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_network_acl_rules/terraform.tfstate
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]

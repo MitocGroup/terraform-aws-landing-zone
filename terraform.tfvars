@@ -10,6 +10,11 @@ landing_zone_providers = {
 #  }
 }
 
+landing_zone_backend = {
+  backend = "local"
+  path    = "/tmp/.terrahub/landing_zone/"
+}
+
 landing_zone_components = {
   landing_zone_pipeline_s3_bucket             = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_s3_bucket/default.tfvars"
   landing_zone_pipeline_artifact_s3_bucket    = "s3://terraform-aws-landing-zone/mycompany/landing_zone_pipeline_artifact_s3_bucket/default.tfvars"

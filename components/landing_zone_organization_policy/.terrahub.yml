@@ -1,11 +1,6 @@
 component:
   name: landing_zone_organization_policy
   template:
-    terraform:
-      backend:
-        local:
-          path: >-
-            ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization_policy/terraform.tfstate
     resource:
       aws_organizations_policy:
         landing_zone_organization_policy:
