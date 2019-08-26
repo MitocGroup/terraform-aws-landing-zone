@@ -33,13 +33,8 @@ async function terrahubOutput(include, jsonBackend) {
   await Helper.executeWithoutErrors(
     'terrahub',
     [
-      'configure',
-      '--config',
-      'component.template.data',
-      '--delete',
-      '--auto-approve',
-      '--include',
-      'terrahub_load_outputs'
+      'configure', '--config', 'component.template.data', '--delete',
+      '--auto-approve', '--include', 'terrahub_load_outputs'
     ],
     rootPath
   );
@@ -73,10 +68,7 @@ async function terrahubOutput(include, jsonBackend) {
   await Helper.cli(
     'terrahub',
     [
-      'configure',
-      '--include',
-      'terrahub_load_outputs',
-      '--config',
+      'configure', '--include', 'terrahub_load_outputs', '--config',
       `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
     ],
     rootPath
@@ -84,13 +76,8 @@ async function terrahubOutput(include, jsonBackend) {
 
   await Helper.cli(
     'terrahub',
-    [
-      'run',
-      '--include',
-      'terrahub_load_outputs',
-      '--apply',
-      '--auto-approve'],
-      rootPath
+    ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve'],
+    rootPath
   ); 
 
   return 'Success';
