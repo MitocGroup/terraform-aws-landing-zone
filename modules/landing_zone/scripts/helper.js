@@ -8,12 +8,12 @@ const { execSync, spawnSync } = require('child_process');
 class Helper {
   /**
    * Spawn CLI process
+   * @param {String} rootPath
    * @param {String} command
    * @param {Array} args
-   * @param {String} rootPath
    * @return {Promise}
    */
-  async cli(command, args, rootPath) {
+  async cli(rootPath, command, args) {
     const execute = spawnSync(command, args, { cwd: rootPath, env: process.env });
 
     if (execute.status === 0) {
@@ -25,56 +25,51 @@ class Helper {
 
   /**
    * Execute
+   * @param {String} rootPath
+   * @param {Array} components
    * @return {Promise}
    */
-  async removeConfig(components, rootPath) {
+  async removeConfig(rootPath, components) {
     const jsonComponents = JSON.parse(components);
     const terrahubConfig = ['configure', '--config'];
 
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars', '-D', '-y']], rootPath);
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.terraform', '-D', '-y']], rootPath);
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider', '-D', '-y']], rootPath);
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0]={}']], rootPath);
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']], rootPath);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.tfvars', '-D', '-y']]);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.terraform', '-D', '-y']]);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider', '-D', '-y']]);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[0]={}']]);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']]);
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.provider[0].aws.region=var.region']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.region=var.region']]
     );
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']]
     );
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1]={}']], rootPath);
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.provider[1].aws={}']], rootPath);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[1]={}']]);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[1].aws={}']]);
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.provider[1].aws.alias=default']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.alias=default']]
     );
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.provider[1].aws.region=var.region']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.region=var.region']]
     );
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']]
     );
     await this.executeWithoutErrors(
-      'terrahub',
-      [...terrahubConfig, ...['template.tfvars.account_id=123456789012']],
-      rootPath
+      rootPath, 'terrahub',
+      [...terrahubConfig, ...['template.tfvars.account_id=123456789012']]
     );
-    await this.executeWithoutErrors('terrahub', [...terrahubConfig, ...['template.tfvars.region=us-east-1']], rootPath);
+    await this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.tfvars.region=us-east-1']]);
 
     for (const key of Object.keys(jsonComponents)) {
       await this.executeWithoutErrors(
-        'terrahub',
-        [...terrahubConfig, ...['terraform', '--include', key, '--delete', '--auto-approve']],
-        rootPath
+        rootPath, 'terrahub',
+        [...terrahubConfig, ...['terraform', '--include', key, '--delete', '--auto-approve']]
       );
     }
 
@@ -82,20 +77,32 @@ class Helper {
   }
 
   /**
+   * @param {String} rootPath
    * @param {String} providers
    * @param {String} backends
    * @param {String} components
-   * @param {String} rootPath
    * @return {Promise}
    */
-  async updateConfig(providers, backends, components, rootPath) {
+  async updateConfig(rootPath, providers, backends, components) {
+    const processes = [];
     let index = 1;
     const terrahubConfig = ['configure', '--config'];
     const jsonProviders = JSON.parse(providers);
     const jsonBackends = JSON.parse(backends);
     const jsonComponents = JSON.parse(components);
 
-    const processes = this.updateBackend(jsonBackends, terrahubConfig);
+    const jsonBackendKeysArray = Object.keys(jsonBackends);
+    const { backend } = jsonBackends;
+    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
+      if (backendKey === 'key' || backendKey === 'prefix') {
+        jsonBackends[backendKey] += `/\${tfvar.terrahub["component"]["name"]}` +
+          (backend === 's3' ? '/terraform.tfstate' : '');
+      }
+      processes.push([
+        ...terrahubConfig,
+        ...[`template.terraform.backend.${backend}.${backendKey}=${jsonBackends[backendKey]}`]
+      ]);
+    });
 
     Object.keys(jsonProviders).forEach(key => {
       if (key !== 'default') {
@@ -130,44 +137,11 @@ class Helper {
         processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
 
         return this.executeWithoutErrors(
-          'terrahub',
-          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]],
-          rootPath
+          rootPath, 'terrahub',
+          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]]
         );
       })
     );
-
-    return processes;
-  }
-
-  /**
-   * Update Backend in .terrahub.yml
-   * @param {JSON} jsonBackends
-   * @param {Array} terrahubConfig
-   * @return {Array}
-   */
-  updateBackend(jsonBackends, terrahubConfig) {
-    const processes = [];
-    const { backend, bucket, key_prefix, region, workspace_key_prefix, path_prefix } = jsonBackends;
-    switch (backend) {
-      case 's3':
-        const { } = jsonBackends;
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.bucket=${bucket}`]]);
-        if (region) {
-          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.region=${region}`]]);
-        }
-        if (workspace_key_prefix) {
-          processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.workspace_key_prefix=${workspace_key_prefix}`]]);
-        }
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.s3.key=${key_prefix}/\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
-        break;
-      case 'gcs':
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.bucket=${bucket}`]]);
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.gcs.prefix=${key_prefix}/\${tfvar.terrahub["component"]["name"]}`]]);
-        break;
-      default:
-        processes.push([...terrahubConfig, ...[`template.terraform.backend.local.path=${path_prefix}\${tfvar.terrahub["component"]["name"]}/terraform.tfstate`]]);
-    }
 
     return processes;
   }
@@ -188,16 +162,16 @@ class Helper {
 
   /**
    * Execute program and throw error
+   * @param {String} rootPath
    * @param {String} command
    * @param {Array<Array>} argsList
-   * @param {String} rootPath
    * @return {Promise}
    */
-  executeWithErrors(command, argsList, rootPath) {
+  executeWithErrors(rootPath, command, argsList) {
     argsList.forEach(async args => {
       try {
         const result = await this.cli(
-          command, args, rootPath
+          rootPath, command, args
         );
         console.log(result);
       } catch (error) {
@@ -210,14 +184,14 @@ class Helper {
 
   /**
    * Execute program and do not throw error
+   * @param {String} rootPath
    * @param {String} command
    * @param {Array} args
-   * @param {String} rootPath
    * @return {Promise}
    */
-  async executeWithoutErrors(command, args, rootPath) {
+  async executeWithoutErrors(rootPath, command, args) {
     try {
-      const result = await this.cli(command, args, rootPath);
+      const result = await this.cli(rootPath, command, args);
 
       console.log(result);
     } catch (error) {
@@ -246,9 +220,8 @@ class Helper {
 
       try {
         result = await this.cli(
-          'terrahub',
-          ['output', '--format', 'json', '--include', item, '--auto-approve'],
-          rootPath
+          rootPath, 'terrahub',
+          ['output', '--format', 'json', '--include', item, '--auto-approve']
         );
 
         response = { ...response, ...this.extractOutputValues(result) };

@@ -14,7 +14,7 @@ variable "landing_zone_backend" {
   description = "This is the backend configure for all components."
   default     = {
     backend = "local"
-    path_prefix = "/tmp/.terrahub/landing_zone/"
+    path    = "/tmp/.terrahub/landing_zone/"
   }
 }
 

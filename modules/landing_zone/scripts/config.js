@@ -31,11 +31,11 @@ async function checkEnvironmentVars() {
  * @return {Promise}
  */
 async function main() {
-  const processes = await Helper.updateConfig(providers, backend, components, rootPath);
+  const processes = await Helper.updateConfig(rootPath, providers, backend, components);
 
   try {
-    await Helper.removeConfig(components, rootPath);
-    await Helper.executeWithErrors('terrahub', processes, rootPath);
+    await Helper.removeConfig(rootPath, components);
+    await Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
     return await Promise.reject(error);
   }

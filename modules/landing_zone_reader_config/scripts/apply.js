@@ -31,54 +31,53 @@ async function terrahubOutput(include, jsonBackend) {
   let outputMap = [];
 
   await Helper.executeWithoutErrors(
-    'terrahub',
+    rootPath, 'terrahub',
     [
       'configure', '--config', 'component.template.data', '--delete',
       '--auto-approve', '--include', 'terrahub_load_outputs'
-    ],
-    rootPath
+    ]
   );
 
-  const promises = include.map(async item => {
-    await Helper.cli(
-      'terrahub',
-      ['init', '--include', item],
-      rootPath
-    );
+  await Promise.all(
+    include.map(async item => {
+      await Helper.cli(
+        rootPath, 'terrahub',
+        ['init', '--include', item]
+      );
 
-    const result = await Helper.cli(
-      'terrahub',
-      ['output', '--format', 'json', '--include', item, '--auto-approve'],
-      rootPath
-    );
+      const result = await Helper.cli(
+        rootPath, 'terrahub',
+        ['output', '--format', 'json', '--include', item, '--auto-approve']
+      );
 
-    if (!result.length) {
-      throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
-        'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
-    }
-    
-    const outputValues = await extractOutputValues(result, jsonBackend);
-    const prepareOutput = `map(${outputValues.join(',')})`;
+      if (!result.length) {
+        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
+          'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
+      }
 
-    outputMap = [...outputMap, ...[prepareOutput]];
-  });
+      const outputValues = await extractOutputValues(result, jsonBackend);
+      const prepareOutput = `map(${outputValues.join(',')})`;
 
-  await Promise.all(promises);
+      outputMap = [...outputMap, ...[prepareOutput]];
+    })
+  );
   
-  await Helper.cli(
-    'terrahub',
-    [
-      'configure', '--include', 'terrahub_load_outputs', '--config',
-      `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
-    ],
-    rootPath
+  await Promise.all(
+    await Helper.cli(
+      rootPath, 'terrahub',
+      [
+        'configure', '--include', 'terrahub_load_outputs', '--config',
+        `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
+      ]
+    )
   );
 
-  await Helper.cli(
-    'terrahub',
-    ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve'],
-    rootPath
-  ); 
+  await Promise.all(
+    await Helper.cli(
+      rootPath, 'terrahub',
+      ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve']
+    )
+  );
 
   return 'Success';
 }
@@ -96,81 +95,36 @@ async function extractOutputValues(result, jsonBackend) {
   const jsonResult = JSON.parse(result);
 
   Object.keys(jsonResult).forEach(key => {
-    processes.push([...terrahubConfig, ...[`component.template.data.terraform_remote_state.${key}.backend=local`]]);
     
-    const { backend, bucket, key_prefix } = jsonBackend;
-
-    switch(backend) {
-      case 's3':
-        const { region } = jsonBackend;
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.backend=s3`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config={}`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config.bucket=${bucket}`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config.region=${region}`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config.key=${key_prefix}/${key}/terraform.tfstate`
-          ]
-        ]);
-        break;
-      case 'gcs':
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.backend=gcs`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config={}`
-          ]
-        ]);
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config.prefix=${key_prefix}/${key}`
-          ]
-        ]);
-        break;
-      default:
-        processes.push([
-          ...terrahubConfig,
-          ...[
-            `component.template.data.terraform_remote_state.${key}` +
-              `.config.path=$\{tfvar.terrahub["tfstate_path"]}/${key}/terraform.tfstate`
-          ]
-        ]);
-    }
+    const jsonBackendKeysArray = Object.keys(jsonBackend);
+    const { backend } = jsonBackend;
+    processes.push([
+      ...terrahubConfig,
+      ...[
+        `component.template.data.terraform_remote_state.${key}` +
+          `.backend=${backend}`
+      ]
+    ]);
+    processes.push([
+      ...terrahubConfig,
+      ...[
+        `component.template.data.terraform_remote_state.${key}` +
+          `.config={}`
+      ]
+    ]);
+    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
+      if (backendKey === 'key' || backendKey === 'prefix') {
+        jsonBackend[backendKey] += `/${key}` +
+          (backend === 's3' ? '/terraform.tfstate' : '');
+      }
+      processes.push([
+        ...terrahubConfig,
+        ...[
+          `component.template.data.terraform_remote_state.${key}` +
+            `.config.${backendKey}=${jsonBackend[backendKey]}`
+        ]
+      ]);
+    });
 
     Object.keys(jsonResult[key]).forEach(subKey => {
       outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.outputs.${subKey}`]];
@@ -178,7 +132,7 @@ async function extractOutputValues(result, jsonBackend) {
   });
 
   try {
-    await Helper.executeWithErrors('terrahub', processes, rootPath);
+    await Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
     return Promise.reject(error);
   }
