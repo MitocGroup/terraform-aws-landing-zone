@@ -11,7 +11,7 @@ resource "aws_lambda_function" "hello_world" {
   timeout       = "30"
   role          = "arn:aws:iam::123456789012:role/ServiceRoleForLambdaEdge"
   s3_bucket     = "www.terrahub.io"
-  s3_key        = "/hello-world/nodejs10.x.zip"
+  s3_key        = "hello-world/nodejs10.x.zip"
 
   vpc_config {
     security_group_ids = local.landing_zone_security_group_ids["default"]

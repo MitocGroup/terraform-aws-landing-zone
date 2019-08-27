@@ -95,7 +95,7 @@ async function extractOutputValues(result, jsonBackend) {
   const jsonResult = JSON.parse(result);
 
   Object.keys(jsonResult).forEach(key => {
-    
+
     const jsonBackendKeysArray = Object.keys(jsonBackend);
     const { backend } = jsonBackend;
     processes.push([
@@ -112,16 +112,17 @@ async function extractOutputValues(result, jsonBackend) {
           `.config={}`
       ]
     ]);
-    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
-      if (backendKey === 'key' || backendKey === 'prefix') {
-        jsonBackend[backendKey] += `/${key}` +
-          (backend === 's3' ? '/terraform.tfstate' : '');
+    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach(backendKey => {
+      let backendValue = jsonBackend[backendKey];
+      if (['key', 'path', 'prefix'].indexOf(backendKey) > -1) {
+        backendValue += `/${key}` +
+          (backend === 'prefix' ? '' : '/terraform.tfstate');
       }
       processes.push([
         ...terrahubConfig,
         ...[
           `component.template.data.terraform_remote_state.${key}` +
-            `.config.${backendKey}=${jsonBackend[backendKey]}`
+            `.config.${backendKey}=${backendValue}`
         ]
       ]);
     });
