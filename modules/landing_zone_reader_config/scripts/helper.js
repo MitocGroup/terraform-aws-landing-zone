@@ -132,43 +132,48 @@ class Helper {
       });
     });
 
-    await Promise.all(
-      Object.keys(jsonComponents).map(key => {
-        const re = /\s*\/\*\s*/;
-        const linkList = jsonComponents[key].split(re);
-        if (linkList.length === 1)
-        {
-          processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
-        } else {
-          var res = jsonComponents[key].substring(0,2);
-          switch (res) {
-            case 's3':
-              // @todo s3 ls
-              break;
-            case 'gs':
-              // @todo ls gs
-              break;
-            case '..':
-              fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
-                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
-              });
-              break;          
-            default:
-              fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
-                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
-              });
-              break;
-          }
-        }
-
-        return this.executeWithoutErrors(
-          rootPath, 'terrahub',
-          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]]
-        );
-      })
-    );
+    await this.updateConfigByComponent(jsonComponents, processes, terrahubConfig, rootPath);
 
     return processes;
+  }
+
+  /**
+   * @param {Array} jsonComponents
+   * @param {Array} processes
+   * @param {Array} terrahubConfig
+   * @param {String} rootPath
+   * @return {Promise}
+   */
+  async updateConfigByComponent(jsonComponents, processes, terrahubConfig, rootPath) {
+    await Promise.all(Object.keys(jsonComponents).map(key => {
+      const re = /\s*\/\*\s*/;
+      const linkList = jsonComponents[key].split(re);
+      if (linkList.length === 1) {
+        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+      }
+      else {
+        var res = jsonComponents[key].substring(0, 2);
+        switch (res) {
+          case 's3':
+            // @todo s3 ls
+            break;
+          case 'gs':
+            // @todo ls gs
+            break;
+          case '..':
+            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            });
+            break;
+          default:
+            fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            });
+            break;
+        }
+      }
+      return this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]]);
+    }));
   }
 
   /**
