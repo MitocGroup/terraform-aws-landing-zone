@@ -7,23 +7,21 @@ component:
     locals:
       elements_vpc_selected_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_vpc_selected_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
       elements_gateway_tgw_selected_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"]
-      elements_gateway_tgw_selected_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_vpc_selected_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_vpc_selected_data_map["config_${count.index}"]["cidr_block"]
       aws_ec2_transit_gateway_vpc_attachment:
         gateway_tgw_attachment_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_vpc_selected_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           filter:
             - name: vpc-id
               values:
@@ -31,7 +29,8 @@ component:
       aws_ec2_transit_gateway:
         gateway_tgw_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_gateway_tgw_selected_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
           filter:
             - name: options.amazon-side-asn
               values:
@@ -40,7 +39,8 @@ component:
       aws_ec2_transit_gateway_route_table:
         route_table_tgw_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_gateway_tgw_selected_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
           filter:
             - name: transit-gateway-id
               values:
@@ -51,7 +51,8 @@ component:
       aws_route_table_association:
         landing_zone_route_table_association_tgw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_vpc_selected_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           transit_gateway_attachment_id: >-
             element(data.aws_ec2_transit_gateway_vpc_attachment.gateway_tgw_attachment_selected.*.id,
             count.index)

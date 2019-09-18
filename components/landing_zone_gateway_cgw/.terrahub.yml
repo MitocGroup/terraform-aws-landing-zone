@@ -8,13 +8,12 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_tags_element"]
       elements_landing_zone_gateway_cgw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_resource"]
-      elements_landing_zone_gateway_cgw_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_resource"])
     resource:
       aws_customer_gateway:
         landing_zone_gateway_cgw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_gateway_cgw_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_resource"])
           bgp_asn: >-
             local.elements_landing_zone_gateway_cgw_map["config_${count.index}"]["bgp_asn"]
           ip_address: >-

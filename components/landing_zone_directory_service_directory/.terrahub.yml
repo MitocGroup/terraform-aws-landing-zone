@@ -4,12 +4,8 @@ component:
     locals:
       elements_landing_zone_subnet_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
-      elements_landing_zone_subnet_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
       elements_landing_zone_directory_service_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"]
-      elements_landing_zone_directory_service_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"])
     data:
       aws_vpc:
         default_vpc:
@@ -18,7 +14,8 @@ component:
       aws_subnet:
         default_subnet:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_subnet_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           availability_zone: >-
             local.elements_landing_zone_subnet_data_map["config_${count.index}"]["availability_zone"]
           vpc_id: data.aws_vpc.default_vpc.id
@@ -26,7 +23,8 @@ component:
       aws_directory_service_directory:
         landing_zone_directory_service_directory:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_directory_service_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"])
           name: >-
             local.elements_landing_zone_directory_service_map["config_${count.index}"]["name"]
           short_name: >-

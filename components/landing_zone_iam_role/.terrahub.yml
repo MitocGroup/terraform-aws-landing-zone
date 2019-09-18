@@ -1,0 +1,20 @@
+component:
+  name: landing_zone_iam_role
+  template:
+    locals:
+      elements_landing_zone_iam_role_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_role_resource"]
+    resource:
+      aws_iam_role:
+        landing_zone_iam_role:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_role_resource"])
+          name: >-
+            local.elements_landing_zone_iam_role_map["config_${count.index}"]["name"]
+          path: >-
+            local.elements_landing_zone_iam_role_map["config_${count.index}"]["path"]
+          description: >-
+            local.elements_landing_zone_iam_role_map["config_${count.index}"]["description"]
+          assume_role_policy: >-
+            local.elements_landing_zone_iam_role_map["config_${count.index}"]["assume_role_policy"]

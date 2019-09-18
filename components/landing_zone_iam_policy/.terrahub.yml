@@ -1,0 +1,20 @@
+component:
+  name: landing_zone_iam_policy
+  template:
+    locals:
+      elements_landing_zone_iam_custom_policy_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_custom_policy_resource"]
+    resource:
+      aws_iam_policy:
+        landing_zone_iam_custom_policy:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_custom_policy_resource"])
+          name: >-
+            local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["name"]
+          description: >-
+            local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["description"]
+          path: >-
+            local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["path"]
+          policy: >-
+            local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["policy"]
