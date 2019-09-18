@@ -6,13 +6,12 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]
       elements_landing_zone_eip_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"]
-      elements_landing_zone_eip_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])
     resource:
       aws_eip:
         landing_zone_eip:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_eip_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])
           tags: 'local.elements_landing_zone_eip_tag_map["config_${count.index}"]'
           vpc: 'local.elements_landing_zone_eip_map["config_${count.index}"]["vpc"]'
     output:

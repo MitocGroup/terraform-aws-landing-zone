@@ -3,10 +3,10 @@ landing_zone_providers = {
     account_id = "123456789012"
     region     = "us-east-1"
   }
-#  ,sample = {
-#    account_id = "987654321098"
-#    region     = "us-east-1"
-#  }
+  #  ,sample = {
+  #    account_id = "987654321098"
+  #    region     = "us-east-1"
+  #  }
 }
 
 landing_zone_backend = {
@@ -53,4 +53,7 @@ landing_zone_components = {
   landing_zone_cloudtrail_s3_bucket_policy    = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket_policy/default.tfvars"
   landing_zone_cloudtrail                     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail/default.tfvars"
   landing_zone_directory_service_directory    = "s3://terraform-aws-landing-zone/mycompany/landing_zone_directory_service_directory/default.tfvars"
+  landing_zone_iam_role                       = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_role/default.tfvars"
+  landing_zone_iam_policy                     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_policy/default.tfvars"
+  landing_zone_iam_role_policy_attachment     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_role_policy_attachment/default.tfvars"
 }

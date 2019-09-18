@@ -8,6 +8,9 @@
     "node": ">=8.0",
     "npm": ">=5.0"
   },
+  "dependencies": {
+    "terrahub": "^0.3.2"
+  },
   "devDependencies": {
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.2.0",

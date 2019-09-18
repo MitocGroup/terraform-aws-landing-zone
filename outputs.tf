@@ -272,3 +272,33 @@ output "landing_zone_gateway_vgw_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_gateway_vgw_ids"]
   description = "The ID's of the VPN Gateway."
 }
+
+output "landing_zone_iam_role_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_role_ids"]
+  description = "The name's of the role."
+}
+
+output "landing_zone_iam_role_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_role_arns"]
+  description = "The Amazon Resource Name (ARN's) specifying the role."
+}
+
+output "landing_zone_iam_role_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_role_names"]
+  description = "The name's of the role."
+}
+
+output "landing_zone_iam_custom_policy_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_ids"]
+  description = "The role policy ID's, in the form of role_name:role_policy_name."
+}
+
+output "landing_zone_iam_custom_policy_policies" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_policies"]
+  description = "The policies document attached to the role."
+}
+
+output "landing_zone_iam_custom_policy_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_names"]
+  description = "The name's of the policy."
+}

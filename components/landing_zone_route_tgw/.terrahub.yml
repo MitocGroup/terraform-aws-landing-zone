@@ -6,8 +6,6 @@ component:
     locals:
       elements_landing_zone_route_tgw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tgw_resource"]
-      elements_landing_zone_route_tgw_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tgw_resource"])
     data:
       terraform_remote_state:
         landing_zone_route_table_tgw:
@@ -19,7 +17,8 @@ component:
       aws_route:
         landing_zone_route_tgw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_route_tgw_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tgw_resource"])
           transit_gateway_route_table_id: >-
             element(data.terraform_remote_state.landing_zone_route_table_tgw.thub_ids,
             count.index)
