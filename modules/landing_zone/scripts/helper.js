@@ -120,7 +120,7 @@ class Helper {
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=var.${key}_region`]]);
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0]={}`]]);
 
-        const roleArn = `arn:aws:iam::var.${key}_account_id:role/OrganizationAccountAccessRole`;
+        const roleArn = `arn:aws:iam::\$\{tfvar.terrahub["${key}_account_id"]\}:role/OrganizationAccountAccessRole`;
         const accountIdConfig = `.aws.assume_role[0].session_name=var.${key}_account_id`;
 
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0].role_arn=${roleArn}`]]);
