@@ -18,3 +18,28 @@ component:
             local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["path"]
           policy: >-
             local.elements_landing_zone_iam_custom_policy_map["config_${count.index}"]["policy"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.id)
+      policies:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.policy)
+      names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.name)
+      landing_zone_iam_custom_policy_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.id)
+      landing_zone_iam_custom_policy_policies:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.policy)
+      landing_zone_iam_custom_policy_names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_policy.landing_zone_iam_custom_policy.*.name)

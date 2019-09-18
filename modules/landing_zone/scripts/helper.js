@@ -1,8 +1,9 @@
 'use strict';
 
-const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const path = require('path');
+const AWS = require('aws-sdk');
 const { execSync, spawnSync } = require('child_process');
 
 class Helper {
@@ -137,7 +138,32 @@ class Helper {
 
     await Promise.all(
       Object.keys(jsonComponents).map(key => {
-        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+        const re = /\s*\/\*\s*/;
+        const linkList = jsonComponents[key].split(re);
+        if (linkList.length === 1)
+        {
+          processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+        } else {
+          var res = jsonComponents[key].substring(0,2);
+          switch (res) {
+            case 's3':
+              // @todo s3 ls
+              break;
+            case 'gs':
+              // @todo ls gs
+              break;
+            case '..':
+              fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              });
+              break;          
+            default:
+              fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              });
+              break;
+          }
+        }
 
         return this.executeWithoutErrors(
           rootPath, 'terrahub',

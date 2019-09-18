@@ -18,3 +18,32 @@ component:
             local.elements_landing_zone_iam_role_map["config_${count.index}"]["description"]
           assume_role_policy: >-
             local.elements_landing_zone_iam_role_map["config_${count.index}"]["assume_role_policy"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.id)
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.arn)
+      names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.name)
+      landing_zone_iam_role_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.id)
+      landing_zone_iam_role_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.arn)
+      landing_zone_iam_role_names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_role.landing_zone_iam_role.*.name)
