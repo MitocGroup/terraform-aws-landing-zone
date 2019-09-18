@@ -20,7 +20,9 @@ class Helper {
       return execute.stdout.toString();
     }
 
-    return process.env.DEBUG ? await Promise.reject(Error(execute.stderr.toString())) : Promise.reject(Error('Error occurred!'));
+    return process.env.DEBUG
+      ? await Promise.reject(Error(execute.stderr.toString()))
+      : Promise.reject(Error(`${command} ${args.join(' ')} failed. Enable DEBUG=debug to learn more.`));
   }
 
   /**
@@ -84,8 +86,8 @@ class Helper {
    * @return {Promise}
    */
   async updateConfig(rootPath, providers, backends, components) {
-    const processes = [];
     let index = 1;
+    const processes = [];
     const terrahubConfig = ['configure', '--config'];
     const jsonProviders = JSON.parse(providers);
     const jsonBackends = JSON.parse(backends);
@@ -93,14 +95,15 @@ class Helper {
 
     const jsonBackendKeysArray = Object.keys(jsonBackends);
     const { backend } = jsonBackends;
-    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach( backendKey => {
-      if (backendKey === 'key' || backendKey === 'prefix') {
-        jsonBackends[backendKey] += `/\${tfvar.terrahub["component"]["name"]}` +
-          (backend === 's3' ? '/terraform.tfstate' : '');
+    jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach(backendKey => {
+      let backendValue = jsonBackends[backendKey];
+      if (['key', 'path', 'prefix'].indexOf(backendKey) > -1) {
+        backendValue += `/\${tfvar.terrahub["component"]["name"]}` +
+          (backend === 'prefix' ? '' : '/terraform.tfstate');
       }
       processes.push([
         ...terrahubConfig,
-        ...[`template.terraform.backend.${backend}.${backendKey}=${jsonBackends[backendKey]}`]
+        ...[`template.terraform.backend.${backend}.${backendKey}=${backendValue}`]
       ]);
     });
 
