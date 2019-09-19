@@ -288,17 +288,17 @@ output "landing_zone_iam_role_names" {
   description = "The name's of the role."
 }
 
-output "landing_zone_iam_custom_policy_ids" {
-  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_ids"]
+output "landing_zone_iam_policy_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_policy_ids"]
   description = "The role policy ID's, in the form of role_name:role_policy_name."
 }
 
-output "landing_zone_iam_custom_policy_policies" {
-  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_policies"]
+output "landing_zone_iam_policy_policies" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_policy_policies"]
   description = "The policies document attached to the role."
 }
 
-output "landing_zone_iam_custom_policy_names" {
-  value       = module.landing_zone.landing_zone["landing_zone_iam_custom_policy_names"]
+output "landing_zone_iam_policy_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_policy_names"]
   description = "The name's of the policy."
 }
