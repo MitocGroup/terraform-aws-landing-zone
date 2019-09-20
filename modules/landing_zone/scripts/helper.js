@@ -156,7 +156,7 @@ class Helper {
         processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
       }
       else {
-        var res = jsonComponents[key].substring(0, 2);
+        const res = jsonComponents[key].substring(0, 2);
         switch (res) {
           case 's3':
             const reLinks = /\s*\/\s*/;
