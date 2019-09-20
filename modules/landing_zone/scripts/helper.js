@@ -165,7 +165,7 @@ class Helper {
 
             const data = await Helper.s3Helper.getObject(links[2], prefix);
             data.Contents.forEach(item => {
-              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join('s3:\/\/' + links[2], item.Key)}`, '-i', key]]);
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${'s3:\/\/' + path.join(links[2], item.Key)}`, '-i', key]]);
             });
             break;
           case 'gs':
