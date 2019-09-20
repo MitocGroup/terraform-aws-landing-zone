@@ -7,45 +7,41 @@ component:
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_landing_zone_vpc_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
       elements_landing_zone_subnet_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
-      elements_landing_zone_subnet_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
       elements_landing_zone_eip_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_data"]
-      elements_landing_zone_eip_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_data"])
       elements_landing_zone_gateway_nat_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_resource"]
-      elements_landing_zone_gateway_nat_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_resource"])
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_vpc_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_subnet:
         subnet_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_subnet_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           cidr_block: >-
             local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
       aws_eip:
         eip_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_eip_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_data"])
           public_ip: >-
             local.elements_landing_zone_eip_data_map["config_${count.index}"]["public_ip"]
     resource:
       aws_nat_gateway:
         landing_zone_gateway_nat:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_gateway_nat_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_resource"])
           allocation_id: 'element(data.aws_eip.eip_selected.*.id, count.index)'
           subnet_id: 'element(data.aws_subnet.subnet_selected.*.id, count.index)'
           tags: 'local.elements_landing_zone_gateway_nat_map["config_${count.index}"]'

@@ -1,8 +1,9 @@
 'use strict';
 
-const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const path = require('path');
+const S3Helper = require('./s3-helper');
 const { execSync, spawnSync } = require('child_process');
 
 class Helper {
@@ -96,7 +97,7 @@ class Helper {
     const jsonBackendKeysArray = Object.keys(jsonBackends);
     const { backend } = jsonBackends;
     jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach(backendKey => {
-      let backendValue = jsonBackend[backendKey];
+      let backendValue = jsonBackends[backendKey];
       if (['key', 'path', 'prefix'].indexOf(backendKey) > -1) {
         backendValue += `/\${tfvar.terrahub["component"]["name"]}` +
           (backend === 'prefix' ? '' : '/terraform.tfstate');
@@ -119,7 +120,7 @@ class Helper {
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.region=var.${key}_region`]]);
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0]={}`]]);
 
-        const roleArn = `arn:aws:iam::var.${key}_account_id:role/OrganizationAccountAccessRole`;
+        const roleArn = `arn:aws:iam::\$\{tfvar.terrahub["${key}_account_id"]\}:role/OrganizationAccountAccessRole`;
         const accountIdConfig = `.aws.assume_role[0].session_name=var.${key}_account_id`;
 
         processes.push([...terrahubConfig, ...[`${defaultConfig}.aws.assume_role[0].role_arn=${roleArn}`]]);
@@ -135,18 +136,55 @@ class Helper {
       });
     });
 
-    await Promise.all(
-      Object.keys(jsonComponents).map(key => {
-        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
-
-        return this.executeWithoutErrors(
-          rootPath, 'terrahub',
-          [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]]
-        );
-      })
-    );
+    await this.updateConfigByComponent(jsonComponents, processes, terrahubConfig, rootPath);
 
     return processes;
+  }
+
+  /**
+   * @param {Array} jsonComponents
+   * @param {Array} processes
+   * @param {Array} terrahubConfig
+   * @param {String} rootPath
+   * @return {Promise}
+   */
+  async updateConfigByComponent(jsonComponents, processes, terrahubConfig, rootPath) {
+    await Promise.all(Object.keys(jsonComponents).map(async key => {
+      const re = /\s*\/\*\s*/;
+      const linkList = jsonComponents[key].split(re);
+      if (linkList.length === 1) {
+        processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${jsonComponents[key].toString()}`, '-i', key]]);
+      }
+      else {
+        const res = jsonComponents[key].substring(0, 2);
+        switch (res) {
+          case 's3':
+            const reLinks = /\s*\/\s*/;
+            const links = jsonComponents[key].split(reLinks);
+            const prefix = linkList[0].replace('s3:\/\/' + links[2] + '/', "") + '/';
+
+            const data = await Helper.s3Helper.getObject(links[2], prefix);
+            data.Contents.forEach(item => {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${'s3:\/\/' + path.join(links[2], item.Key)}`, '-i', key]]);
+            });
+            break;
+          case 'gs':
+            // @todo ls gs
+            break;
+          case '..':
+            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            });
+            break;
+          default:
+            fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            });
+            break;
+        }
+      }
+      return this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['terraform', '--delete', '--auto-approve', '--include', key]]);
+    }));
   }
 
   /**
@@ -276,6 +314,18 @@ class Helper {
     keys.forEach(key => response.push(`${key}=${this.getOutputValueByType(value[key])}`));
 
     return response.join('|');
+  }
+
+  /**
+   * @return {S3Helper}
+   * @private
+   */
+  static get s3Helper() {
+    if (!Helper._s3Helper) {
+      Helper._s3Helper = new S3Helper();
+    }
+
+    return Helper._s3Helper;
   }
 }
 

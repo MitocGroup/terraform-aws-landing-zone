@@ -8,13 +8,12 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_tags_element"]
       elements_landing_zone_gateway_tgw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"]
-      elements_landing_zone_gateway_tgw_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"])
     resource:
       aws_ec2_transit_gateway:
         landing_zone_gateway_tgw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_gateway_tgw_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"])
           amazon_side_asn: >-
             local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["amazon_side_asn"]
           auto_accept_shared_attachments: >-

@@ -6,26 +6,24 @@ component:
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_landing_zone_vpc_data_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
       elements_landing_zone_security_group_tags_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_tags_element"]
       elements_landing_zone_security_group_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_resource"]
-      elements_landing_zone_security_group_count: >-
-        length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_resource"])
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_vpc_data_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
     resource:
       aws_security_group:
         landing_zone_security_group:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: local.elements_landing_zone_security_group_count
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_group_resource"])
           name: >-
             local.elements_landing_zone_security_group_map["config_${count.index}"]["name"]
           description: >-

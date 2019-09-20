@@ -35,7 +35,7 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.1.5"
+  version   = "0.1.6"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
@@ -125,19 +125,19 @@ components (work in progress).
 <img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
 
 Based on the multi-account architecture, here below are currently available components:
-1. [landing_zone_pipeline_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L11)
-2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L11)
-3. [landing_zone_code_pipeline](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L34)
-4. [landing_zone_code_pipeline_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role/.terrahub.yml#L11)
+1. [landing_zone_pipeline_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L6)
+2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L6)
+3. [landing_zone_code_pipeline](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L33)
+4. [landing_zone_code_pipeline_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role/.terrahub.yml#L6)
 5. [landing_zone_code_pipeline_role_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role_policy/.terrahub.yml#L41)
-6. [landing_zone_code_build](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build/.terrahub.yml#L24)
-7. [landing_zone_code_build_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role/.terrahub.yml#L11)
-8. [landing_zone_code_build_role_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role_policy/.terrahub.yml#L31)
-9. [landing_zone_organization](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization/.terrahub.yml#L11)
-10. [landing_zone_organization_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy/.terrahub.yml#L11)
-11. [landing_zone_organization_policy_attachment](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy_attachment/.terrahub.yml#L21)
-12. [landing_zone_organization_accounts](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_accounts/.terrahub.yml#L19)
-13. [landing_zone_organization_unit](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_unit/.terrahub.yml#L19)
+6. [landing_zone_code_build](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build/.terrahub.yml#L21)
+7. [landing_zone_code_build_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role/.terrahub.yml#L6)
+8. [landing_zone_code_build_role_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role_policy/.terrahub.yml#L29)
+9. [landing_zone_organization](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization/.terrahub.yml#L6)
+10. [landing_zone_organization_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy/.terrahub.yml#L6)
+11. [landing_zone_organization_policy_attachment](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy_attachment/.terrahub.yml#L18)
+12. [landing_zone_organization_accounts](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_accounts/.terrahub.yml#L15)
+13. [landing_zone_organization_unit](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_unit/.terrahub.yml#L15)
 
 <br clear="right" />
 
@@ -153,7 +153,11 @@ Based on the account vending machine architecture, here below are currently avai
 <img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access and Identity Management Architecture" />
 
 Based on the user access architecture, here below are currently available components:
-1. Coming soon ...
+1. [landing_zone_iam_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role/.terrahub.yml#L9)
+2. [landing_zone_iam_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_policy/.terrahub.yml#L9)
+3. [landing_zone_iam_role_policy_attachment](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role_policy_attachment/.terrahub.yml#L9)
+4. landing_zone_sso
+5. [landing_zone_directory_service_director](https://github.com/TerraHubCorp/terraform-aws-landing-zone/blob/master/components/landing_zone_directory_service_directory/.terrahub.yml#L24)
 
 > NOTE: This solution is relying on cross-account role called `OrganizationAccountAccessRole`. Follow [this link](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role) to learn more and/or create missing IAM role(s)...
 
