@@ -3,7 +3,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const AWS = require('aws-sdk');
+const S3Helper = require('./s3-helper');
 const { execSync, spawnSync } = require('child_process');
 
 class Helper {
@@ -149,7 +149,7 @@ class Helper {
    * @return {Promise}
    */
   async updateConfigByComponent(jsonComponents, processes, terrahubConfig, rootPath) {
-    await Promise.all(Object.keys(jsonComponents).map(key => {
+    await Promise.all(Object.keys(jsonComponents).map(async key => {
       const re = /\s*\/\*\s*/;
       const linkList = jsonComponents[key].split(re);
       if (linkList.length === 1) {
@@ -159,7 +159,14 @@ class Helper {
         var res = jsonComponents[key].substring(0, 2);
         switch (res) {
           case 's3':
-            // @todo s3 ls
+            const reLinks = /\s*\/\s*/;
+            const links = jsonComponents[key].split(reLinks);
+            const prefix = linkList[0].replace('s3:\/\/' + links[2] + '/', "") + '/';
+
+            const data = await Helper.s3Helper.getObject(links[2], prefix);
+            data.Contents.forEach(item => {
+              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join('s3:\/\/' + links[2], item.Key)}`, '-i', key]]);
+            });
             break;
           case 'gs':
             // @todo ls gs
@@ -307,6 +314,18 @@ class Helper {
     keys.forEach(key => response.push(`${key}=${this.getOutputValueByType(value[key])}`));
 
     return response.join('|');
+  }
+
+  /**
+   * @return {S3Helper}
+   * @private
+   */
+  static get s3Helper() {
+    if (!Helper._s3Helper) {
+      Helper._s3Helper = new S3Helper();
+    }
+
+    return Helper._s3Helper;
   }
 }
 
