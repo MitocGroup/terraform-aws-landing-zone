@@ -40,6 +40,7 @@ landing_zone_components = {
   landing_zone_iam_role                       = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_role/*.tfvars"
   landing_zone_iam_policy                     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_policy/*.tfvars"
   landing_zone_iam_role_policy_attachment     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_role_policy_attachment/*.tfvars"
+  landing_zone_iam_instance_profile           = "s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_instance_profile/*.tfvars"
 }
 
 landing_zone_providers = {
