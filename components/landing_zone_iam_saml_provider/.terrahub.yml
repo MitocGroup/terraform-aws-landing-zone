@@ -1,0 +1,31 @@
+component:
+  name: landing_zone_iam_saml_provider
+  template:
+    locals:
+      elements_landing_zone_iam_saml_provider_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_saml_provider_resource"]
+      index_element: ${tfvar.terrahub["landing_zone_providers"]["0"]}
+    data:
+      local_file:
+        s3_file_selected:
+          count: length(var.landing_zone_providers)
+          filename: '${path.module}/saml-metadata/${element(var.landing_zone_providers, count.index)}.xml'
+    resource:
+      aws_iam_saml_provider:
+        landing_zone_iam_saml_provider:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_saml_provider_resource"])
+          name: local.elements_landing_zone_iam_saml_provider_map["config_${count.index}"]["name"]
+          saml_metadata_document: data.local_file.s3_file_selected[index(var.landing_zone_providers, "${local.index_element}")].content
+## build config
+build:
+  env:
+    variables:
+      THUB_S3_PATH: 's3://terraform-aws-landing-zone/mycompany/landing_zone_iam_saml_provider/saml-metadata/'
+      THUB_LOCAL_PATH: 'saml-metadata'
+  phases:
+    pre_build:
+      commands:
+        - 'echo "BUILD: Running pre_build step"'
+        - 'mkdir -p $THUB_LOCAL_PATH'
+        - 'aws s3 sync $THUB_S3_PATH $THUB_LOCAL_PATH'
