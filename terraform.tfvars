@@ -28,6 +28,7 @@ landing_zone_components = {
   landing_zone_route_tgw                      = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route_tgw/*.tfvars"
   landing_zone_route                          = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route/*.tfvars"
   landing_zone_route_igw                      = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route_igw/*.tfvars"
+  landing_zone_route_ipv6                     = "s3://terraform-aws-landing-zone/mycompany/landing_zone_route_ipv6/*.tfvars"
   landing_zone_network_acl                    = "s3://terraform-aws-landing-zone/mycompany/landing_zone_network_acl/*.tfvars"
   landing_zone_network_acl_rules              = "s3://terraform-aws-landing-zone/mycompany/landing_zone_network_acl_rules/*.tfvars"
   landing_zone_security_group                 = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group/*.tfvars"
