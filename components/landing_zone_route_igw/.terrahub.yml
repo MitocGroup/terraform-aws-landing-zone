@@ -8,8 +8,8 @@ component:
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_landing_zone_subnet_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
+      elements_landing_zone_route_table_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"]
       elements_landing_zone_route_igw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_igw_resource"]
     data:
@@ -20,36 +20,33 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
-      aws_subnet:
-        subnet_selected:
-          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
-          cidr_block: >-
-            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"]
-          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
       aws_route_table:
         route_table_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(data.aws_subnet.subnet_selected.*.id)
-          subnet_id: 'element(data.aws_subnet.subnet_selected.*.id, count.index)'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"])
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+          filter:
+            name: 'tag:Name'
+            values:
+              - >-
+                local.elements_landing_zone_route_table_data_map["config_${count.index}"]["name"]
       aws_internet_gateway:
         internet_gateway_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(data.aws_subnet.subnet_selected.*.vpc_id)
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           filter:
-            name: attachment.vpc-id
-            values:
-              - 'element(data.aws_subnet.subnet_selected.*.vpc_id, count.index)'
+            - name: attachment.vpc-id
+              values:
+                - 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
     resource:
       aws_route:
         landing_zone_route_igw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_igw_resource"])
-          route_table_id: >-
-            element(distinct(data.aws_route_table.route_table_selected.*.id),
-            count.index)
+          route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
           destination_cidr_block: >-
             local.elements_landing_zone_route_igw_map["config_${count.index}"]["destination_cidr_block"]
           gateway_id: >-

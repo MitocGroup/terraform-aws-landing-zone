@@ -1,5 +1,5 @@
 component:
-  name: landing_zone_route
+  name: landing_zone_route_ipv6
   dependsOn:
     - ../landing_zone_route_table
     - ../landing_zone_route_table_association
@@ -9,8 +9,8 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
       elements_landing_zone_route_table_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"]
-      elements_landing_zone_route_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_resource"]
+      elements_landing_zone_route_ipv6_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_ipv6_resource"]
     data:
       aws_vpc:
         vpc_selected:
@@ -32,23 +32,23 @@ component:
                 local.elements_landing_zone_route_table_data_map["config_${count.index}"]["name"]
     resource:
       aws_route:
-        landing_zone_route:
+        landing_zone_route_ipv6:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_ipv6_resource"])
           route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
-          destination_cidr_block: >-
-            local.elements_landing_zone_route_map["config_${count.index}"]["destination_cidr_block"]
+          destination_ipv6_cidr_block: >-
+            local.elements_landing_zone_route_ipv6_map["config_${count.index}"]["destination_ipv6_cidr_block"]
     output:
       ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
+          aws_route.landing_zone_route_ipv6.*.id)
       thub_ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
-      landing_zone_route_ids:
+          aws_route.landing_zone_route_ipv6.*.id)
+      landing_zone_route_ipv6_ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
+          aws_route.landing_zone_route_ipv6.*.id)
