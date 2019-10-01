@@ -28,8 +28,8 @@ component:
           filter:
             name: cidr-block
             values: >-
-              split("|",
-              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"])
+              compact(split("|",
+              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"]))
     resource:
       aws_network_acl:
         landing_zone_network_acl:
