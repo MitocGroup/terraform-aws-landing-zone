@@ -188,6 +188,11 @@ output "landing_zone_route_igw_ids" {
   description = "The ID's of the Local Route."
 }
 
+output "landing_zone_route_ipv6_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_route_ipv6_ids"]
+  description = "The ID's of the Local Route."
+}
+
 output "landing_zone_network_acl_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_network_acl_ids"]
   description = "The ID's of the Network ACL."
@@ -301,4 +306,29 @@ output "landing_zone_iam_policy_policies" {
 output "landing_zone_iam_policy_names" {
   value       = module.landing_zone.landing_zone["landing_zone_iam_policy_names"]
   description = "The name's of the policy."
+}
+
+output "landing_zone_iam_instance_profile_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_ids"]
+  description = "The instance profile's ID's."
+}
+
+output "landing_zone_iam_instance_profile_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_arns"]
+  description = "The ARN's assigned by AWS to the instance profile's."
+}
+
+output "landing_zone_iam_instance_profile_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_names"]
+  description = "The instance profile's name's."
+}
+
+output "landing_zone_iam_instance_profile_paths" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_paths"]
+  description = "The path's of the instance profile's in IAM."
+}
+
+output "landing_zone_iam_instance_profile_roles" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_roles"]
+  description = "The role's assigned to the instance profile's."
 }

@@ -44,6 +44,17 @@ component:
             count.index)
           self: >-
             local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["self"]
+          description: >-
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["description"]
+          cidr_blocks: >-
+            compact(split("|",
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["cidr_blocks"]))
+          ipv6_cidr_blocks: >-
+            compact(split("|",
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["ipv6_cidr_blocks"]))
+          prefix_list_ids: >-
+            compact(split("|",
+            local.elements_landing_zone_security_group_rule_map["config_${count.index}"]["prefix_list_ids"]))
     output:
       ids:
         value: >-

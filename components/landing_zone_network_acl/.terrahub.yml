@@ -9,6 +9,8 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
       elements_landing_zone_subnet_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
+      elements_landing_zone_network_acl_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_tags_resource"]
       elements_landing_zone_network_acl_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_resource"]
     data:
@@ -19,17 +21,16 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
-      aws_subnet_ids:
+      aws_subnet:
         subnet_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
-          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-          filter:
-            name: cidr-block
-            values: >-
-              split("|",
-              local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"])
+          vpc_id: >-
+            element(data.aws_vpc.vpc_selected.*.id,
+            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["vpc_index"])
+          cidr_block: >-
+            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"]
     resource:
       aws_network_acl:
         landing_zone_network_acl:
@@ -37,11 +38,12 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_resource"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-          tags: 'local.elements_landing_zone_network_acl_map["config_${count.index}"]'
+          tags: >-
+            local.elements_landing_zone_network_acl_tags_map["config_${count.index}"]
           subnet_ids: >-
-            slice(tolist(data.aws_subnet_ids.subnet_selected[count.index].ids),
-            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_from_index"],
-            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["subnets_to_index"])
+            slice(data.aws_subnet.subnet_selected.*.id,
+            local.elements_landing_zone_network_acl_map["config_${count.index}"]["subnets_from_index"],
+            local.elements_landing_zone_network_acl_map["config_${count.index}"]["subnets_to_index"])
     output:
       ids:
         value: >-

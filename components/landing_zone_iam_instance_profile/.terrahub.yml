@@ -1,0 +1,62 @@
+component:
+  name: landing_zone_iam_instance_profile
+  template:
+    locals:
+      elements_landing_zone_iam_instance_profile_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_instance_profile_resource"]
+    data:
+      aws_iam_role:
+        role_selected:          
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_instance_profile_resource"])
+          name: >-
+            local.elements_landing_zone_iam_instance_profile_map["config_${count.index}"]["name"]
+    resource:
+      aws_iam_instance_profile:
+        landing_zone_iam_instance_profile:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_instance_profile_resource"])
+          name: local.elements_landing_zone_iam_instance_profile_map["config_${count.index}"]["name"]
+          role: element(data.aws_iam_role.role_selected.*.arn, count.index)
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.id)
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.arn)
+      names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.name)
+      paths:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.path)
+      roles:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.role)
+      landing_zone_iam_instance_profile_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.id)
+      landing_zone_iam_instance_profile_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.arn)
+      landing_zone_iam_instance_profile_names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.name)
+      landing_zone_iam_instance_profile_paths:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.path)
+      landing_zone_iam_instance_profile_roles:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_iam_instance_profile.landing_zone_iam_instance_profile.*.role)
