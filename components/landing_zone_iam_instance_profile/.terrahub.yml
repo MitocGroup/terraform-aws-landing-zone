@@ -24,7 +24,7 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_iam_instance_profile.landing_zone_iam_instance_profile.*.id)
-      anrs:
+      arns:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_iam_instance_profile.landing_zone_iam_instance_profile.*.arn)
@@ -44,7 +44,7 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_iam_instance_profile.landing_zone_iam_instance_profile.*.id)
-      landing_zone_iam_instance_profile_anrs:
+      landing_zone_iam_instance_profile_arns:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_iam_instance_profile.landing_zone_iam_instance_profile.*.arn)

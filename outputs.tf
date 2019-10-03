@@ -313,8 +313,8 @@ output "landing_zone_iam_instance_profile_ids" {
   description = "The instance profile's ID's."
 }
 
-output "landing_zone_iam_instance_profile_anrs" {
-  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_anrs"]
+output "landing_zone_iam_instance_profile_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_arns"]
   description = "The ARN's assigned by AWS to the instance profile's."
 }
 
