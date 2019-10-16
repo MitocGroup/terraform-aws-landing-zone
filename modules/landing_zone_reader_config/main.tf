@@ -1,8 +1,8 @@
 resource "null_resource" "landing_zone_reader_config" {
   triggers = {
     providers  = md5(jsonencode(var.landing_zone_providers))
-    backend    = md5(jsonencode(var.landing_zone_backend))
     components = md5(jsonencode(var.landing_zone_components))
+    backend    = md5(jsonencode(var.terraform_backend))
   }
 
   provisioner "local-exec" {
@@ -12,8 +12,8 @@ resource "null_resource" "landing_zone_reader_config" {
     environment = {
       ROOT_PATH  = var.root_path
       PROVIDERS  = jsonencode(var.landing_zone_providers)
-      BACKEND    = jsonencode(var.landing_zone_backend)
       COMPONENTS = jsonencode(var.landing_zone_components)
+      BACKEND    = jsonencode(var.terraform_backend)
     }
   }
 
@@ -32,8 +32,8 @@ resource "null_resource" "landing_zone_reader_apply" {
   depends_on = ["null_resource.landing_zone_reader_config"]
 
   triggers = {
-    backend    = md5(jsonencode(var.landing_zone_backend))
     components = md5(jsonencode(var.landing_zone_components))
+    backend    = md5(jsonencode(var.terraform_backend))
     timestamp  = timestamp()
   }
 
@@ -43,8 +43,8 @@ resource "null_resource" "landing_zone_reader_apply" {
 
     environment = {
       ROOT_PATH  = var.root_path
-      BACKEND    = jsonencode(var.landing_zone_backend)
       COMPONENTS = jsonencode(var.landing_zone_components)
+      BACKEND    = jsonencode(var.terraform_backend)
     }
   }
 
