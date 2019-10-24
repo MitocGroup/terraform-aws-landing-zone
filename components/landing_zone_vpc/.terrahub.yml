@@ -5,7 +5,7 @@ component:
       elements_landing_zone_vpc_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_resource"]
       elements_landing_zone_vpc_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_tags_element"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_tags"]
     resource:
       aws_vpc:
         landing_zone_vpc:

@@ -10,10 +10,10 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
       elements_tgw_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"]
-      elements_subnet_selected_data_map: >-
+      elements_subnet_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
       elements_tgw_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags_element"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags"]
       elements_tgw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"]
     data:
@@ -29,7 +29,7 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           cidr_block: >-
-            local.elements_subnet_selected_data_map["config_${count.index}"]["cidr_block"]
+            local.elements_subnet_data_map["config_${count.index}"]["cidr_block"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
       aws_ec2_transit_gateway:
         gateway_tgw_selected:
@@ -50,7 +50,7 @@ component:
           subnet_ids: >-
             slice(tolist(data.aws_subnet.subnet_selected[count.index].*.id),
             local.elements_tgw_map["config_${count.index}"]["subnets_from_index"],
-            local.elements_tgw_map["config_${count.index}"]["subnets_to_index"]) 
+            local.elements_tgw_map["config_${count.index}"]["subnets_to_index"])
           transit_gateway_id: >-
             element(data.aws_ec2_transit_gateway.gateway_tgw_selected.*.id,
             count.index)

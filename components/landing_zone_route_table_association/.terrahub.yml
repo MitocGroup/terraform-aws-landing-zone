@@ -5,49 +5,49 @@ component:
     - landing_zone_subnet
   template:
     locals:
-      elements_vpc_selected_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_selected_data"]
-      elements_subnet_selected_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_selected_data"]
-      elements_route_table_selected_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_selected_data"]
+      elements_landing_zone_vpc_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_landing_zone_subnet_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
+      elements_landing_zone_route_table_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"]
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_selected_data"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
-            local.elements_vpc_selected_data_map["config_${count.index}"]["cidr_block"]
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_subnet:
         subnet_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_selected_data"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           cidr_block: >-
-            local.elements_subnet_selected_data_map["config_${count.index}"]["cidr_block"]
+            local.elements_landing_zone_subnet_data_map["config_${count.index}"]["cidr_block"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
       aws_route_table:
         route_table_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_selected_data"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
             - name: 'tag:Name'
               values:
                 - >-
-                  local.elements_route_table_selected_data_map["config_${count.index}"]["filter_tag_name"]
+                  local.elements_landing_zone_route_table_data_map["config_${count.index}"]["filter_tag_name"]
             - name: association.main
               values:
                 - >-
-                  local.elements_route_table_selected_data_map["config_${count.index}"]["filter_association_main"]
+                  local.elements_landing_zone_route_table_data_map["config_${count.index}"]["filter_association_main"]
     resource:
       aws_route_table_association:
         landing_zone_route_table_association:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_selected_data"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           subnet_id: 'element(data.aws_subnet.subnet_selected.*.id, count.index)'
           route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
     output:

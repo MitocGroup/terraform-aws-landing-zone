@@ -10,7 +10,7 @@ component:
       elements_landing_zone_subnet_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
       elements_landing_zone_network_acl_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_tags_resource"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_tags"]
       elements_landing_zone_network_acl_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_resource"]
     data:
