@@ -1,7 +1,7 @@
 component:
   name: landing_zone_security_group_rule_ingress
   dependsOn:
-    - ../landing_zone_security_group
+    - landing_zone_security_group
   template:
     locals:
       elements_landing_zone_vpc_data_map: >-

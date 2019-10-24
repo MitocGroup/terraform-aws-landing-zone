@@ -1,7 +1,7 @@
 component:
   name: landing_zone_organization_accounts
   dependsOn:
-    - ../landing_zone_organization
+    - landing_zone_organization
   template:
     data:
       terraform_remote_state:

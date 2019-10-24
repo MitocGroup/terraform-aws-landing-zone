@@ -1,7 +1,7 @@
 component:
   name: landing_zone_network_acl_rules
   dependsOn:
-    - ../landing_zone_network_acl
+    - landing_zone_network_acl
   template:
     locals:
       elements_landing_zone_vpc_data_map: >-
