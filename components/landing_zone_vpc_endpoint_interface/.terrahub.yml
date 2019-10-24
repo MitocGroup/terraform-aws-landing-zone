@@ -20,27 +20,34 @@ component:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
-          cidr_block: local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+          cidr_block: >-
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_subnet_ids:
         subnet_ids_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnets_data"])
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnets_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
-            name: 'cidr-block'
-            values: split("|", local.elements_landing_zone_subnets_data_map["config_${count.index}"]["cidr_blocks"])
+            name: cidr-block
+            values: >-
+              split("|",
+              local.elements_landing_zone_subnets_data_map["config_${count.index}"]["cidr_blocks"])
       aws_security_groups:
         security_groups_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_groups_data"])
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_security_groups_data"])
           filter:
-            - name: 'vpc-id'
+            - name: vpc-id
               values:
                 - 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
             - name: 'tag:Name'
               values:
-                - local.elements_landing_zone_security_groups_data_map["config_${count.index}"]["name"]
+                - >-
+                  local.elements_landing_zone_security_groups_data_map["config_${count.index}"]["name"]
     resource:
       aws_vpc_endpoint:
         landing_zone_vpc_endpoint_interface:
@@ -50,14 +57,14 @@ component:
           service_name: >-
             local.elements_landing_zone_vpc_endpoint_interface_map["config_${count.index}"]["service_name"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-#          auto_accept: >-
-#            local.elements_landing_zone_vpc_endpoint_interface_map["config_${count.index}"]["auto_accept"]
           policy: >-
             local.elements_landing_zone_vpc_endpoint_interface_map["config_${count.index}"]["policy"]
           private_dns_enabled: >-
             local.elements_landing_zone_vpc_endpoint_interface_map["config_${count.index}"]["private_dns_enabled"]
-          security_group_ids: element(data.aws_security_groups.security_groups_selected.*.ids, count.index)
-          subnet_ids: element(data.aws_subnet_ids.subnet_ids_selected.*.ids, count.index)
+          security_group_ids: >-
+            element(data.aws_security_groups.security_groups_selected.*.ids,
+            count.index)
+          subnet_ids: 'element(data.aws_subnet_ids.subnet_ids_selected.*.ids, count.index)'
           tags: >-
             local.elements_landing_zone_vpc_endpoint_interface_tags_map["config_${count.index}"]
           vpc_endpoint_type: Interface

@@ -17,13 +17,15 @@ component:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
             local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_route_tables:
         route_tables_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tables_data"])
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tables_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
             name: 'tag:Name'
@@ -34,12 +36,11 @@ component:
       aws_vpc_endpoint:
         landing_zone_vpc_endpoint_gateway:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_endpoint_gateway_resource"])
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_endpoint_gateway_resource"])
           service_name: >-
             local.elements_landing_zone_vpc_endpoint_gateway_map["config_${count.index}"]["service_name"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-#          auto_accept: >-
-#            local.elements_landing_zone_vpc_endpoint_gateway_map["config_${count.index}"]["auto_accept"]
           policy: >-
             local.elements_landing_zone_vpc_endpoint_gateway_map["config_${count.index}"]["policy"]
           private_dns_enabled: >-
