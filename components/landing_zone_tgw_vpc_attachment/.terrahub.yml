@@ -1,0 +1,77 @@
+component:
+  name: landing_zone_tgw_vpc_attachment
+  dependsOn:
+    - landing_zone_vpc
+    - landing_zone_subnet
+    - landing_zone_gateway_tgw
+  template:
+    locals:
+      elements_vpc_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_tgw_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"]
+      elements_subnet_selected_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"]
+      elements_tgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags_element"]
+      elements_tgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"]
+    data:
+      aws_vpc:
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+          cidr_block: 'local.elements_vpc_data_map["config_${count.index}"]["cidr_block"]'
+      aws_subnet:
+        subnet_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
+          cidr_block: >-
+            local.elements_subnet_selected_data_map["config_${count.index}"]["cidr_block"]
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+      aws_ec2_transit_gateway:
+        gateway_tgw_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
+          filter:
+            - name: options.amazon-side-asn
+              values:
+                - >-
+                  local.elements_tgw_data_map["config_${count.index}"]["amazon_side_asn"]
+    resource:
+      aws_ec2_transit_gateway_vpc_attachment:
+        landing_zone_tgw_vpc_attachment:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"])
+          subnet_ids: >-
+            slice(tolist(data.aws_subnet.subnet_selected[count.index].*.id),
+            local.elements_tgw_map["config_${count.index}"]["subnets_from_index"],
+            local.elements_tgw_map["config_${count.index}"]["subnets_to_index"]) 
+          transit_gateway_id: >-
+            element(data.aws_ec2_transit_gateway.gateway_tgw_selected.*.id,
+            count.index)
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+          dns_support: 'local.elements_tgw_map["config_${count.index}"]["dns_support"]'
+          ipv6_support: 'local.elements_tgw_map["config_${count.index}"]["ipv6_support"]'
+          tags: 'local.elements_tgw_tags_map["config_${count.index}"]'
+          transit_gateway_default_route_table_association: >-
+            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
+          transit_gateway_default_route_table_propagation: >-
+            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_propagation"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment.landing_zone_tgw_vpc_attachment.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment.landing_zone_tgw_vpc_attachment.*.id)
+      landing_zone_tgw_vpc_attachment_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment.landing_zone_tgw_vpc_attachment.*.id)

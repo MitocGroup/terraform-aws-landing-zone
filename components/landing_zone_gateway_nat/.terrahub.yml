@@ -1,8 +1,8 @@
 component:
   name: landing_zone_gateway_nat
   dependsOn:
-    - ../landing_zone_eip
-    - ../landing_zone_subnet
+    - landing_zone_eip
+    - landing_zone_subnet
   template:
     locals:
       elements_landing_zone_vpc_data_map: >-

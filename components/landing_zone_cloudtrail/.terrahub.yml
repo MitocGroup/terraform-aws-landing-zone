@@ -1,7 +1,7 @@
 component:
   name: landing_zone_cloudtrail
   dependsOn:
-    - ../landing_zone_cloudtrail_s3_bucket
+    - landing_zone_cloudtrail_s3_bucket
   template:
     data:
       terraform_remote_state:

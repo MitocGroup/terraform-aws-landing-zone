@@ -263,9 +263,9 @@ output "landing_zone_gateway_tgw_ids" {
   description = "EC2 Transit Gateway identifiers."
 }
 
-output "landing_zone_gateway_attachment_tgw_ids" {
-  value       = module.landing_zone.landing_zone["landing_zone_gateway_attachment_tgw_ids"]
-  description = "EC2 Transit Gateway Attachment identifiers."
+output "landing_zone_route_pcx_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_route_pcx_ids"]
+  description = "Identifiers of a VPC peering connection."
 }
 
 output "landing_zone_gateway_cgw_ids" {
@@ -331,4 +331,39 @@ output "landing_zone_iam_instance_profile_paths" {
 output "landing_zone_iam_instance_profile_roles" {
   value       = module.landing_zone.landing_zone["landing_zone_iam_instance_profile_roles"]
   description = "The role's assigned to the instance profile's."
+}
+
+output "landing_zone_vpc_peering_connection_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_vpc_peering_connection_ids"]
+  description = "The ID's of the VPC Peering Connection."
+}
+
+output "landing_zone_tgw_route_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_route_ids"]
+  description = "EC2 Transit Gateway Route Table identifiers combined with destination."
+}
+
+output "landing_zone_tgw_route_table_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_route_table_ids"]
+  description = "EC2 Transit Gateway Route Table identifiers."
+}
+
+output "landing_zone_tgw_route_table_association_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_route_table_association_ids"]
+  description = "EC2 Transit Gateway Route Table identifier combined with EC2 Transit Gateway Attachment identifiers."
+}
+
+output "landing_zone_tgw_route_table_propagation_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_route_table_propagation_ids"]
+  description = "EC2 Transit Gateway Route Table identifier combined with EC2 Transit Gateway Attachment identifiers."
+}
+
+output "landing_zone_tgw_vpc_attachment_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_vpc_attachment_ids"]
+  description = "EC2 Transit Gateway Attachment identifiers."
+}
+
+output "landing_zone_tgw_vpc_accepter_attachment_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_tgw_vpc_accepter_attachment_ids"]
+  description = "EC2 Transit Gateway Attachment identifiers."
 }

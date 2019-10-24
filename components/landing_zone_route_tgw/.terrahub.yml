@@ -1,7 +1,7 @@
 component:
   name: landing_zone_route_tgw
   dependsOn:
-    - ../landing_zone_route_table_tgw
+    - landing_zone_route_table_tgw
   template:
     locals:
       elements_landing_zone_route_tgw_map: >-

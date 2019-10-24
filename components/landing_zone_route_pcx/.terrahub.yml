@@ -1,16 +1,18 @@
 component:
-  name: landing_zone_route_igw
+  name: landing_zone_route_pcx
   dependsOn:
     - landing_zone_route_table
-    - landing_zone_gateway_igw
+    - landing_zone_vpc_peering_connection
   template:
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_landing_zone_vpc_pcx_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_pcx_data"]
       elements_landing_zone_route_table_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"]
-      elements_landing_zone_route_igw_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_igw_resource"]
+      elements_landing_zone_route_pcx_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_pcx_resource"]
     data:
       aws_vpc:
         vpc_selected:
@@ -30,37 +32,42 @@ component:
             values:
               - >-
                 local.elements_landing_zone_route_table_data_map["config_${count.index}"]["name"]
-      aws_internet_gateway:
-        internet_gateway_selected:
+      aws_vpc_peering_connection:
+        vpc_peering_connection_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_pcx_data"])
           filter:
-            - name: attachment.vpc-id
+            - name: accepter-vpc-info.cidr-block
               values:
-                - 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+                - >-
+                  local.elements_landing_zone_vpc_pcx_data_map["config_${count.index}"]["accepter_cidr_block"]
+            - name: requester-vpc-info.cidr-block
+              values:
+                - >-
+                  local.elements_landing_zone_vpc_pcx_data_map["config_${count.index}"]["requester_cidr_block"]
     resource:
       aws_route:
-        landing_zone_route_igw:
+        landing_zone_route_pcx:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_igw_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_pcx_resource"])
           route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
           destination_cidr_block: >-
-            local.elements_landing_zone_route_igw_map["config_${count.index}"]["destination_cidr_block"]
-          gateway_id: >-
-            element(distinct(data.aws_internet_gateway.internet_gateway_selected.*.id),
+            local.elements_landing_zone_route_pcx_map["config_${count.index}"]["destination_cidr_block"]
+          vpc_peering_connection_id: >-
+            element(data.aws_vpc_peering_connection.vpc_peering_connection_selected.*.id,
             count.index)
     output:
       ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_igw.*.id)
+          aws_route.landing_zone_route_pcx.*.id)
       thub_ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_igw.*.id)
-      landing_zone_route_igw_ids:
+          aws_route.landing_zone_route_pcx.*.id)
+      landing_zone_route_pcx_ids:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_igw.*.id)
+          aws_route.landing_zone_route_pcx.*.id)

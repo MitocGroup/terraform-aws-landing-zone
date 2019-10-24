@@ -1,10 +1,10 @@
 component:
   name: landing_zone_code_pipeline_role_policy
   dependsOn:
-    - ../landing_zone_pipeline_s3_bucket
-    - ../landing_zone_pipeline_artifact_s3_bucket
-    - ../landing_zone_code_pipeline_role
-    - ../landing_zone_code_build
+    - landing_zone_pipeline_s3_bucket
+    - landing_zone_pipeline_artifact_s3_bucket
+    - landing_zone_code_pipeline_role
+    - landing_zone_code_build
   template:
     data:
       terraform_remote_state:

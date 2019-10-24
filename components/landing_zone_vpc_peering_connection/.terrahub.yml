@@ -1,0 +1,49 @@
+component:
+  name: landing_zone_vpc_peering_connection
+  template:
+    locals:
+      elements_landing_zone_vpc_peering_connection_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_resource"]
+      elements_landing_zone_vpc_peering_connection_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_data"]
+      elements_landing_zone_vpc_peering_connection_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_tags_element"]
+    data:
+      aws_vpc:
+        peer_vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_data"])
+          cidr_block: >-
+            local.elements_landing_zone_vpc_peering_connection_data_map["config_${count.index}"]["peer_vpc_cidr_block"]
+    resource:
+      aws_vpc_peering_connection:
+        landing_zone_vpc_peering_connection:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_resource"])
+          vpc_id: >-
+            ${local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["reverse"]
+            ? element(data.aws_vpc.peer_vpc_selected.*.id, count.index) :
+            local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["vpc_id"]}
+          peer_vpc_id: >-
+            ${local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["reverse"]
+            ? local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["vpc_id"]
+            : element(data.aws_vpc.peer_vpc_selected.*.id, count.index)}
+          peer_region: >-
+            local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["peer_region"]
+          tags: >-
+            local.elements_landing_zone_vpc_peering_connection_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
+      landing_zone_vpc_peering_connection_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
