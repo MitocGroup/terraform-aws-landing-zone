@@ -63,7 +63,7 @@ landing_zone_providers = {
   #  }
 }
 
-landing_zone_backend = {
+terraform_backend = {
   backend = "local"
   path    = "/tmp/.terrahub/landing_zone"
 }

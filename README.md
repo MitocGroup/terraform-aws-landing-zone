@@ -35,11 +35,11 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.1.6"
+  version   = "0.1.9"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
-  landing_zone_backend    = var.landing_zone_backend
+  terraform_backend       = var.terraform_backend
 }
 ```
 > NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
@@ -57,7 +57,7 @@ landing_zone_components = {
   landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
   [...]
 }
-landing_zone_backend = {
+terraform_backend = {
   backend = "local"
   path    = "/tmp/.terrahub/landing_zone"
 }
@@ -74,7 +74,7 @@ This means that before you use this terraform module, you will need to:
     * each key from `landing_zone_components` map represents the name of the component from [this list of available components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 and/or local disk
         * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
-3. Change `landing_zone_backend` to values that reflect your terraform backend where `.tfstate` files are stored (in `variables.tf` default parameter value is defined as `local`)
+3. Change `terraform_backend` to values that reflect your terraform backend where `.tfstate` files are stored (in `variables.tf` default parameter value is defined as `local`)
 
 > NOTE: Terraform module `landing_zone` can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` variable will be ignored.
 
