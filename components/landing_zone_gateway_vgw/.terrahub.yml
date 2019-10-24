@@ -1,7 +1,7 @@
 component:
   name: landing_zone_gateway_vgw
   dependsOn:
-    - ../landing_zone_vpc
+    - landing_zone_vpc
   template:
     locals:
       elements_landing_zone_vpc_data_map: >-

@@ -1,0 +1,54 @@
+component:
+  name: landing_zone_tgw_vpc_attachment_accepter
+  dependsOn:
+    - landing_zone_gateway_tgw
+  template:
+    locals:
+      elements_vpc_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_tgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags_element"]
+      elements_tgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"]
+    data:
+      aws_vpc:
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+          cidr_block: 'local.elements_vpc_data_map["config_${count.index}"]["cidr_block"]'
+      aws_ec2_transit_gateway_vpc_attachment:
+        tgw_vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(data.aws_vpc.vpc_selected.*.id)
+          filter:
+            name: vpc-id
+            values:
+              - 'element(data.aws_vpc.vpc_selected.*.id , count.index)'
+    resource:
+      aws_ec2_transit_gateway_vpc_attachment_accepter:
+        landing_zone_tgw_vpc_attachment_accepter:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"])
+          transit_gateway_attachment_id: >-
+            element(data.aws_ec2_transit_gateway_vpc_attachment.tgw_vpc_selected.*.id,
+            count.index)
+          tags: 'local.elements_tgw_tags_map["config_${count.index}"]'
+          transit_gateway_default_route_table_association: >-
+            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
+          transit_gateway_default_route_table_propagation: >-
+            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_propagation"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
+      landing_zone_tgw_vpc_accepter_attachment_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
