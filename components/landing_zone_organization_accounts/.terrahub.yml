@@ -25,6 +25,3 @@ component:
         value: aws_organizations_account.landing_zone_organization_accounts.*.id
       landing_zone_organization_accounts_arns:
         value: aws_organizations_account.landing_zone_organization_accounts.*.arn
-terraform:
-  varFile:
-    - ../../org-tfvars/tfvars/landing_zone_organization_accounts/default.tfvars
