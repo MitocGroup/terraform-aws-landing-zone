@@ -4,19 +4,19 @@ component:
     - landing_zone_gateway_tgw
   template:
     locals:
-      elements_vpc_data_map: >-
+      elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_tgw_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags_element"]
-      elements_tgw_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"]
+      elements_landing_zone_tgw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags"]
+      elements_landing_zone_tgw_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw"]
     data:
       aws_vpc:
         vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
-          cidr_block: 'local.elements_vpc_data_map["config_${count.index}"]["cidr_block"]'
+          cidr_block: 'local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]'
       aws_ec2_transit_gateway_vpc_attachment:
         tgw_vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
@@ -30,15 +30,15 @@ component:
         landing_zone_tgw_vpc_attachment_accepter:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_element"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw"])
           transit_gateway_attachment_id: >-
             element(data.aws_ec2_transit_gateway_vpc_attachment.tgw_vpc_selected.*.id,
             count.index)
-          tags: 'local.elements_tgw_tags_map["config_${count.index}"]'
+          tags: 'local.elements_landing_zone_tgw_tags_map["config_${count.index}"]'
           transit_gateway_default_route_table_association: >-
-            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
+            local.elements_landing_zone_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
           transit_gateway_default_route_table_propagation: >-
-            local.elements_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_propagation"]
+            local.elements_landing_zone_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_propagation"]
     output:
       ids:
         value: >-

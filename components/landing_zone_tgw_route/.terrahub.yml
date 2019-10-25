@@ -7,11 +7,11 @@ component:
     - landing_zone_tgw_route_table
   template:
     locals:
-      elements_tgw_route_map: >-
+      elements_landing_zone_tgw_route_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_route_resource"]
-      elements_vpc_data_map: >-
+      elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_tgw_data_map: >-
+      elements_landing_zone_tgw_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"]
     data:
       aws_vpc:
@@ -19,7 +19,7 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
-          cidr_block: 'local.elements_vpc_data_map["config_${count.index}"]["cidr_block"]'
+          cidr_block: 'local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]'
       aws_ec2_transit_gateway_vpc_attachment:
         tgw_vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
@@ -37,7 +37,7 @@ component:
             - name: options.amazon-side-asn
               values:
                 - >-
-                  local.elements_tgw_data_map["config_${count.index}"]["amazon_side_asn"]
+                  local.elements_landing_zone_tgw_data_map["config_${count.index}"]["amazon_side_asn"]
       aws_ec2_transit_gateway_route_table:
         route_table_tgw_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
@@ -55,7 +55,7 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tgw_resource"])
           destination_cidr_block: >-
-            local.elements_tgw_route_map["config_${count.index}"]["destination_cidr_block"]
+            local.elements_landing_zone_tgw_route_map["config_${count.index}"]["destination_cidr_block"]
           transit_gateway_attachment_id: >-
             element(data.aws_ec2_transit_gateway_vpc_attachment.tgw_vpc_selected.*.id
             , count.index)

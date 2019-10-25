@@ -28,7 +28,7 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_rule_resource"])
           network_acl_id: >-
-            element(data.aws_network_acls.network_acls_selected.ids,
+            element(flatten(data.aws_network_acls.network_acls_selected.*.ids),
             count.index)
           rule_number: >-
             local.elements_landing_zone_landing_zone_network_acl_rules_map["config_${count.index}"]["rule_number"]

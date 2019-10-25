@@ -8,17 +8,17 @@ component:
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_directory_service_resource"]
     data:
       aws_vpc:
-        default_vpc:
+        vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           default: true
       aws_subnet:
-        default_subnet:
+        subnet_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_subnet_data"])
           availability_zone: >-
             local.elements_landing_zone_subnet_data_map["config_${count.index}"]["availability_zone"]
-          vpc_id: data.aws_vpc.default_vpc.id
+          vpc_id: data.aws_vpc.vpc_selected.id
     resource:
       aws_directory_service_directory:
         landing_zone_directory_service_directory:
@@ -44,9 +44,8 @@ component:
           type: >-
             local.elements_landing_zone_directory_service_map["config_${count.index}"]["type"]
           vpc_settings:
-            vpc_id: data.aws_vpc.default_vpc.id
-            subnet_ids:
-              - data.aws_subnet.default_subnet.*.id
+            vpc_id: data.aws_vpc.vpc_selected.id
+            subnet_ids: data.aws_subnet.subnet_selected.*.id
     output:
       ids:
         value: >-
