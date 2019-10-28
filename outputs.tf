@@ -253,11 +253,6 @@ output "landing_zone_route_table_association_tgw_ids" {
   description = " EC2 Transit Gateway Route Table identifier combined with EC2 Transit Gateway Attachment identifiers."
 }
 
-output "landing_zone_route_tgw_ids" {
-  value       = module.landing_zone.landing_zone["landing_zone_route_tgw_ids"]
-  description = "EC2 Transit Gateway Route Table identifiers combined with destination."
-}
-
 output "landing_zone_gateway_tgw_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_gateway_tgw_ids"]
   description = "EC2 Transit Gateway identifiers."

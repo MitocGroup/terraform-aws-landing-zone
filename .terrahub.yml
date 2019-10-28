@@ -23,14 +23,57 @@ template:
         allowed_account_ids:
           - var.account_id
     - aws:
-        alias: sample
-        region: var.sample_region
+        alias: bloomingaprons
+        region: var.bloomingaprons_region
         assume_role:
           - role_arn: >-
-              arn:aws:iam::var.sample_account_id:role/OrganizationAccountAccessRole
-            session_name: var.sample_account_id
+              arn:aws:iam::${tfvar.terrahub["bloomingaprons_account_id"]}:role/OrganizationAccountAccessRole
+            session_name: var.bloomingaprons_account_id
+    - aws:
+        alias: eurechean
+        region: var.eurechean_region
+        assume_role:
+          - role_arn: >-
+              arn:aws:iam::${tfvar.terrahub["eurechean_account_id"]}:role/OrganizationAccountAccessRole
+            session_name: var.eurechean_account_id
+    - aws:
+        alias: mitocgroup
+        region: var.mitocgroup_region
+        assume_role:
+          - role_arn: >-
+              arn:aws:iam::${tfvar.terrahub["mitocgroup_account_id"]}:role/OrganizationAccountAccessRole
+            session_name: var.mitocgroup_account_id
+    - aws:
+        alias: terrahub
+        region: var.terrahub_region
+        assume_role:
+          - role_arn: >-
+              arn:aws:iam::${tfvar.terrahub["terrahub_account_id"]}:role/OrganizationAccountAccessRole
+            session_name: var.terrahub_account_id
+    - aws:
+        alias: vcalmic
+        region: var.vcalmic_region
+        assume_role:
+          - role_arn: >-
+              arn:aws:iam::${tfvar.terrahub["vcalmic_account_id"]}:role/OrganizationAccountAccessRole
+            session_name: var.vcalmic_account_id
   tfvars:
-    account_id: 123456789012
+    account_id: 722084099005
     region: us-east-1
-    sample_account_id: 987654321098
-    sample_region: us-east-1
+    bloomingaprons_account_id: 490643292278
+    bloomingaprons_region: us-east-1
+    default_account_id: 722084099005
+    default_region: us-east-1
+    eurechean_account_id: 643695102975
+    eurechean_region: us-east-1
+    mitocgroup_account_id: 492198229272
+    mitocgroup_region: us-east-1
+    terrahub_account_id: 600605919324
+    terrahub_region: us-east-1
+    vcalmic_account_id: 300672210419
+    vcalmic_region: us-east-1
+  terraform:
+    backend:
+      local:
+        path: >-
+          /tmp/.terrahub/landing_zone/${tfvar.terrahub["component"]["name"]}/terraform.tfstate
