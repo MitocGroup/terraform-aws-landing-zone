@@ -28,7 +28,8 @@ component:
             local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["vpc_id"]}
           peer_vpc_id: >-
             ${local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["reverse"]
-            ? local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["vpc_id"]
+            ?
+            local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["vpc_id"]
             : element(data.aws_vpc.peer_vpc_selected.*.id, count.index)}
           peer_region: >-
             local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["peer_region"]

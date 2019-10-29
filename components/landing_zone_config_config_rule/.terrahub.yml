@@ -1,0 +1,40 @@
+component:
+  name: landing_zone_config_config_rule
+  template:
+    locals:
+      elements_config_rule_tag_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_rule_tags_resource"]
+      elements_config_rule_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_rule_resource"]
+    resource:
+      aws_config_config_rule:
+        landing_zone_config_config_rule:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_rule_resource"])
+          name: 'local.elements_config_rule_map["config_${count.index}"]["name"]'
+          description: >-
+            local.elements_config_rule_map["config_${count.index}"]["description"]
+          source:
+            owner: >-
+              local.elements_config_rule_map["config_${count.index}"]["source_owner"]
+            source_identifier: >-
+              local.elements_config_rule_map["config_${count.index}"]["source_identifier"]
+          tags: 'local.elements_config_rule_tag_map["config_${count.index}"]'
+    output:
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_config_rule.landing_zone_config_config_rule.*.arn)
+      rule_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_config_rule.landing_zone_config_config_rule.*.rule_id)
+      landing_zone_config_config_rule_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_config_rule.landing_zone_config_config_rule.*.arn)
+      landing_zone_config_config_rule_rule_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_config_rule.landing_zone_config_config_rule.*.rule_id)
