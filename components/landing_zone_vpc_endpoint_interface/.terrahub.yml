@@ -81,7 +81,3 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id)
-terraform:
-  varFile:
-    - ../../org-tfvars/tfvars/landing_zone_vpc_endpoint_interface/default.tfvars
-    - ../../org-tfvars/tfvars/landing_zone_vpc_endpoint_interface/terrahub.tfvars

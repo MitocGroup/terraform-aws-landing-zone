@@ -1,0 +1,18 @@
+component:
+  name: landing_zone_config_configuration_recorder_status
+  dependsOn:
+    - landing_zone_config_configuration_recorder
+  template:
+    locals:
+      config_configuration_recorder_status_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_configuration_recorder_status_resource"]
+    resource:
+      aws_config_configuration_recorder_status:
+        landing_zone_config_configuration_recorder_status:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_configuration_recorder_status_resource"])
+          name: >-
+            local.config_configuration_recorder_status_map["config_${count.index}"]["name"]
+          is_enabled: >-
+            tobool(local.config_configuration_recorder_status_map["config_${count.index}"]["is_enabled"])
