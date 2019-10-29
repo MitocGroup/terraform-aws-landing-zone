@@ -13,7 +13,8 @@ component:
           count: length(var.landing_zone_organization_accounts_emails)
           name: 'element(var.landing_zone_organization_accounts_names, count.index)'
           email: 'element(var.landing_zone_organization_accounts_emails, count.index)'
-          parent_id: data.aws_organizations_organization.landing_zone_organization.roots.0.id
+          parent_id: >-
+            data.aws_organizations_organization.landing_zone_organization.roots.0.id
     output:
       ids:
         value: aws_organizations_account.landing_zone_organization_accounts.*.id

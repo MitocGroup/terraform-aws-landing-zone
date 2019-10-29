@@ -16,7 +16,8 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
-          cidr_block: 'local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]'
+          cidr_block: >-
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_ec2_transit_gateway_vpc_attachment:
         tgw_vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
