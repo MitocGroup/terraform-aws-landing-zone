@@ -2,8 +2,8 @@ component:
   name: landing_zone_eip
   template:
     locals:
-      elements_landing_zone_eip_tag_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags_resource"]
+      elements_landing_zone_eip_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_tags"]
       elements_landing_zone_eip_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"]
     resource:
@@ -12,7 +12,7 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])
-          tags: 'local.elements_landing_zone_eip_tag_map["config_${count.index}"]'
+          tags: 'local.elements_landing_zone_eip_tags_map["config_${count.index}"]'
           vpc: 'local.elements_landing_zone_eip_map["config_${count.index}"]["vpc"]'
     output:
       ids:

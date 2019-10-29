@@ -362,3 +362,43 @@ output "landing_zone_tgw_vpc_accepter_attachment_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_tgw_vpc_accepter_attachment_ids"]
   description = "EC2 Transit Gateway Attachment identifiers."
 }
+
+output "landing_zone_config_configuration_aggregator_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_configuration_aggregator_arns"]
+  description = "The ARN's of the authorization."
+}
+
+output "landing_zone_config_config_rule_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_config_rule_arns"]
+  description = "The ARN's of the config rule."
+}
+
+output "landing_zone_config_config_rule_rule_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_config_rule_rule_ids"]
+  description = "The ID's of the config rule."
+}
+
+output "landing_zone_config_aggregate_authorization_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_aggregate_authorization_arns"]
+  description = "The ARN's of the aggregator."
+}
+
+output "landing_zone_config_configuration_recorder_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_configuration_recorder_ids"]
+  description = "The ID's of the recorder."
+}
+
+output "landing_zone_config_delivery_channel_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_delivery_channel_ids"]
+  description = "The ID's of the delivery channel."
+}
+
+output "landing_zone_config_organization_custom_rule_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_organization_custom_rule_arns"]
+  description = "The ARN's of the organization custom rule."
+}
+
+output "landing_zone_config_organization_managed_rule_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_config_organization_managed_rule_arns"]
+  description = "The ARN's of the organization managed rule."
+}

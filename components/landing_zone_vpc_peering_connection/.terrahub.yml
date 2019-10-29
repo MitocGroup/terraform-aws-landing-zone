@@ -7,7 +7,7 @@ component:
       elements_landing_zone_vpc_peering_connection_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_data"]
       elements_landing_zone_vpc_peering_connection_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_tags_element"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_peering_connection_tags"]
     data:
       aws_vpc:
         peer_vpc_selected:

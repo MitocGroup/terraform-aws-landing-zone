@@ -10,7 +10,7 @@ component:
       elements_landing_zone_vpc_pcx_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_pcx_data"]
       elements_landing_zone_route_table_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"]
       elements_landing_zone_route_pcx_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_pcx_resource"]
     data:
@@ -25,7 +25,7 @@ component:
         route_table_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["elements_landing_zone_route_table_data_map"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
             name: 'tag:Name'

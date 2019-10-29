@@ -20,7 +20,7 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_instance_profile_resource"])
           name: >-
             local.elements_landing_zone_iam_instance_profile_map["config_${count.index}"]["name"]
-          role: 'element(data.aws_iam_role.role_selected.*.arn, count.index)'
+          role: 'element(data.aws_iam_role.role_selected.*.id, count.index)'
     output:
       ids:
         value: >-
