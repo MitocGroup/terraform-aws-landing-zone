@@ -1,0 +1,39 @@
+component:
+  name: landing_zone_ssm_maintenance_window_target
+  template:
+    locals:
+      elements_landing_zone_ssm_maintenance_window_target_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_target_resource"]
+    data:
+      terraform_remote_state:
+        landing_zone_ssm_maintenance_window:
+          backend: local
+          config:
+            path: >-
+              ${tfvar.terrahub["tfstate_path"]}/landing_zone_ssm_maintenance_window/terraform.tfstate
+    resource:
+      aws_ssm_maintenance_window_target:
+        landing_zone_ssm_maintenance_window_target:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_target_resource"])
+          window_id: element(data.terraform_remote_state.landing_zone_ssm_maintenance_window.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"], count.index)
+          name: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["name"]
+          description: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["description"]
+          resource_type: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["resource_type"]
+          targets:
+            key: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_key"]
+            values: split("|", local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_values"])
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
+      landing_zone_ssm_maintenance_window_target_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
