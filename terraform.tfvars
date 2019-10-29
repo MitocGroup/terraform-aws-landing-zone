@@ -51,6 +51,7 @@ landing_zone_components = {
   landing_zone_security_group                       = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group/*.tfvars"
   landing_zone_security_group_rule_ingress          = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group_rule_ingress/*.tfvars"
   landing_zone_security_group_rule_egress           = "s3://terraform-aws-landing-zone/mycompany/landing_zone_security_group_rule_egress/*.tfvars"
+  landing_zone_secretsmanager_secret                = "s3://terraform-aws-landing-zone/mycompany/landing_zone_secretsmanager_secret/*.tfvars"
   landing_zone_cloudtrail_s3_bucket                 = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket/*.tfvars"
   landing_zone_cloudtrail_s3_bucket_policy          = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail_s3_bucket_policy/*.tfvars"
   landing_zone_cloudtrail                           = "s3://terraform-aws-landing-zone/mycompany/landing_zone_cloudtrail/*.tfvars"

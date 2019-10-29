@@ -402,3 +402,13 @@ output "landing_zone_config_organization_managed_rule_arns" {
   value       = module.landing_zone.landing_zone["landing_zone_config_organization_managed_rule_arns"]
   description = "The ARN's of the organization managed rule."
 }
+
+output "landing_zone_secretsmanager_secret_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_secretsmanager_secret_ids"]
+  description = "Amazon Resource Name (ARN's) of the secret."
+}
+
+output "landing_zone_secretsmanager_secret_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_secretsmanager_secret_arns"]
+  description = "Amazon Resource Name (ARN's) of the secret."
+}
