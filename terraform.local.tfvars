@@ -61,6 +61,13 @@ landing_zone_components = {
   landing_zone_iam_role_policy_attachment           = "*.tfvars"
   landing_zone_iam_instance_profile                 = "*.tfvars"
   landing_zone_iam_saml_provider                    = "*.tfvars"
+  landing_zone_ssm_activation                       = "*.tfvars"
+  landing_zone_ssm_association_version_1            = "*.tfvars"
+  landing_zone_ssm_association_version_2            = "*.tfvars"
+  landing_zone_ssm_document                         = "*.tfvars"
+  landing_zone_ssm_maintenance_window               = "*.tfvars"
+  landing_zone_ssm_maintenance_window_target        = "*.tfvars"
+  landing_zone_ssm_parameter                        = "*.tfvars"
 }
 
 landing_zone_providers = {
