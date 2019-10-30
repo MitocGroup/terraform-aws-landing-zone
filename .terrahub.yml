@@ -2,11 +2,12 @@ project:
   name: terraform-aws-landing-zone
   code: eef16dcf
   include:
-    - .
+    - '.'
   exclude:
-    - '**/.terraform/**'
-    - '**/node_modules/**'
-    - '**/.git/**'
+    - '.git'
+    - 'node_modules'
+    - '**/.backup'
+    - '**/.terraform'
 terraform:
   varFile:
     - default.tfvars
