@@ -2,10 +2,10 @@ project:
   name: terraform-aws-landing-zone
   code: eef16dcf
   include:
-    - '.'
+    - .
   exclude:
-    - '.git'
-    - 'node_modules'
+    - .git
+    - node_modules
     - '**/.backup'
     - '**/.terraform'
 terraform:
