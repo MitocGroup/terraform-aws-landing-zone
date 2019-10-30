@@ -69,7 +69,7 @@ component:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_ssm_document.landing_zone_ssm_document.*.created_date)
-      landing_zone_ssm_document_created_hashes:
+      landing_zone_ssm_document_hashes:
         value: >-
           map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
           aws_ssm_document.landing_zone_ssm_document.*.hash)
