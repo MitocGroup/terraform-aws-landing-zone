@@ -2,22 +2,10 @@ component:
   name: landing_zone_ssm_association_version_2
   template:
     locals:
-      elements_landing_zone_instance_data_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_instance_data"]
       elements_landing_zone_ssm_association_version_2_arg_parameters_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_version_2_resource_arg_parameters"]
       elements_landing_zone_ssm_association_version_2_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_version_2_resource"]
-    data:
-      aws_instance:
-        instance_selected:
-          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_instance_data"])
-          filter:
-            name: 'tag:Name'
-            values:
-              - local.elements_landing_zone_instance_data_map["config_${count.index}"]["name"]
     resource:
       aws_ssm_association:
         landing_zone_ssm_association_version_2:
