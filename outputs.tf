@@ -328,6 +328,16 @@ output "landing_zone_iam_instance_profile_roles" {
   description = "The role's assigned to the instance profile's."
 }
 
+output "landing_zone_vpc_endpoint_gateway_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_vpc_endpoint_gateway_ids"]
+  description = "The ID's of the VPC Endpoint Gateway."
+}
+
+output "landing_zone_vpc_endpoint_interface_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_vpc_endpoint_interface_ids"]
+  description = "The ID's of the VPC Endpoint Interface."
+}
+
 output "landing_zone_vpc_peering_connection_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_vpc_peering_connection_ids"]
   description = "The ID's of the VPC Peering Connection."
@@ -411,4 +421,60 @@ output "landing_zone_secretsmanager_secret_ids" {
 output "landing_zone_secretsmanager_secret_arns" {
   value       = module.landing_zone.landing_zone["landing_zone_secretsmanager_secret_arns"]
   description = "Amazon Resource Name (ARN's) of the secret."
+}
+
+output "landing_zone_ssm_activation_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_activation_ids"]
+  description = ""
+}
+
+output "landing_zone_ssm_association_version_1_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_1_ids"]
+  description = ""
+}
+
+output "landing_zone_ssm_association_version_1_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_1_names"]
+  description = ""
+}
+
+output "landing_zone_ssm_association_version_2_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_2_ids"]
+  description = ""
+}
+
+output "landing_zone_ssm_association_version_2_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_2_names"]
+  description = ""
+}
+
+output "landing_zone_ssm_document_created_dates" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_document_created_dates"]
+  description = ""
+}
+
+output "landing_zone_ssm_document_hashes" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_document_hashes"]
+  description = ""
+}
+
+output "landing_zone_ssm_maintenance_window_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_maintenance_window_ids"]
+  description = ""
+}
+
+output "landing_zone_ssm_maintenance_window_target_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_maintenance_window_target_ids"]
+  description = ""
+
+}
+
+output "landing_zone_ssm_parameter_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_arns"]
+  description = ""
+}
+
+output "landing_zone_ssm_parameter_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_names"]
+  description = ""
 }
