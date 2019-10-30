@@ -17,13 +17,21 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_target_resource"])
-          window_id: element(data.terraform_remote_state.landing_zone_ssm_maintenance_window.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"], count.index)
-          name: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["name"]
-          description: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["description"]
-          resource_type: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["resource_type"]
+          window_id: >-
+            element(data.terraform_remote_state.landing_zone_ssm_maintenance_window.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"],
+            count.index)
+          name: >-
+            local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["name"]
+          description: >-
+            local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["description"]
+          resource_type: >-
+            local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["resource_type"]
           targets:
-            key: local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_key"]
-            values: split("|", local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_values"])
+            key: >-
+              local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_key"]
+            values: >-
+              split("|",
+              local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_values"])
     output:
       ids:
         value: >-

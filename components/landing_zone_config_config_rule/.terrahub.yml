@@ -12,7 +12,8 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_rule_resource"])
-          name: 'local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["name"]'
+          name: >-
+            local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["name"]
           description: >-
             local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["description"]
           source:
@@ -20,7 +21,8 @@ component:
               local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["source_owner"]
             source_identifier: >-
               local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["source_identifier"]
-          tags: 'local.elements_landing_zone_config_config_rule_tags_map["config_${count.index}"]'
+          tags: >-
+            local.elements_landing_zone_config_config_rule_tags_map["config_${count.index}"]
     output:
       arns:
         value: >-

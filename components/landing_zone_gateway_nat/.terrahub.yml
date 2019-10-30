@@ -44,7 +44,8 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_tags"])
           allocation_id: 'element(data.aws_eip.eip_selected.*.id, count.index)'
           subnet_id: 'element(data.aws_subnet.subnet_selected.*.id, count.index)'
-          tags: 'local.elements_landing_zone_gateway_nat_tags_map["config_${count.index}"]'
+          tags: >-
+            local.elements_landing_zone_gateway_nat_tags_map["config_${count.index}"]
     output:
       ids:
         value: >-

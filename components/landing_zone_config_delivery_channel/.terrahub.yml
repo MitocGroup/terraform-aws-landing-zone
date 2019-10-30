@@ -10,7 +10,8 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_delivery_channel_resource"])
-          name: 'local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["name"]'
+          name: >-
+            local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["name"]
           s3_bucket_name: >-
             local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["s3_bucket_name"]
     output:

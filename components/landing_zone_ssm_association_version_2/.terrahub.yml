@@ -12,23 +12,33 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_version_2_resource"])
-          name: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["name"]
-          association_name: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["association_name"]
-          document_version: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["document_version"]
+          name: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["name"]
+          association_name: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["association_name"]
+          document_version: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["document_version"]
           output_location:
-            s3_bucket_name: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["ol_s3_bucket_name"]
-            s3_key_prefix: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["ol_s3_key_prefix"]
-          parameters: local.elements_landing_zone_ssm_association_version_2_arg_parameters_map["config_${count.index}"]
-          schedule_expression: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["schedule_expression"]
-          compliance_severity: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["compliance_severity"]
-          max_concurrency: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["max_concurrency"]
-          max_errors: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["max_errors"]
+            s3_bucket_name: >-
+              local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["ol_s3_bucket_name"]
+            s3_key_prefix: >-
+              local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["ol_s3_key_prefix"]
+          parameters: >-
+            local.elements_landing_zone_ssm_association_version_2_arg_parameters_map["config_${count.index}"]
+          schedule_expression: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["schedule_expression"]
+          compliance_severity: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["compliance_severity"]
+          max_concurrency: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["max_concurrency"]
+          max_errors: >-
+            local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["max_errors"]
           targets:
-            - key: local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["targets_key_1"]
+            - key: >-
+                local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["targets_key_1"]
               values:
-                - local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["targets_value_1"]
-            #- key:
-              #value:
+                - >-
+                  local.elements_landing_zone_ssm_association_version_2_map["config_${count.index}"]["targets_value_1"]
     output:
       association_ids:
         value: >-

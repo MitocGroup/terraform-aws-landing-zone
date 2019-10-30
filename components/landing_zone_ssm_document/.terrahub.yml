@@ -12,14 +12,21 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_document_resource"])
-          name: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["name"]
-          content: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["content"]
-          document_format: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["document_format"]
-          document_type: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["document_type"]
+          name: >-
+            local.elements_landing_zone_ssm_document_map["config_${count.index}"]["name"]
+          content: >-
+            local.elements_landing_zone_ssm_document_map["config_${count.index}"]["content"]
+          document_format: >-
+            local.elements_landing_zone_ssm_document_map["config_${count.index}"]["document_format"]
+          document_type: >-
+            local.elements_landing_zone_ssm_document_map["config_${count.index}"]["document_type"]
           permissions:
-            type: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["permissions_type"]
-            account_ids: local.elements_landing_zone_ssm_document_map["config_${count.index}"]["permissions_account_ids"]
-          tags: local.elements_landing_zone_ssm_document_tags_map["config_${count.index}"]
+            type: >-
+              local.elements_landing_zone_ssm_document_map["config_${count.index}"]["permissions_type"]
+            account_ids: >-
+              local.elements_landing_zone_ssm_document_map["config_${count.index}"]["permissions_account_ids"]
+          tags: >-
+            local.elements_landing_zone_ssm_document_tags_map["config_${count.index}"]
     output:
       created_dates:
         value: >-

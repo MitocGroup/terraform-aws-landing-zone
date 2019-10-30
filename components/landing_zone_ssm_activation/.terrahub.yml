@@ -12,13 +12,19 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_activation_resource"])
-          name: local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["name"]
-          description: local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["description"]
+          name: >-
+            local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["name"]
+          description: >-
+            local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["description"]
           expiration_date: >-
-            timeadd(timestamp(), local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["expiration_timeadd"])
-          iam_role: local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["iam_role"]
-          registration_limit: local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["registration_limit"]
-          tags: local.elements_landing_zone_ssm_activation_tags_map["config_${count.index}"]
+            timeadd(timestamp(),
+            local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["expiration_timeadd"])
+          iam_role: >-
+            local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["iam_role"]
+          registration_limit: >-
+            local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["registration_limit"]
+          tags: >-
+            local.elements_landing_zone_ssm_activation_tags_map["config_${count.index}"]
     output:
       ids:
         value: >-
