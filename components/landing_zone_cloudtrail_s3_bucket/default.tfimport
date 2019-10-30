@@ -1,0 +1,1 @@
+landing_zone_cloudtrail_s3_bucket,aws_s3_bucket.landing_zone_cloudtrail_s3_bucket,data-lake-cloudtrail

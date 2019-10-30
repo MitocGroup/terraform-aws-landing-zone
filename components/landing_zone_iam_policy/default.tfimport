@@ -1,0 +1,1 @@
+landing_zone_iam_policy,aws_iam_policy.landing_zone_iam_policy,arn:aws:iam::123456789012:policy/LandingZoneIAMPolicy
