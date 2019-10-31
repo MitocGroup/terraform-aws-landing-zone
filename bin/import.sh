@@ -2,10 +2,7 @@
 
 LZ_LOCAL_PATH="./components"
 LZ_TFIMPORT_FILENAME="default.tfimport"
-LZ_COMPONENTS=(\
-  "landing_zone_cloudtrail"
-  "landing_zone_cloudtrail_s3_bucket"
-  "landing_zone_cloudtrail_s3_bucket_policy"
+LZ_COMPONENTS=(
   "landing_zone_eip"
   "landing_zone_gateway_igw"
   "landing_zone_gateway_nat"
@@ -18,7 +15,6 @@ LZ_COMPONENTS=(\
   "landing_zone_network_acl_rules"
   "landing_zone_organization"
   "landing_zone_organization_accounts"
-  "landing_zone_organization_policy"
   "landing_zone_route"
   "landing_zone_route_igw"
   "landing_zone_route_ipv6"
@@ -34,8 +30,19 @@ LZ_COMPONENTS=(\
   "landing_zone_vpc_endpoint_interface"
   "landing_zone_vpc_peering_connection"
   )
+LZ_COMPONENTS_JOIN=$(printf ",%s" "${LZ_COMPONENTS[@]}")
 
 for LZ_COMPONENT in "${LZ_COMPONENTS[@]}"; do
-  echo "${LZ_COMPONENT}"
-#  terrahub import --batch ${LZ_LOCAL_PATH}/${LZ_COMPONENT}/${LZ_TFIMPORT_FILENAME}  --include ${LZ_COMPONENT}
+  terrahub import --batch ${LZ_LOCAL_PATH}/${LZ_COMPONENT}/${LZ_TFIMPORT_FILENAME}  --include ${LZ_COMPONENT}
 done
+
+terrahub state -D aws_security_group_rule.landing_zone_security_group --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group-1 --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_mitocgroup --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_mitocgroup-1 --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-1 --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-2 --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-3 --include landing_zone_security_group \
+  && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-4 --include landing_zone_security_group

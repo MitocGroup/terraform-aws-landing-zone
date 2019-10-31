@@ -171,13 +171,17 @@ class Helper {
             // @todo ls gs
             break;
           case '..':
-            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
-              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(name => {
+              if (path.extname(name) === '.tfvars') {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              }
             });
             break;
           default:
-            fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
-              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            fs.readdirSync(path.join(__dirname, '..', '..', '..', 'components', key, linkList[0])).forEach(name => {
+              if (path.extname(name) === '.tfvars') {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              }
             });
             break;
         }
@@ -207,18 +211,20 @@ class Helper {
    * @param {Array<Array>} argsList
    * @return {Promise}
    */
-  executeWithErrors(rootPath, command, argsList) {
-    argsList.forEach(async args => {
+  async executeWithErrors(rootPath, command, argsList) {
+    for (const args of argsList) {
       try {
         const result = await this.cli(
           rootPath, command, args
         );
+
         console.log(result);
       } catch (error) {
         console.log('Error: failed to execute command:');
+
         return Promise.reject(error);
       }
-    });
+    }
     return Promise.resolve();
   }
 
