@@ -170,13 +170,17 @@ class Helper {
             // @todo ls gs
             break;
           case '..':
-            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(function (name) {
-              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(name => {
+              if (path.extname(name) === '.tfvars') {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              }
             });
             break;
           default:
-            fs.readdirSync(path.join(linkList[0])).forEach(function (name) {
-              processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+            fs.readdirSync(path.join(__dirname, '..', '..', '..', 'components', key, linkList[0])).forEach(name => {
+              if (path.extname(name) === '.tfvars') {
+                processes.push([...terrahubConfig, ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]]);
+              }
             });
             break;
         }
