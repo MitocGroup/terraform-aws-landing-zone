@@ -12,7 +12,6 @@ LZ_COMPONENTS=(
   "landing_zone_iam_role_policy_attachment"
   "landing_zone_iam_saml_provider"
   "landing_zone_network_acl"
-  "landing_zone_network_acl_rules"
   "landing_zone_organization"
   "landing_zone_organization_accounts"
   "landing_zone_route"
@@ -51,3 +50,5 @@ terrahub state -D aws_security_group_rule.landing_zone_security_group --include 
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-2 --include landing_zone_security_group \
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-3 --include landing_zone_security_group \
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-4 --include landing_zone_security_group
+
+terrahub run -i $(printf ",%s" "${LZ_COMPONENTS[@]}")
