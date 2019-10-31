@@ -1,0 +1,47 @@
+component:
+  name: landing_zone_ssm_patch_baseline
+  template:
+    locals:
+      elements_landing_zone_ssm_patch_baseline_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_patch_baseline_tags"]
+      elements_landing_zone_ssm_patch_baseline_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_patch_baseline_resource"]
+    resource:
+      aws_ssm_patch_baseline:
+        landing_zone_ssm_patch_baseline:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_patch_baseline_resource"])
+          name: >-
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["name"]
+          description: >-
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["description"]
+          operating_system: >-
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["operating_system"]
+          approved_patches_compliance_level: >-
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["approved_patches_compliance_level"]
+          approved_patches: >-
+            split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["approved_patches"])
+          rejected_patches: >-
+            split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["rejected_patches"])
+          global_filter:
+            - key: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_key_1"]
+              values: split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_values_1"])
+          approval_rule:
+            - approve_after_days: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["ar_approve_after_days_1"]
+              patch_filter:
+                - key: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_key_1"]
+                  values: split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_values_1"])
+              compliance_level: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["compliance_level_1"]
+              enable_non_security: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["enable_non_security_1"]
+          tags: >-
+            local.elements_landing_zone_ssm_patch_baseline_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id)
+      landing_zone_ssm_patch_baseline_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id)

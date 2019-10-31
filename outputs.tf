@@ -478,3 +478,8 @@ output "landing_zone_ssm_parameter_names" {
   value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_names"]
   description = ""
 }
+
+output "landing_zone_ssm_patch_baseline_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_names"]
+  description = ""
+}
