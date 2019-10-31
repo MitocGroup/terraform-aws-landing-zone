@@ -58,6 +58,7 @@ landing_zone_components = {
   landing_zone_ssm_parameter                        = "default.tfvars"
   landing_zone_ssm_resource_data_sync               = "default.tfvars"
   landing_zone_ssm_patch_baseline                   = "default.tfvars"
+  landing_zone_ssm_patch_group                      = "default.tfvars"
   landing_zone_sso                                  = "default.tfvars"
   landing_zone_subnet                               = "default.tfvars"
   landing_zone_tgw_route                            = "default.tfvars"
