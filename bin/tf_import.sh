@@ -31,10 +31,16 @@ LZ_COMPONENTS=(
   "landing_zone_vpc_peering_connection"
   )
 
+###################
+# terrahub import #
+###################
 for LZ_COMPONENT in "${LZ_COMPONENTS[@]}"; do
   terrahub import --batch ${LZ_LOCAL_PATH}/${LZ_COMPONENT}/${LZ_TFIMPORT_FILENAME}  --include ${LZ_COMPONENT}
 done
 
+#######################
+# delete remote state #
+#######################
 terrahub state -D aws_security_group_rule.landing_zone_security_group --include landing_zone_security_group \
   && terrahub state -D aws_security_group_rule.landing_zone_security_group-1 --include landing_zone_security_group \
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_mitocgroup --include landing_zone_security_group \
