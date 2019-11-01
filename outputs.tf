@@ -428,23 +428,23 @@ output "landing_zone_ssm_activation_ids" {
   description = ""
 }
 
-output "landing_zone_ssm_association_version_1_ids" {
-  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_1_ids"]
+output "landing_zone_ssm_association_by_instance_id_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_instance_id_ids"]
   description = ""
 }
 
-output "landing_zone_ssm_association_version_1_names" {
-  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_1_names"]
+output "landing_zone_ssm_association_by_instance_id_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_instance_id_names"]
   description = ""
 }
 
-output "landing_zone_ssm_association_version_2_ids" {
-  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_2_ids"]
+output "landing_zone_ssm_association_by_targets_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_targets_ids"]
   description = ""
 }
 
-output "landing_zone_ssm_association_version_2_names" {
-  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_version_2_names"]
+output "landing_zone_ssm_association_by_targets_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_targets_names"]
   description = ""
 }
 

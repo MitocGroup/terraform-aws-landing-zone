@@ -1,0 +1,66 @@
+component:
+  name: landing_zone_ssm_association_by_targets
+  template:
+    locals:
+      elements_landing_zone_ssm_association_by_targets_arg_parameters_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_by_targets_resource_arg_parameters"]
+      elements_landing_zone_ssm_association_by_targets_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_by_targets_resource"]
+    resource:
+      aws_ssm_association:
+        landing_zone_ssm_association_by_targets:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_association_by_targets_resource"])
+          name: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["name"]
+          association_name: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["association_name"]
+          document_version: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["document_version"]
+          output_location:
+            s3_bucket_name: >-
+              local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["ol_s3_bucket_name"]
+            s3_key_prefix: >-
+              local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["ol_s3_key_prefix"]
+          parameters: >-
+            local.elements_landing_zone_ssm_association_by_targets_arg_parameters_map["config_${count.index}"]
+          schedule_expression: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["schedule_expression"]
+          compliance_severity: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["compliance_severity"]
+          max_concurrency: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["max_concurrency"]
+          max_errors: >-
+            local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["max_errors"]
+          targets:
+            - key: >-
+                local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["targets_key_1"]
+              values:
+                - >-
+                  local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["targets_value_1"]
+    output:
+      association_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.association_id)
+      instance_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.instance_id)
+      names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.name)
+      parameters:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.parameters)
+      landing_zone_ssm_association_by_targets_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.association_id)
+      landing_zone_ssm_association_by_targets_names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.name)
