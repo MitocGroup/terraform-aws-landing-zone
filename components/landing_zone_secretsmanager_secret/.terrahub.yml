@@ -1,0 +1,37 @@
+component:
+  name: landing_zone_secretsmanager_secret
+  template:
+    locals:
+      secretsmanager_secret_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["secretsmanager_secret_resource"]
+      secretsmanager_secret_tag_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["secretsmanager_secret_tag_resource"]
+    resource:
+      aws_secretsmanager_secret:
+        landing_zone_secretsmanager_secret:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["secretsmanager_secret_resource"])
+          name: 'local.secretsmanager_secret_map["config_${count.index}"]["name"]'
+          description: >-
+            local.secretsmanager_secret_map["config_${count.index}"]["description"]
+          recovery_window_in_days: >-
+            local.secretsmanager_secret_map["config_${count.index}"]["recovery_window_in_days"]
+          tags: 'local.secretsmanager_secret_tag_map["config_${count.index}"]'
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.id)
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.arn)
+      landing_zone_secretsmanager_secret_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.id)
+      landing_zone_secretsmanager_secret_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.arn)

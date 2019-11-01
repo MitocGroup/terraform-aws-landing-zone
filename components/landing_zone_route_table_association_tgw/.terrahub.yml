@@ -5,9 +5,9 @@ component:
     - landing_zone_tgw_vpc_attachment
   template:
     locals:
-      elements_vpc_selected_data_map: >-
+      elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_gateway_tgw_selected_data_map: >-
+      elements_landing_zone_gateway_tgw_selected_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"]
     data:
       aws_vpc:
@@ -16,7 +16,7 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
           cidr_block: >-
-            local.elements_vpc_selected_data_map["config_${count.index}"]["cidr_block"]
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
       aws_ec2_transit_gateway_vpc_attachment:
         gateway_tgw_attachment_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
@@ -35,7 +35,7 @@ component:
             - name: options.amazon-side-asn
               values:
                 - >-
-                  local.elements_gateway_tgw_selected_data_map["config_${count.index}"]["amazon_side_asn"]
+                  local.elements_landing_zone_gateway_tgw_selected_data_map["config_${count.index}"]["amazon_side_asn"]
       aws_ec2_transit_gateway_route_table:
         route_table_tgw_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'

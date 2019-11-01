@@ -5,7 +5,7 @@ component:
   template:
     locals:
       elements_landing_zone_gateway_tgw_tags_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_tags_element"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_tags"]
       elements_landing_zone_gateway_tgw_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_resource"]
     resource:

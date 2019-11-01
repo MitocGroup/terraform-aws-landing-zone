@@ -4,9 +4,10 @@ project:
   include:
     - .
   exclude:
-    - '**/.terraform/**'
-    - '**/node_modules/**'
-    - '**/.git/**'
+    - .git
+    - node_modules
+    - '**/.backup'
+    - '**/.terraform'
 terraform:
   varFile:
     - default.tfvars

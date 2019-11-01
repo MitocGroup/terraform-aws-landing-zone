@@ -1,0 +1,25 @@
+component:
+  name: landing_zone_config_aggregate_authorization
+  template:
+    locals:
+      elements_config_aggregate_authorization_tag_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_aggregate_authorization_tags_resource"]
+    resource:
+      aws_config_aggregate_authorization:
+        landing_zone_config_aggregate_authorization:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_aggregate_authorization_tags_resource"])
+          account_id: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id'
+          region: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region'
+          tags: >-
+            local.elements_config_aggregate_authorization_tag_map["config_${count.index}"]
+    output:
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*.arn)
+      landing_zone_config_aggregate_authorization_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*.arn)
