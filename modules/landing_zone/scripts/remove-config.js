@@ -21,9 +21,8 @@ function checkEnvironmentVars() {
   try {
     checkEnvironmentVars();
     Helper.checkIfTerrahubIsInstalled();
-    const resp = Helper.removeConfig(rootPath, components);
 
-    console.log(resp);
+    console.log(Helper.removeConfig(rootPath, components));
   } catch (error) {
     console.log(error);
   }
