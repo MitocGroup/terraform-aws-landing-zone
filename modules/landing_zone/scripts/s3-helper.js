@@ -17,7 +17,7 @@ class S3Helper {
    * @returns {Promise}
    */
   async getObject(bucketName, objectKey) {
-    return await this._s3.listObjects({ Bucket: bucketName, Delimiter: '/', Prefix: objectKey }).promise();
+    return this._s3.listObjects({ Bucket: bucketName, Delimiter: '/', Prefix: objectKey }).promise();
   }
 }
 

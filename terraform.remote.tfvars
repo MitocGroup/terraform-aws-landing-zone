@@ -82,6 +82,8 @@ landing_zone_providers = {
 }
 
 terraform_backend = {
-  backend = "local"
-  path    = "/tmp/.terrahub/landing_zone"
+  backend = "s3"
+  region  = "us-east-1"
+  bucket  = "terraform-aws-landing-zone"
+  key     = "components"
 }
