@@ -9,7 +9,7 @@ resource "aws_lambda_function" "hello_world" {
   handler       = "index.handler"
   memory_size   = "128"
   timeout       = "30"
-  role          = [for i in local.landing_zone_iam_role_arns["default"]: i if i != replace(i, "ServiceRoleForLambdaEdge", "")]
+  role          = element([for i in local.landing_zone_iam_role_arns["default"]: i if i != replace(i, "ServiceRoleForLambdaEdge", "")], 0)
   s3_bucket     = "www.terrahub.io"
   s3_key        = "hello-world/nodejs10.x.zip"
 
