@@ -20,7 +20,8 @@ component:
           patch_group: >-
             local.elements_landing_zone_ssm_patch_group_map["config_${count.index}"]["patch_group"]
           baseline_id: >-
-            element(data.terraform_remote_state.landing_zone_ssm_patch_baseline.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"], count.index)
+            element(data.terraform_remote_state.landing_zone_ssm_patch_baseline.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"],
+            count.index)
     output:
       ids:
         value: >-

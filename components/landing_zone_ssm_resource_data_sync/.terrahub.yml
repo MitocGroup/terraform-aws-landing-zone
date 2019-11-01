@@ -11,7 +11,8 @@ component:
         kms_key_selected:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_kms_key_data"])
-          key_id: local.elements_landing_zone_kms_key_data_map["config_${count.index}"]["key_id"]
+          key_id: >-
+            local.elements_landing_zone_kms_key_data_map["config_${count.index}"]["key_id"]
     resource:
       aws_ssm_resource_data_sync:
         landing_zone_ssm_resource_data_sync:
@@ -21,11 +22,15 @@ component:
           name: >-
             local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["name"]
           s3_destination:
-            bucket_name: local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_bucket"]
-            region: local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_region"]
+            bucket_name: >-
+              local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_bucket"]
+            region: >-
+              local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_region"]
             kms_key_arn: >-
-              length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_kms_key_data"]) > 0 ?
-              element(data.aws_kms_key.kms_key_selected.*.arn, count.index) :
-              ""
-            prefix: local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_prefix"]
-            sync_format: local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_sync_format"]
+              length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_kms_key_data"])
+              > 0 ? element(data.aws_kms_key.kms_key_selected.*.arn,
+              count.index) : ""
+            prefix: >-
+              local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_prefix"]
+            sync_format: >-
+              local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_sync_format"]

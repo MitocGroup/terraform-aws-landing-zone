@@ -21,19 +21,30 @@ component:
           approved_patches_compliance_level: >-
             local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["approved_patches_compliance_level"]
           approved_patches: >-
-            split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["approved_patches"])
+            split("|",
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["approved_patches"])
           rejected_patches: >-
-            split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["rejected_patches"])
+            split("|",
+            local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["rejected_patches"])
           global_filter:
-            - key: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_key_1"]
-              values: split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_values_1"])
+            - key: >-
+                local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_key_1"]
+              values: >-
+                split("|",
+                local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_values_1"])
           approval_rule:
-            - approve_after_days: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["ar_approve_after_days_1"]
+            - approve_after_days: >-
+                local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["ar_approve_after_days_1"]
               patch_filter:
-                - key: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_key_1"]
-                  values: split("|", local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_values_1"])
-              compliance_level: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["compliance_level_1"]
-              enable_non_security: local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["enable_non_security_1"]
+                - key: >-
+                    local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_key_1"]
+                  values: >-
+                    split("|",
+                    local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_values_1"])
+              compliance_level: >-
+                local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["compliance_level_1"]
+              enable_non_security: >-
+                local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["enable_non_security_1"]
           tags: >-
             local.elements_landing_zone_ssm_patch_baseline_tags_map["config_${count.index}"]
     output:
