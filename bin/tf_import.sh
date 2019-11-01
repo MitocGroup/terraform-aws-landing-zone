@@ -34,7 +34,15 @@ LZ_COMPONENTS=(
 # terrahub import #
 ###################
 for LZ_COMPONENT in "${LZ_COMPONENTS[@]}"; do
-  terrahub import --batch ${LZ_LOCAL_PATH}/${LZ_COMPONENT}/${LZ_TFIMPORT_FILENAME}  --include ${LZ_COMPONENT}
+  SEARCH_PATH="${LZ_LOCAL_PATH}/${LZ_COMPONENT}"
+
+  shopt -s nullglob
+  LZ_IMPORT_FILES=(${SEARCH_PATH}/*.tfimport)
+
+  for LZ_IMPORT_FILE in "${LZ_IMPORT_FILES[@]}"; do
+    terrahub import --batch ${LZ_IMPORT_FILE}  --include ${LZ_COMPONENT}
+  done
+
 done
 
 #######################
@@ -51,4 +59,4 @@ terrahub state -D aws_security_group_rule.landing_zone_security_group --include 
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-3 --include landing_zone_security_group \
   && terrahub state -D aws_security_group_rule.landing_zone_security_group_terrahub-4 --include landing_zone_security_group
 
-terrahub run -i $(printf ",%s" "${LZ_COMPONENTS[@]}")
+# terrahub run -i $(printf ",%s" "${LZ_COMPONENTS[@]}")
