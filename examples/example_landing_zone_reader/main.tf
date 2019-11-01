@@ -1,5 +1,11 @@
 module "example_landing_zone_reader" {
   source  = "../../modules/landing_zone_reader"
+  terraform_backend_type = "s3"
+  terraform_backend_config = {
+    bucket = "terraform-aws-landing-zone-mitocgroup"
+    key = "terraform/terrahub_load_outputs/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 resource "aws_lambda_function" "hello_world" {
