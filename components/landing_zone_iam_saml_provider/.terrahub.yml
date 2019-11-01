@@ -27,7 +27,7 @@ build:
   env:
     variables:
       LZ_S3_PATH: >-
-        s3://terraform-aws-landing-zone/mycompany/landing_zone_iam_saml_provider/saml-metadata/
+        s3://terraform-aws-landing-zone/components/landing_zone_iam_saml_provider/saml-metadata/
       LZ_LOCAL_PATH: saml-metadata
   phases:
     pre_build:

@@ -54,7 +54,7 @@ landing_zone_providers = {
   [...]
 }
 landing_zone_components = {
-  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/components/landing_zone_vpc/default.tfvars"
   [...]
 }
 terraform_backend = {
