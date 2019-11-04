@@ -11,7 +11,7 @@ component:
         landing_zone_config_config_rule:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_rule_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_config_rule_resource"])
           name: >-
             local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["name"]
           description: >-
