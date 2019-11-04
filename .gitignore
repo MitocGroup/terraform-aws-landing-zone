@@ -22,3 +22,6 @@ package-lock.json
 
 # .tfimport files
 *.tfimport
+
+# .tfvars files
+*.tfvars
