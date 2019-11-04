@@ -21,7 +21,6 @@ default_provider = {
   landing_zone_ssm_association_by_targets_resource_arg_parameters = {
     config_0 = {
       Key = "Value"
-    # Key = "Value"
     }
   }
 }
