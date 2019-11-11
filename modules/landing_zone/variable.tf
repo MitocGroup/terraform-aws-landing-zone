@@ -23,7 +23,7 @@ variable "landing_zone_command" {
 variable "terraform_backend" {
   type        = map(string)
   description = "This is the backend configure for all components."
-  default     = {
+  default = {
     backend = "local"
     path    = "/tmp/.terrahub/landing_zone"
   }

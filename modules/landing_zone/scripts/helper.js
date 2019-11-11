@@ -22,7 +22,7 @@ class Helper {
     }
 
     if (process.env.DEBUG) {
-      throw Error(execute.stderr.toString())
+      throw Error(execute.stderr.toString());
     }
     throw Error(`${command} ${args.join(' ')} failed. Enable DEBUG=debug to learn more.`);
   }
@@ -42,34 +42,28 @@ class Helper {
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider', '-D', '-y']]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[0]={}']]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[0].aws={}']]);
-    this.executeWithoutErrors(rootPath, 'terrahub', [
-      ...terrahubConfig,
+    this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
       ...['template.provider[0].aws.region=var.region']
     ]);
-    this.executeWithoutErrors(rootPath, 'terrahub', [
-      ...terrahubConfig,
+    this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
       ...['template.provider[0].aws.allowed_account_ids[]=var.account_id']
     ]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[1]={}']]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[1].aws={}']]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.provider[1].aws.alias=default']]);
-    this.executeWithoutErrors(rootPath, 'terrahub', [
-      ...terrahubConfig,
+    this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
       ...['template.provider[1].aws.region=var.region']
     ]);
-    this.executeWithoutErrors(rootPath, 'terrahub', [
-      ...terrahubConfig,
+    this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
       ...['template.provider[1].aws.allowed_account_ids[]=var.account_id']
     ]);
-    this.executeWithoutErrors(rootPath, 'terrahub', [
-      ...terrahubConfig,
+    this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
       ...['template.tfvars.account_id=123456789012']
     ]);
     this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig, ...['template.tfvars.region=us-east-1']]);
 
     Object.keys(jsonComponents).forEach(key => {
-      this.executeWithoutErrors(rootPath, 'terrahub', [
-        ...terrahubConfig,
+      this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
         ...['terraform', '--include', key, '--delete', '--auto-approve']
       ]);
     });
@@ -162,8 +156,7 @@ class Helper {
               const data = await Helper.s3Helper.getObject(links[2], prefix);
 
               data.Contents.forEach(item => {
-                processes.push([
-                  ...terrahubConfig,
+                processes.push([...terrahubConfig,
                   ...[`terraform.varFile[0]=${'s3://' + path.join(links[2], item.Key)}`, '-i', key]
                 ]);
               });
@@ -174,8 +167,7 @@ class Helper {
             case '..':
               fs.readdirSync(path.join(__dirname, '..', linkList[0])).forEach(name => {
                 if (path.extname(name) === '.tfvars') {
-                  processes.push([
-                    ...terrahubConfig,
+                  processes.push([...terrahubConfig,
                     ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]
                   ]);
                 }
@@ -184,8 +176,7 @@ class Helper {
             default:
               fs.readdirSync(path.join(__dirname, '..', '..', '..', 'components', key, linkList[0])).forEach(name => {
                 if (path.extname(name) === '.tfvars') {
-                  processes.push([
-                    ...terrahubConfig,
+                  processes.push([...terrahubConfig,
                     ...[`terraform.varFile[0]=${path.join(linkList[0], name)}`, '-i', key]
                   ]);
                 }
@@ -193,8 +184,7 @@ class Helper {
               break;
           }
         }
-        return this.executeWithoutErrors(rootPath, 'terrahub', [
-          ...terrahubConfig,
+        return this.executeWithoutErrors(rootPath, 'terrahub', [...terrahubConfig,
           ...['terraform', '--delete', '--auto-approve', '--include', key]
         ]);
       })

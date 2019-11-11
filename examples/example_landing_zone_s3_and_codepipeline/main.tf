@@ -21,10 +21,10 @@ module "example_landing_zone_s3_and_codepipeline" {
   }
 
   terraform_backend = {
-    backend = "s3"
-    bucket  = "terraform-aws-landing-zone"
-    region  = "us-east-1"
-    key     = "terraform"
+    backend              = "s3"
+    bucket               = "terraform-aws-landing-zone"
+    region               = "us-east-1"
+    key                  = "terraform"
     workspace_key_prefix = "tfstates_workspaces"
   }
 }
