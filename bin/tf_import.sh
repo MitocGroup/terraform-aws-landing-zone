@@ -28,7 +28,7 @@ LZ_COMPONENTS=(
   "landing_zone_vpc_endpoint_gateway"
   "landing_zone_vpc_endpoint_interface"
   "landing_zone_vpc_peering_connection"
-  )
+)
 
 ###################
 # terrahub import #
