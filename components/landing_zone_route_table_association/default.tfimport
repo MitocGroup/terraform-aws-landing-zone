@@ -1,0 +1,1 @@
+landing_zone_route_table_association,aws_route_table_association.landing_zone_route_table_association,[subnet_id]/[rtb_id]

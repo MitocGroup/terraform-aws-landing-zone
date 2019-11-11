@@ -328,6 +328,16 @@ output "landing_zone_iam_instance_profile_roles" {
   description = "The role's assigned to the instance profile's."
 }
 
+output "landing_zone_vpc_endpoint_gateway_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_vpc_endpoint_gateway_ids"]
+  description = "The ID's of the VPC Endpoint Gateway."
+}
+
+output "landing_zone_vpc_endpoint_interface_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_vpc_endpoint_interface_ids"]
+  description = "The ID's of the VPC Endpoint Interface."
+}
+
 output "landing_zone_vpc_peering_connection_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_vpc_peering_connection_ids"]
   description = "The ID's of the VPC Peering Connection."
@@ -411,4 +421,70 @@ output "landing_zone_secretsmanager_secret_ids" {
 output "landing_zone_secretsmanager_secret_arns" {
   value       = module.landing_zone.landing_zone["landing_zone_secretsmanager_secret_arns"]
   description = "Amazon Resource Name (ARN's) of the secret."
+}
+
+output "landing_zone_ssm_activation_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_activation_ids"]
+  description = "The ID's of the SSM Activation."
+}
+
+output "landing_zone_ssm_association_by_instance_id_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_instance_id_ids"]
+  description = "The ID's of the SSM Associaton by Instance ID."
+}
+
+output "landing_zone_ssm_association_by_instance_id_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_instance_id_names"]
+  description = "The name of the SSM Associaton by Instance ID."
+}
+
+output "landing_zone_ssm_association_by_targets_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_targets_ids"]
+  description = "The ID's of the SSM Associaton by targets."
+}
+
+output "landing_zone_ssm_association_by_targets_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_association_by_targets_names"]
+  description = "The name of the SSM Associaton by targets."
+}
+
+output "landing_zone_ssm_document_created_dates" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_document_created_dates"]
+  description = "The created date of the SSM Document."
+}
+
+output "landing_zone_ssm_document_hashes" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_document_hashes"]
+  description = "The hash of the SSM Documents"
+}
+
+output "landing_zone_ssm_maintenance_window_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_maintenance_window_ids"]
+  description = "The ID's of the SSM Maintenance Window."
+}
+
+output "landing_zone_ssm_maintenance_window_target_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_maintenance_window_target_ids"]
+  description = "The ID's of the SSM Maintenance Window Target."
+
+}
+
+output "landing_zone_ssm_parameter_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_arns"]
+  description = "Amazon Resource Name (ARN's) of the SSM Parameter."
+}
+
+output "landing_zone_ssm_parameter_names" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_parameter_names"]
+  description = "The name of the SSM Parameter."
+}
+
+output "landing_zone_ssm_patch_baseline_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_patch_baseline_ids"]
+  description = "The ID's of the SSM Patch Baseline."
+}
+
+output "landing_zone_ssm_patch_group_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_ssm_patch_group_ids"]
+  description = "The ID's of the SSM Patch Group."
 }

@@ -1,9 +1,9 @@
 module "example_landing_zone_reader" {
-  source  = "../../modules/landing_zone_reader"
+  source                 = "../../modules/landing_zone_reader"
   terraform_backend_type = "s3"
   terraform_backend_config = {
     bucket = "terraform-aws-landing-zone-mitocgroup"
-    key = "terraform/terrahub_load_outputs/terraform.tfstate"
+    key    = "terraform/terrahub_load_outputs/terraform.tfstate"
     region = "us-east-1"
   }
 }
@@ -15,7 +15,7 @@ resource "aws_lambda_function" "hello_world" {
   handler       = "index.handler"
   memory_size   = "128"
   timeout       = "30"
-  role          = element([for i in local.landing_zone_iam_role_arns["default"]: i if i != replace(i, "ServiceRoleForLambdaEdge", "")], 0)
+  role          = element([for i in local.landing_zone_iam_role_arns["default"] : i if i != replace(i, "ServiceRoleForLambdaEdge", "")], 0)
   s3_bucket     = "www.terrahub.io"
   s3_key        = "hello-world/nodejs10.x.zip"
 

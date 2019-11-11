@@ -1,0 +1,47 @@
+component:
+  name: landing_zone_ssm_maintenance_window
+  template:
+    locals:
+      elements_landing_zone_ssm_maintenance_window_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_tags"]
+      elements_landing_zone_ssm_maintenance_window_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_resource"]
+    resource:
+      aws_ssm_maintenance_window:
+        landing_zone_ssm_maintenance_window:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_maintenance_window_resource"])
+          name: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["name"]
+          schedule: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["schedule"]
+          cutoff: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["cutoff"]
+          duration: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["duration"]
+          allow_unassociated_targets: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["allow_unassociated_targets"]
+          enabled: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["enabled"]
+          end_date: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["end_date"]
+          schedule_timezone: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["schedule_timezone"]
+          start_date: >-
+            local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["start_date"]
+          tags: >-
+            local.elements_landing_zone_ssm_maintenance_window_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)
+      thub_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)
+      landing_zone_ssm_maintenance_window_ids:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)

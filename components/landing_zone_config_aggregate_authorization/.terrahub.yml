@@ -2,27 +2,27 @@ component:
   name: landing_zone_config_configuration_aggregator
   template:
     locals:
-      elements_config_configuration_aggregator_tag_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_tags_resource"]
-      elements_config_configuration_aggregator_map: >-
+      elements_landing_zone_config_configuration_aggregator_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_tags"]
+      elements_landing_zone_config_configuration_aggregator_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_resource"]
     resource:
       aws_config_configuration_aggregator:
         landing_zone_config_configuration_aggregator:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_tags_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_tags"])
           name: >-
-            local.elements_config_configuration_aggregator_map["config_${count.index}"]["name"]
+            local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["name"]
           account_aggregation_source:
             account_ids: >-
               split("|",
-              local.elements_config_configuration_aggregator_map["config_${count.index}"]["account_ids"])
+              local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["account_ids"])
             regions: >-
               split("|",
-              local.elements_config_configuration_aggregator_map["config_${count.index}"]["regions"])
+              local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["regions"])
           tags: >-
-            local.elements_config_configuration_aggregator_tag_map["config_${count.index}"]
+            local.elements_landing_zone_config_configuration_aggregator_tags_map["config_${count.index}"]
     output:
       arns:
         value: >-

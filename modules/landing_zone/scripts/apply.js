@@ -5,27 +5,26 @@ const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components } = proces
 
 /**
  * Check if required env variables are defined
- * @return {Promise}
  */
-async function checkEnvironmentVars() {
+function checkEnvironmentVars() {
   if (!rootPath) {
-    return Promise.reject(Error('ERROR: ROOT_PATH variable is empty. Aborting...'));
+    throw Error('ERROR: ROOT_PATH variable is empty. Aborting...');
   }
 
   if (!command) {
-    return Promise.reject(Error('ERROR: COMMAND variable is empty. Aborting...'));
+    throw Error('ERROR: COMMAND variable is empty. Aborting...');
   }
 
   if (!components) {
-    return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
+    throw Error('ERROR: COMPONENTS variable is empty. Aborting...');
   }
 }
 
 /**
  * Execute
- * @return {Promise}
+ * @return {String}
  */
-async function main() {
+function main() {
   const processes = [];
   const include = [];
   const jsonComponents = JSON.parse(components);
@@ -39,7 +38,7 @@ async function main() {
   try {
     Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
-    return Promise.reject(error);
+    throw error;
   }
 
   return Helper.output(include);
@@ -47,10 +46,10 @@ async function main() {
 
 (async () => {
   try {
-    await checkEnvironmentVars();
-    await Helper.checkIfTerrahubIsInstalled();
-    const resp = await main();
-    console.log(resp);
+    checkEnvironmentVars();
+    Helper.checkIfTerrahubIsInstalled();
+
+    console.log(main());
   } catch (error) {
     console.log(error);
   }

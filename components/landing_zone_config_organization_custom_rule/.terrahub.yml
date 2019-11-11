@@ -2,21 +2,21 @@ component:
   name: landing_zone_config_organization_custom_rule
   template:
     locals:
-      config_organization_custom_rule_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_organization_custom_rule_resource"]
+      elements_landing_zone_config_organization_custom_rule_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_organization_custom_rule_resource"]
     resource:
       aws_config_organization_custom_rule:
         landing_zone_config_organization_custom_rule:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_organization_custom_rule_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_organization_custom_rule_resource"])
           name: >-
-            local.config_organization_custom_rule_map["config_${count.index}"]["name"]
+            local.elements_landing_zone_config_organization_custom_rule_map["config_${count.index}"]["name"]
           lambda_function_arn: >-
-            arn:aws:lambda:${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region}:${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id}:function:${local.config_organization_custom_rule_map["config_${count.index}"]["lambda_function_name"]}
+            arn:aws:lambda:${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region}:${var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id}:function:${local.elements_landing_zone_config_organization_custom_rule_map["config_${count.index}"]["lambda_function_name"]}
           trigger_types: >-
             split("|",
-            local.config_organization_custom_rule_map["config_${count.index}"]["trigger_types"])
+            local.elements_landing_zone_config_organization_custom_rule_map["config_${count.index}"]["trigger_types"])
     output:
       arns:
         value: >-
