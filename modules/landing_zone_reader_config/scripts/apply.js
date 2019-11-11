@@ -6,19 +6,18 @@ const { ROOT_PATH: rootPath, BACKEND: backend, COMPONENTS: components } = proces
 
 /**
  * Check if required env variables are defined
- * @return {Promise}
  */
-async function checkEnvironmentVars() {
+function checkEnvironmentVars() {
   if (!rootPath) {
-    return Promise.reject(Error('ERROR: ROOT_PATH variable is empty. Aborting...'));
+    throw Error('ERROR: ROOT_PATH variable is empty. Aborting...');
   }
 
   if (!backend) {
-    return Promise.reject(Error('ERROR: BACKEND variable is empty. Aborting...'));
+    throw Error('ERROR: BACKEND variable is empty. Aborting...');
   }
 
   if (!components) {
-    return Promise.reject(Error('ERROR: COMPONENTS variable is empty. Aborting...'));
+    throw Error('ERROR: COMPONENTS variable is empty. Aborting...');
   }
 }
 
@@ -30,7 +29,7 @@ async function checkEnvironmentVars() {
 async function terrahubOutput(include, jsonBackend) {
   let outputMap = [];
 
-  await Helper.executeWithoutErrors(
+  Helper.executeWithoutErrors(
     rootPath, 'terrahub',
     [
       'configure', '--config', 'component.template.data', '--delete',
@@ -40,18 +39,18 @@ async function terrahubOutput(include, jsonBackend) {
 
   await Promise.all(
     include.map(async item => {
-      await Helper.cli(
+      Helper.cli(
         rootPath, 'terrahub',
         ['init', '--include', item]
       );
 
-      const result = await Helper.cli(
+      const result = Helper.cli(
         rootPath, 'terrahub',
         ['output', '--format', 'json', '--include', item, '--auto-approve']
       );
 
       if (!result.length) {
-        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, '+
+        throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, ' +
           'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
       }
 
@@ -61,22 +60,19 @@ async function terrahubOutput(include, jsonBackend) {
       outputMap = [...outputMap, ...[prepareOutput]];
     })
   );
-  
-  await Promise.all(
-    await Helper.cli(
-      rootPath, 'terrahub',
-      [
-        'configure', '--include', 'terrahub_load_outputs', '--config',
-        `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
-      ]
-    )
-  );
 
-  await Promise.all(
-    await Helper.cli(
-      rootPath, 'terrahub',
-      ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve']
-    )
+
+  Helper.cli(
+    rootPath, 'terrahub',
+    [
+      'configure', '--include', 'terrahub_load_outputs', '--config',
+      `component.template.output.terrahub_reader.value=merge(${outputMap.join(',')})`
+    ]);
+
+
+  Helper.cli(
+    rootPath, 'terrahub',
+    ['run', '--include', 'terrahub_load_outputs', '--apply', '--auto-approve']
   );
 
   return 'Success';
@@ -102,14 +98,14 @@ async function extractOutputValues(result, jsonBackend) {
       ...terrahubConfig,
       ...[
         `component.template.data.terraform_remote_state.${key}` +
-          `.backend=${backend}`
+        `.backend=${backend}`
       ]
     ]);
     processes.push([
       ...terrahubConfig,
       ...[
         `component.template.data.terraform_remote_state.${key}` +
-          `.config={}`
+        `.config={}`
       ]
     ]);
     jsonBackendKeysArray.filter(elem => elem !== 'backend').forEach(backendKey => {
@@ -122,7 +118,7 @@ async function extractOutputValues(result, jsonBackend) {
         ...terrahubConfig,
         ...[
           `component.template.data.terraform_remote_state.${key}` +
-            `.config.${backendKey}=${backendValue}`
+          `.config.${backendKey}=${backendValue}`
         ]
       ]);
     });
@@ -133,9 +129,9 @@ async function extractOutputValues(result, jsonBackend) {
   });
 
   try {
-    await Helper.executeWithErrors(rootPath, 'terrahub', processes);
+    Helper.executeWithErrors(rootPath, 'terrahub', processes);
   } catch (error) {
-    return Promise.reject(error);
+    throw error;
   }
 
   return outputMap;
@@ -157,9 +153,10 @@ async function main() {
 
 (async () => {
   try {
-    await checkEnvironmentVars();
-    await Helper.checkIfTerrahubIsInstalled();
+    checkEnvironmentVars();
+    Helper.checkIfTerrahubIsInstalled();
     const resp = await main();
+
     console.log(resp);
   } catch (error) {
     console.log(error);

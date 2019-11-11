@@ -1,0 +1,65 @@
+component:
+  name: landing_zone_ssm_parameter
+  template:
+    locals:
+      elements_landing_zone_ssm_parameter_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_parameter_tags"]
+      elements_landing_zone_ssm_parameter_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_parameter_resource"]
+    resource:
+      aws_ssm_parameter:
+        landing_zone_ssm_parameter:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_parameter_resource"])
+          name: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["name"]
+          type: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["type"]
+          value: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["value"]
+          description: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["description"]
+          tier: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["tier"]
+          key_id: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["key_id"]
+          overwrite: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["overwrite"]
+          allowed_pattern: >-
+            local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["allowed_pattern"]
+          tags: >-
+            local.elements_landing_zone_ssm_parameter_tags_map["config_${count.index}"]
+    output:
+      arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.arn)
+      names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.name)
+      descriptions:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.description)
+      types:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.type)
+      values:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.value)
+      versions:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.version)
+      landing_zone_ssm_parameter_arns:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.arn)
+      landing_zone_ssm_parameter_names:
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_ssm_parameter.landing_zone_ssm_parameter.*.name)

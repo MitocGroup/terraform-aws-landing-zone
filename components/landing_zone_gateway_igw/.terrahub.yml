@@ -6,8 +6,8 @@ component:
     locals:
       elements_landing_zone_vpc_data_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
-      elements_landing_zone_gateway_igw_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_resource"]
+      elements_landing_zone_gateway_igw_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_tags"]
     data:
       aws_vpc:
         vpc_selected:
@@ -21,9 +21,10 @@ component:
         landing_zone_gateway_igw:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_resource"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_tags"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-          tags: 'local.elements_landing_zone_gateway_igw_map["config_${count.index}"]'
+          tags: >-
+            local.elements_landing_zone_gateway_igw_tags_map["config_${count.index}"]
     output:
       ids:
         value: >-

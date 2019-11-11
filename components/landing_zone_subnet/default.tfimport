@@ -1,0 +1,2 @@
+landing_zone_subnet,aws_subnet.landing_zone_subnet,[first_id]
+landing_zone_subnet,aws_subnet.landing_zone_subnet,[second_id]

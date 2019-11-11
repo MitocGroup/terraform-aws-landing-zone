@@ -2,17 +2,18 @@ component:
   name: landing_zone_config_delivery_channel
   template:
     locals:
-      config_delivery_channel_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_delivery_channel_resource"]
+      elements_landing_zone_config_delivery_channel_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_delivery_channel_resource"]
     resource:
       aws_config_delivery_channel:
         landing_zone_config_delivery_channel:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["config_delivery_channel_resource"])
-          name: 'local.config_delivery_channel_map["config_${count.index}"]["name"]'
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_delivery_channel_resource"])
+          name: >-
+            local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["name"]
           s3_bucket_name: >-
-            local.config_delivery_channel_map["config_${count.index}"]["s3_bucket_name"]
+            local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["s3_bucket_name"]
     output:
       ids:
         value: >-

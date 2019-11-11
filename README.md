@@ -35,7 +35,7 @@ To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.1.10"
+  version   = "0.1.11"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
@@ -54,7 +54,7 @@ landing_zone_providers = {
   [...]
 }
 landing_zone_components = {
-  landing_zone_vpc = "s3://terraform-aws-landing-zone/mycompany/landing_zone_vpc/default.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/components/landing_zone_vpc/default.tfvars"
   [...]
 }
 terraform_backend = {
@@ -95,6 +95,10 @@ After `landing_zone_reader_config` module configures everything, second step is 
 ```hcl
 module "landing_zone_reader" {
   source = "./modules/landing_zone_reader"
+  terraform_backend_type   = "local"
+  terraform_backend_config = {
+    path = "/tmp/.terrahub/landing_zone/terrahub_load_outputs/terraform.tfstate"
+  }
 }
 ```
 

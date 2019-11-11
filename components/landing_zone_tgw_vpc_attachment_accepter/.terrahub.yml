@@ -9,7 +9,7 @@ component:
       elements_landing_zone_tgw_tags_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_tags"]
       elements_landing_zone_tgw_map: >-
-        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw"]
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_resource"]
     data:
       aws_vpc:
         vpc_selected:
@@ -31,7 +31,7 @@ component:
         landing_zone_tgw_vpc_attachment_accepter:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
-            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw"])
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_tgw_resource"])
           transit_gateway_attachment_id: >-
             element(data.aws_ec2_transit_gateway_vpc_attachment.tgw_vpc_selected.*.id,
             count.index)
