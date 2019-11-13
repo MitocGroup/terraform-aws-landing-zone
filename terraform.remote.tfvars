@@ -32,6 +32,7 @@ landing_zone_components = {
   landing_zone_network_acl_rules                    = "s3://terraform-aws-landing-zone/components/landing_zone_network_acl_rules/*.tfvars"
   landing_zone_organization                         = "s3://terraform-aws-landing-zone/components/landing_zone_organization/*.tfvars"
   landing_zone_organization_accounts                = "s3://terraform-aws-landing-zone/components/landing_zone_organization_accounts/*.tfvars"
+  landing_zone_organization_accounts_non_master     = "s3://terraform-aws-landing-zone/components/landing_zone_organization_accounts_non_master/*.tfvars"
   landing_zone_organization_policy                  = "s3://terraform-aws-landing-zone/components/landing_zone_organization_policy/*.tfvars"
   landing_zone_organization_policy_attachment       = "s3://terraform-aws-landing-zone/components/landing_zone_organization_policy_attachment/*.tfvars"
   landing_zone_organization_unit                    = "s3://terraform-aws-landing-zone/components/landing_zone_organization_unit/*.tfvars"
