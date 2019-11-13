@@ -37,6 +37,15 @@ output "landing_zone_organization_accounts_arns" {
   value       = module.landing_zone.landing_zone["landing_zone_organization_accounts_arns"]
   description = "The ARN for this accounts"
 }
+output "landing_zone_organization_accounts_non_master_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_organization_accounts_non_master_ids"]
+  description = "The AWS account ids"
+}
+
+output "landing_zone_organization_accounts_non_master_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_organization_accounts_non_master_arns"]
+  description = "The ARN for this accounts"
+}
 
 output "landing_zone_organization_id" {
   value       = module.landing_zone.landing_zone["landing_zone_organization_id"]
