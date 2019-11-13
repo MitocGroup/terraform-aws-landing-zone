@@ -3,25 +3,14 @@ landing_zone_providers = [
 ]
 
 default_provider = {
+  landing_zone_iam_policy_data = {
+    config_0 = {}
+  },
   landing_zone_iam_policy_resource = {
     config_0 = {
-      name        = "LandingZoneIAMPolicy"
-      description = "Managed By TerraHub"
+      name        = "ServicePolicyForADroles"
+      description = "DO NOT REMOVE ... FOR ANY QUESTIONS EMAIL SECURITY@MYCOMPANY.COM"
       path        = "/"
-      policy      = <<EOF
-        {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Action": [
-                "ec2:Describe*"
-              ],
-              "Effect": "Allow",
-              "Resource": "*"
-            }
-          ]
-        }
-        EOF
     }
   }
 }
