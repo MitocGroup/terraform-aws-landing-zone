@@ -2,5 +2,10 @@ landing_zone_providers = [
   "default"
 ]
 
-landing_zone_organization_accounts_names  = []
-landing_zone_organization_accounts_emails = []
+default_provider = {
+  config_0 = {
+    name               = "Landing Zone Account"
+    email              = "myemail@mydomain.com"
+    organization_index = "0"
+  }
+}

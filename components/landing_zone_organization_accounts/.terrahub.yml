@@ -6,23 +6,39 @@ component:
     data:
       aws_organizations_organization:
         landing_zone_organization: {}
+    locals:
+      elements_landing_zone_organization_accounts_map: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider'
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(var.landing_zone_organization_accounts_emails)
-          name: 'element(var.landing_zone_organization_accounts_names, count.index)'
-          email: 'element(var.landing_zone_organization_accounts_emails, count.index)'
+          count: length(local.elements_landing_zone_organization_accounts_map)
+          name: >-
+            local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["name"]
+          email: >-
+            local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["email"]
           parent_id: >-
-            data.aws_organizations_organization.landing_zone_organization.roots.0.id
+            lookup(element(data.aws_organizations_organization.landing_zone_organization.roots,
+            local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["organization_index"]),
+            "id")
     output:
       ids:
-        value: aws_organizations_account.landing_zone_organization_accounts.*.id
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_organizations_account.landing_zone_organization_accounts.*.id)
       thub_ids:
-        value: aws_organizations_account.landing_zone_organization_accounts.*.id
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_organizations_account.landing_zone_organization_accounts.*.id)
       arns:
-        value: aws_organizations_account.landing_zone_organization_accounts.*.arn
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_organizations_account.landing_zone_organization_accounts.*.arn)
       landing_zone_organization_accounts_ids:
-        value: aws_organizations_account.landing_zone_organization_accounts.*.id
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_organizations_account.landing_zone_organization_accounts.*.id)
       landing_zone_organization_accounts_arns:
-        value: aws_organizations_account.landing_zone_organization_accounts.*.arn
+        value: >-
+          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
+          aws_organizations_account.landing_zone_organization_accounts.*.arn)
