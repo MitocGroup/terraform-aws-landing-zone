@@ -497,3 +497,48 @@ output "landing_zone_ssm_patch_group_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_ssm_patch_group_ids"]
   description = "The ID's of the SSM Patch Group."
 }
+
+output "landing_zone_sns_platform_application_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_platform_application_ids"]
+  description = "The ARN's of the SNS platform application."
+}
+
+output "landing_zone_sns_platform_application_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_platform_application_arns"]
+  description = "The ARN's of the SNS platform application."
+}
+
+output "landing_zone_sns_topic_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_ids"]
+  description = "The ARN's of the SNS topic."
+}
+
+output "landing_zone_sns_topic_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_arns"]
+  description = "The ARN's of the SNS topic."
+}
+
+output "landing_zone_sns_topic_subscription_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_ids"]
+  description = "The ARN's of the subscription."
+}
+
+output "landing_zone_sns_topic_subscription_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_arns"]
+  description = "The ARN's of the subscription stored as a more user-friendly property."
+}
+
+output "landing_zone_sns_topic_subscription_topic_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_topic_arns"]
+  description = "The ARN's of the topic the subscription belongs to."
+}
+
+output "landing_zone_sns_topic_subscription_protocols" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_protocols"]
+  description = "The protocol's being used."
+}
+
+output "landing_zone_sns_topic_subscription_endpoints" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_endpoints"]
+  description = "The full endpoint's to send data to (SQS ARN, HTTP(S) URL, Application ARN, SMS number, etc.)."
+}

@@ -1,0 +1,37 @@
+component:
+  name: landing_zone_sns_topic_policy
+  template:
+    locals:
+      elements_landing_zone_sns_iam_policy_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_iam_policy"]
+      elements_landing_zone_sns_topic_policy_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_policy_resource"]
+    data:
+      template_file:
+        policy:
+          provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.elements_landing_zone_sns_iam_policy_data_map)
+          template: 'file("${local.component["path"]}/policies/policy.json.tpl")'
+          vars: >-
+            merge(map("region",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region,
+            "account_id",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id,
+            "name",
+            local.elements_landing_zone_sns_topic_policy_map["config_${count.index}"]["name"]),
+            local.elements_landing_zone_sns_iam_policy_data_map["config_${count.index}"])
+      aws_sns_topic:
+        sns_topic_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_policy_resource"])
+          name: >-
+            local.elements_landing_zone_sns_topic_policy_map["config_${count.index}"]["name"]
+    resource:
+      aws_sns_topic_policy:
+        landing_zone_sns_topic_policy:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_policy_resource"])
+          arn: 'element(data.aws_sns_topic.sns_topic_selected.*.arn, count.index)'
+          policy: 'element(data.template_file.policy.*.rendered, count.index)'
