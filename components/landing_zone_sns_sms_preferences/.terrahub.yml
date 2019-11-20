@@ -1,0 +1,22 @@
+component:
+  name: landing_zone_sns_sms_preferences
+  template:
+    locals:
+      elements_landing_zone_sns_sms_preferences_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_sms_preferences_resource"]
+    resource:
+      aws_sns_sms_preferences:
+        landing_zone_sns_sms_preferences:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          monthly_spend_limit: >-
+            local.elements_landing_zone_sns_sms_preferences_map["monthly_spend_limit"]
+          delivery_status_iam_role_arn: >-
+            local.elements_landing_zone_sns_sms_preferences_map["delivery_status_iam_role_arn"]
+          delivery_status_success_sampling_rate: >-
+            local.elements_landing_zone_sns_sms_preferences_map["delivery_status_success_sampling_rate"]
+          default_sender_id: >-
+            local.elements_landing_zone_sns_sms_preferences_map["default_sender_id"]
+          default_sms_type: >-
+            local.elements_landing_zone_sns_sms_preferences_map["default_sms_type"]
+          usage_report_s3_bucket: >-
+            local.elements_landing_zone_sns_sms_preferences_map["usage_report_s3_bucket"]
