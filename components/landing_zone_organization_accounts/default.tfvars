@@ -5,7 +5,7 @@ landing_zone_providers = [
 default_provider = {
   config_0 = {
     name               = "Landing Zone Account"
-    email              = "landingzone@lz.com"
+    email              = "myemail@mydomain.com"
     organization_index = "0"
   }
 }
