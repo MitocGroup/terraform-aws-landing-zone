@@ -35,13 +35,12 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id
       thub_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id
       landing_zone_ssm_maintenance_window_target_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*.id)
+          { for ssm_maintenance_window_target in
+          aws_ssm_maintenance_window_target.landing_zone_ssm_maintenance_window_target.*:
+          ssm_maintenance_window_target.id => ssm_maintenance_window_target.id }

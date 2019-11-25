@@ -41,6 +41,9 @@ landing_zone_components = {
   landing_zone_route                                = "./*.tfvars"
   landing_zone_route_igw                            = "./*.tfvars"
   landing_zone_route_ipv6                           = "./*.tfvars"
+  landing_zone_route_nat                            = "./*.tfvars"
+  landing_zone_route_vgw                            = "./*.tfvars"
+  landing_zone_route_cgw                            = "./*.tfvars"
   landing_zone_route_pcx                            = "./*.tfvars"
   landing_zone_route_table                          = "./*.tfvars"
   landing_zone_route_table_association              = "./*.tfvars"
@@ -74,6 +77,9 @@ landing_zone_components = {
   landing_zone_vpc_endpoint_gateway                 = "./*.tfvars"
   landing_zone_vpc_endpoint_interface               = "./*.tfvars"
   landing_zone_vpc_peering_connection               = "./*.tfvars"
+  landing_zone_guardduty_detector                   = "./*.tfvars"
+  landing_zone_guardduty_invite_accepter            = "./*.tfvars"
+  landing_zone_guardduty_member                     = "./*.tfvars"
 }
 
 landing_zone_providers = {

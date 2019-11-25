@@ -9,4 +9,24 @@ component:
     output:
       terrahub_reader:
         value: >-
-          merge(map("ids", "test"))
+          merge(map("landing_zone_iam_role_arns",data.terraform_remote_state.landing_zone_iam_role.outputs.landing_zone_iam_role_arns,"landing_zone_iam_role_ids",data.terraform_remote_state.landing_zone_iam_role.outputs.landing_zone_iam_role_ids,"landing_zone_iam_role_names",data.terraform_remote_state.landing_zone_iam_role.outputs.landing_zone_iam_role_names),map("landing_zone_security_group_ids",data.terraform_remote_state.landing_zone_security_group.outputs.landing_zone_security_group_ids),map("landing_zone_subnet_arns",data.terraform_remote_state.landing_zone_subnet.outputs.landing_zone_subnet_arns,"landing_zone_subnet_availability_zone_ids",data.terraform_remote_state.landing_zone_subnet.outputs.landing_zone_subnet_availability_zone_ids,"landing_zone_subnet_ids",data.terraform_remote_state.landing_zone_subnet.outputs.landing_zone_subnet_ids),map("landing_zone_vpc_arns",data.terraform_remote_state.landing_zone_vpc.outputs.landing_zone_vpc_arns,"landing_zone_vpc_ids",data.terraform_remote_state.landing_zone_vpc.outputs.landing_zone_vpc_ids))
+    data:
+      terraform_remote_state:
+        landing_zone_iam_role:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/landing_zone/landing_zone_iam_role/terraform.tfstate
+        landing_zone_security_group:
+          backend: local
+          config:
+            path: >-
+              /tmp/.terrahub/landing_zone/landing_zone_security_group/terraform.tfstate
+        landing_zone_subnet:
+          backend: local
+          config:
+            path: /tmp/.terrahub/landing_zone/landing_zone_subnet/terraform.tfstate
+        landing_zone_vpc:
+          backend: local
+          config:
+            path: /tmp/.terrahub/landing_zone/landing_zone_vpc/terraform.tfstate

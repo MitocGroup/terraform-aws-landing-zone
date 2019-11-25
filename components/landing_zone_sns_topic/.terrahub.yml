@@ -74,22 +74,16 @@ component:
             local.elements_landing_zone_sns_topic_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic.landing_zone_sns_topic.*.id)
+        value: aws_sns_topic.landing_zone_sns_topic.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic.landing_zone_sns_topic.*.id)
+        value: aws_sns_topic.landing_zone_sns_topic.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic.landing_zone_sns_topic.*.arn)
+        value: aws_sns_topic.landing_zone_sns_topic.*.arn
       landing_zone_sns_topic_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic.landing_zone_sns_topic.*.id)
+          { for sns_topic in aws_sns_topic.landing_zone_sns_topic.*:
+          sns_topic.name => sns_topic.id }
       landing_zone_sns_topic_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic.landing_zone_sns_topic.*.arn)
+          { for sns_topic in aws_sns_topic.landing_zone_sns_topic.*:
+          sns_topic.name => sns_topic.arn }

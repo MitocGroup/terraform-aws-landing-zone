@@ -37,14 +37,11 @@ component:
             local.elements_landing_zone_vpc_peering_connection_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
+        value: aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
+        value: aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id
       landing_zone_vpc_peering_connection_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id)
+          { for vpc_peering_connection in
+          aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*:
+          vpc_peering_connection.tags["Name"] => vpc_peering_connection.id }

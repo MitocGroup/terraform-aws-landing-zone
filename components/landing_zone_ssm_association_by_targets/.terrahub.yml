@@ -42,25 +42,22 @@ component:
     output:
       association_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.association_id)
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.association_id
       instance_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.instance_id)
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.instance_id
       names:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.name)
+        value: aws_ssm_association.landing_zone_ssm_association_by_targets.*.name
       parameters:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.parameters)
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*.parameters
       landing_zone_ssm_association_by_targets_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.association_id)
+          { for ssm_association_by_targets in
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*:
+          ssm_association_by_targets.name => ssm_association_by_targets.id }
       landing_zone_ssm_association_by_targets_names:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_targets.*.name)
+          { for ssm_association_by_targets in
+          aws_ssm_association.landing_zone_ssm_association_by_targets.*:
+          ssm_association_by_targets.name => ssm_association_by_targets.name }

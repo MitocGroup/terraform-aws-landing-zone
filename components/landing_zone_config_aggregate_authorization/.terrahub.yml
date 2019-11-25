@@ -26,9 +26,10 @@ component:
     output:
       arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_configuration_aggregator.landing_zone_config_configuration_aggregator.*.arn)
+          aws_config_configuration_aggregator.landing_zone_config_configuration_aggregator.*.arn
       landing_zone_config_configuration_aggregator_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_configuration_aggregator.landing_zone_config_configuration_aggregator.*.arn)
+          { for config_configuration_aggregator in
+          aws_config_configuration_aggregator.landing_zone_config_configuration_aggregator.*:
+          config_configuration_aggregator.tags["Name"] =>
+          config_configuration_aggregator.arn }

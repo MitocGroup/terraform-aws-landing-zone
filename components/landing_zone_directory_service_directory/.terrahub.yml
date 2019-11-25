@@ -49,29 +49,30 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.id
       thub_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.id
       access_urls:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.access_url)
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.access_url
       aliases:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.alias)
+          aws_directory_service_directory.landing_zone_directory_service_directory.*.alias
       landing_zone_directory_service_directory_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.id)
+          { for directory_service_directory in
+          aws_directory_service_directory.landing_zone_directory_service_directory.*:
+          directory_service_directory.name => directory_service_directory.id }
       landing_zone_directory_service_directory_access_urls:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.access_url)
+          { for directory_service_directory in
+          aws_directory_service_directory.landing_zone_directory_service_directory.*:
+          directory_service_directory.name =>
+          directory_service_directory.access_url }
       landing_zone_directory_service_directory_aliases:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_directory_service_directory.landing_zone_directory_service_directory.*.alias)
+          { for directory_service_directory in
+          aws_directory_service_directory.landing_zone_directory_service_directory.*:
+          directory_service_directory.name => directory_service_directory.alias
+          }

@@ -23,22 +23,18 @@ component:
             "id")
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts.*.id)
+        value: aws_organizations_account.landing_zone_organization_accounts.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts.*.id)
+        value: aws_organizations_account.landing_zone_organization_accounts.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts.*.arn)
+        value: aws_organizations_account.landing_zone_organization_accounts.*.arn
       landing_zone_organization_accounts_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts.*.id)
+          { for organization_accounts in
+          aws_organizations_account.landing_zone_organization_accounts.*:
+          organization_accounts.name => organization_accounts.id }
       landing_zone_organization_accounts_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts.*.arn)
+          { for organization_accounts in
+          aws_organizations_account.landing_zone_organization_accounts.*:
+          organization_accounts.name => organization_accounts.arn }

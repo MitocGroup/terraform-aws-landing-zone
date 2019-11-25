@@ -40,14 +40,10 @@ component:
             local.elements_landing_zone_route_ipv6_map["config_${count.index}"]["destination_ipv6_cidr_block"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_ipv6.*.id)
+        value: aws_route.landing_zone_route_ipv6.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_ipv6.*.id)
+        value: aws_route.landing_zone_route_ipv6.*.id
       landing_zone_route_ipv6_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_ipv6.*.id)
+          { for route_ipv6 in aws_route.landing_zone_route_ipv6.*: route_ipv6.id
+          => route_ipv6.id }

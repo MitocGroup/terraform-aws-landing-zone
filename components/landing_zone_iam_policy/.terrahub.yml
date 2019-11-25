@@ -34,26 +34,20 @@ component:
           policy: 'element(data.template_file.policy.*.rendered, count.index)'
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.id)
+        value: aws_iam_policy.landing_zone_iam_policy.*.id
       policies:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.policy)
+        value: aws_iam_policy.landing_zone_iam_policy.*.policy
       names:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.name)
+        value: aws_iam_policy.landing_zone_iam_policy.*.name
       landing_zone_iam_policy_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.id)
+          { for iam_policy in aws_iam_policy.landing_zone_iam_policy.*:
+          iam_policy.name => iam_policy.id }
       landing_zone_iam_policy_policies:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.policy)
+          { for iam_policy in aws_iam_policy.landing_zone_iam_policy.*:
+          iam_policy.name => iam_policy.policy }
       landing_zone_iam_policy_names:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_policy.landing_zone_iam_policy.*.name)
+          { for iam_policy in aws_iam_policy.landing_zone_iam_policy.*:
+          iam_policy.name => iam_policy.name }

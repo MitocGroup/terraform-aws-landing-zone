@@ -34,14 +34,11 @@ component:
             local.elements_landing_zone_ssm_maintenance_window_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)
+        value: aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)
+        value: aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id
       landing_zone_ssm_maintenance_window_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id)
+          { for ssm_maintenance_window in
+          aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*:
+          ssm_maintenance_window.tags["Name"] => ssm_maintenance_window.id }

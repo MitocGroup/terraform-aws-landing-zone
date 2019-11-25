@@ -6,7 +6,7 @@ resource "null_resource" "landing_zone_reader_config" {
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "node ${path.module}/scripts/config.js"
 
     environment = {
@@ -18,7 +18,7 @@ resource "null_resource" "landing_zone_reader_config" {
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "node ${path.module}/scripts/remove-config.js"
 
     environment = {
@@ -29,7 +29,7 @@ resource "null_resource" "landing_zone_reader_config" {
 }
 
 resource "null_resource" "landing_zone_reader_apply" {
-  depends_on = ["null_resource.landing_zone_reader_config"]
+  depends_on = [null_resource.landing_zone_reader_config]
 
   triggers = {
     components = md5(jsonencode(var.landing_zone_components))
@@ -38,7 +38,7 @@ resource "null_resource" "landing_zone_reader_apply" {
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "node ${path.module}/scripts/apply.js"
 
     environment = {
@@ -49,7 +49,7 @@ resource "null_resource" "landing_zone_reader_apply" {
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "echo 'info: destroy ignored because part of apply'"
   }
 }

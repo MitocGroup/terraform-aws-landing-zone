@@ -46,14 +46,10 @@ component:
             local.elements_landing_zone_network_acl_map["config_${count.index}"]["subnets_to_index"])
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_network_acl.landing_zone_network_acl.*.id)
+        value: aws_network_acl.landing_zone_network_acl.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_network_acl.landing_zone_network_acl.*.id)
+        value: aws_network_acl.landing_zone_network_acl.*.id
       landing_zone_network_acl_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_network_acl.landing_zone_network_acl.*.id)
+          { for network_acl in aws_network_acl.landing_zone_network_acl.*:
+          network_acl.tags["Name"] => network_acl.id }

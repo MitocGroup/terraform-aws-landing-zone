@@ -31,14 +31,10 @@ component:
             local.elements_landing_zone_gateway_vgw_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)
+        value: aws_vpn_gateway.landing_zone_gateway_vgw.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)
+        value: aws_vpn_gateway.landing_zone_gateway_vgw.*.id
       landing_zone_gateway_vgw_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpn_gateway.landing_zone_gateway_vgw.*.id)
+          { for gateway_vgw in aws_vpn_gateway.landing_zone_gateway_vgw.*:
+          gateway_vgw.tags["Name"] => gateway_vgw.id }

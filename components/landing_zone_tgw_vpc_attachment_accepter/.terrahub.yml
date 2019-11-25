@@ -43,13 +43,13 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id
       thub_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id
       landing_zone_tgw_vpc_accepter_attachment_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*.id)
+          { for tgw_vpc_attachment_accepter in
+          aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*:
+          tgw_vpc_attachment_accepter.tags["Name"] =>
+          tgw_vpc_attachment_accepter.id }

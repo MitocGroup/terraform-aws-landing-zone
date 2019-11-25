@@ -123,7 +123,7 @@ async function extractOutputValues(result, jsonBackend) {
       ]);
     });
 
-    Object.keys(jsonResult[key]).forEach(subKey => {
+    Object.keys(jsonResult[key]).filter(elem => elem.includes('landing_zone') ).forEach(subKey => {
       outputMap = [...outputMap, ...[`"${subKey}"`, `data.terraform_remote_state.${key}.outputs.${subKey}`]];
     });
   });
