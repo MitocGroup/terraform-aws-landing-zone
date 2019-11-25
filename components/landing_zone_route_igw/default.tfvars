@@ -8,9 +8,9 @@ default_provider = {
       cidr_block = "172.16.0.0/16"
     }
   },
-  landing_zone_subnet_data = {
+  landing_zone_route_table_data = {
     config_0 = {
-      cidr_block = "172.16.1.0/24"
+      name = "Landing Zone Route Table"
     }
   },
   landing_zone_route_igw_resource = {

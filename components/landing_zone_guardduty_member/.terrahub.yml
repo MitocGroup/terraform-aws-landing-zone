@@ -1,0 +1,50 @@
+component:
+  name: landing_zone_guardduty_member
+  dependsOn:
+    - landing_zone_guardduty_detector
+  template:
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_guardduty_detector
+            name: landing_zone_guardduty_detector
+    locals:
+      guardduty_member_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["guardduty_member_resource"]
+      remote_state_guardduty_detector_ids: >-
+        data.terraform_remote_state.landing_zone_guardduty_detector.outputs["landing_zone_guardduty_detector_ids"]
+      remote_state_guardduty_detector_account_ids: >-
+        data.terraform_remote_state.landing_zone_guardduty_detector.outputs["landing_zone_guardduty_detector_account_ids"]
+    resource:
+      aws_guardduty_member:
+        landing_zone_guardduty_member:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.guardduty_member_map)
+          account_id: >-
+            local.remote_state_guardduty_detector_account_ids[local.guardduty_invite_accepter_map["config_${count.index}"]["guardduty_detector_account_provider"]][local.guardduty_member_map["config_${count.index}"]["guardduty_detector_account_name"]]
+          detector_id: >-
+            local.remote_state_guardduty_detector_ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"][local.guardduty_member_map["config_${count.index}"]["guardduty_detector_name"]]
+          email: 'local.guardduty_member_map["config_${count.index}"]["email"]'
+          invite: 'local.guardduty_member_map["config_${count.index}"]["invite"]'
+          invitation_message: >-
+            local.guardduty_member_map["config_${count.index}"]["invitation_message"]
+          disable_email_notification: >-
+            local.guardduty_member_map["config_${count.index}"]["disable_email_notification"]
+    output:
+      ids:
+        value: aws_guardduty_member.landing_zone_guardduty_member.*.id
+      thub_ids:
+        value: aws_guardduty_member.landing_zone_guardduty_member.*.id
+      relationship_statuses:
+        value: >-
+          aws_guardduty_member.landing_zone_guardduty_member.*.relationship_status
+      landing_zone_guardduty_member_ids:
+        value: >-
+          { for guardduty in
+          aws_guardduty_member.landing_zone_guardduty_member.*: guardduty.email
+          => guardduty.id }
+      landing_zone_guardduty_member_relationship_statuses:
+        value: >-
+          { for guardduty in
+          aws_guardduty_member.landing_zone_guardduty_member.*: guardduty.email
+          => guardduty.relationship_status }

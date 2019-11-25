@@ -22,7 +22,7 @@ default_provider = {
             }
           ]
         }
-        EOF
+      EOF
     }
   }
 }

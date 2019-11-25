@@ -48,22 +48,16 @@ component:
             local.elements_landing_zone_gateway_nat_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_nat_gateway.landing_zone_gateway_nat.*.id)
+        value: aws_nat_gateway.landing_zone_gateway_nat.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_nat_gateway.landing_zone_gateway_nat.*.id)
+        value: aws_nat_gateway.landing_zone_gateway_nat.*.id
       network_interface_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id)
+        value: aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id
       landing_zone_gateway_nat_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_nat_gateway.landing_zone_gateway_nat.*.id)
+          { for gateway_nat in aws_nat_gateway.landing_zone_gateway_nat.*:
+          gateway_nat.tags["Name"] => gateway_nat.id }
       landing_zone_gateway_nat_network_interface_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_nat_gateway.landing_zone_gateway_nat.*.network_interface_id)
+          { for gateway_nat in aws_nat_gateway.landing_zone_gateway_nat.*:
+          gateway_nat.tags["Name"] => gateway_nat.network_interface_id }

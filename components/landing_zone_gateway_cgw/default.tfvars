@@ -3,7 +3,7 @@ landing_zone_providers = [
 ]
 
 default_provider = {
-  landing_zone_gateway_cgw_tags_element = {
+  landing_zone_gateway_cgw_tags = {
     config_0 = {
       Description = "Managed by TerraHub"
       ThubCode    = "1234abcd"

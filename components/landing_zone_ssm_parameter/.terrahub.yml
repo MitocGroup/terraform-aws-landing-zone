@@ -32,34 +32,22 @@ component:
             local.elements_landing_zone_ssm_parameter_tags_map["config_${count.index}"]
     output:
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.arn)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.arn
       names:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.name)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.name
       descriptions:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.description)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.description
       types:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.type)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.type
       values:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.value)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.value
       versions:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.version)
+        value: aws_ssm_parameter.landing_zone_ssm_parameter.*.version
       landing_zone_ssm_parameter_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.arn)
+          { for ssm_parameter in aws_ssm_parameter.landing_zone_ssm_parameter.*:
+          ssm_parameter.name => ssm_parameter.id }
       landing_zone_ssm_parameter_names:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_parameter.landing_zone_ssm_parameter.*.name)
+          { for ssm_parameter in aws_ssm_parameter.landing_zone_ssm_parameter.*:
+          ssm_parameter.name => ssm_parameter.name }

@@ -17,33 +17,25 @@ component:
           description: >-
             local.elements_landing_zone_iam_role_map["config_${count.index}"]["description"]
           assume_role_policy: >-
-            local.elements_landing_zone_iam_role_map["config_${count.index}"]["assume_role_policy"]
+            jsondecode(base64decode(local.elements_landing_zone_iam_role_map["config_${count.index}"]["assume_role_policy"]))
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.id)
+        value: aws_iam_role.landing_zone_iam_role.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.id)
+        value: aws_iam_role.landing_zone_iam_role.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.arn)
+        value: aws_iam_role.landing_zone_iam_role.*.arn
       names:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.name)
+        value: aws_iam_role.landing_zone_iam_role.*.name
       landing_zone_iam_role_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.id)
+          { for role in aws_iam_role.landing_zone_iam_role.*: role.name =>
+          role.id }
       landing_zone_iam_role_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.arn)
+          { for role in aws_iam_role.landing_zone_iam_role.*: role.name =>
+          role.arn }
       landing_zone_iam_role_names:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_iam_role.landing_zone_iam_role.*.name)
+          { for role in aws_iam_role.landing_zone_iam_role.*: role.id =>
+          role.name }

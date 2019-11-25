@@ -1,0 +1,89 @@
+component:
+  name: landing_zone_sns_topic
+  template:
+    locals:
+      elements_landing_zone_sns_iam_policy_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_iam_policy"]
+      elements_landing_zone_sns_iam_delivery_policy_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_iam_delivery_policy"]
+      elements_landing_zone_sns_topic_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_resource"]
+      elements_landing_zone_sns_topic_tags_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_tags"]
+    data:
+      template_file:
+        policy:
+          provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.elements_landing_zone_sns_iam_policy_data_map)
+          template: 'file("${local.component["path"]}/policies/policy.json.tpl")'
+          vars: >-
+            merge(map("region",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region,
+            "account_id",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id,
+            "name",
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["name"]),
+            local.elements_landing_zone_sns_iam_policy_data_map["config_${count.index}"])
+        delivery_policy:
+          provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.elements_landing_zone_sns_iam_delivery_policy_data_map)
+          template: 'file("${local.component["path"]}/policies/delivery_policy.json.tpl")'
+          vars: >-
+            merge(map("region",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region,
+            "account_id",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id,
+            "name",
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["name"]),
+            local.elements_landing_zone_sns_iam_delivery_policy_data_map["config_${count.index}"])
+    resource:
+      aws_sns_topic:
+        landing_zone_sns_topic:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_topic_resource"])
+          name: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["name"]
+          display_name: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["display_name"]
+          policy: 'element(data.template_file.policy.*.rendered, count.index)'
+          delivery_policy: 'element(data.template_file.delivery_policy.*.rendered, count.index)'
+          application_success_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["application_success_feedback_role_arn"]
+          application_success_feedback_sample_rate: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["application_success_feedback_sample_rate"]
+          application_failure_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["application_failure_feedback_role_arn"]
+          http_success_feedback_sample_rate: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["http_success_feedback_sample_rate"]
+          http_failure_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["http_failure_feedback_role_arn"]
+          lambda_success_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["lambda_success_feedback_role_arn"]
+          lambda_success_feedback_sample_rate: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["lambda_success_feedback_sample_rate"]
+          lambda_failure_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["lambda_failure_feedback_role_arn"]
+          sqs_success_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["sqs_success_feedback_role_arn"]
+          sqs_success_feedback_sample_rate: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["sqs_success_feedback_sample_rate"]
+          sqs_failure_feedback_role_arn: >-
+            local.elements_landing_zone_sns_topic_map["config_${count.index}"]["sqs_failure_feedback_role_arn"]
+          tags: >-
+            local.elements_landing_zone_sns_topic_tags_map["config_${count.index}"]
+    output:
+      ids:
+        value: aws_sns_topic.landing_zone_sns_topic.*.id
+      thub_ids:
+        value: aws_sns_topic.landing_zone_sns_topic.*.id
+      arns:
+        value: aws_sns_topic.landing_zone_sns_topic.*.arn
+      landing_zone_sns_topic_ids:
+        value: >-
+          { for sns_topic in aws_sns_topic.landing_zone_sns_topic.*:
+          sns_topic.name => sns_topic.id }
+      landing_zone_sns_topic_arns:
+        value: >-
+          { for sns_topic in aws_sns_topic.landing_zone_sns_topic.*:
+          sns_topic.name => sns_topic.arn }

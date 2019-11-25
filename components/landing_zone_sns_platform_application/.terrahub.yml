@@ -1,0 +1,50 @@
+component:
+  name: landing_zone_sns_platform_application
+  template:
+    locals:
+      elements_landing_zone_sns_platform_application_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_platform_application_resource"]
+    resource:
+      aws_sns_platform_application:
+        landing_zone_sns_platform_application:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_platform_application_resource"])
+          name: 'local.elements_landing_zone_sns_platform_application_map["name"]'
+          platform: 'local.elements_landing_zone_sns_platform_application_map["platform"]'
+          platform_credential: >-
+            local.elements_landing_zone_sns_platform_application_map["platform_credential"]
+          event_delivery_failure_topic_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["event_delivery_failure_topic_arn"]
+          event_endpoint_created_topic_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["event_endpoint_created_topic_arn"]
+          event_endpoint_deleted_topic_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["event_endpoint_deleted_topic_arn"]
+          event_endpoint_updated_topic_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["event_endpoint_updated_topic_arn"]
+          failure_feedback_role_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["failure_feedback_role_arn"]
+          success_feedback_role_arn: >-
+            local.elements_landing_zone_sns_platform_application_map["success_feedback_role_arn"]
+          success_feedback_sample_rate: >-
+            local.elements_landing_zone_sns_platform_application_map["success_feedback_sample_rate"]
+    output:
+      ids:
+        value: >-
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.id
+      thub_ids:
+        value: >-
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.id
+      arns:
+        value: >-
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.arn
+      landing_zone_sns_platform_application_ids:
+        value: >-
+          { for sns_platform_application in
+          aws_sns_platform_application.landing_zone_sns_platform_application.*:
+          sns_platform_application.name => sns_platform_application.id }
+      landing_zone_sns_platform_application_arns:
+        value: >-
+          { for sns_platform_application in
+          aws_sns_platform_application.landing_zone_sns_platform_application.*:
+          sns_platform_application.name => sns_platform_application.arn }

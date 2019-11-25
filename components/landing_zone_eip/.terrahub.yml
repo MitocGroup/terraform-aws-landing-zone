@@ -16,22 +16,14 @@ component:
           vpc: 'local.elements_landing_zone_eip_map["config_${count.index}"]["vpc"]'
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)
+        value: aws_eip.landing_zone_eip.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)
+        value: aws_eip.landing_zone_eip.*.id
       public_ips:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.public_ip)
+        value: aws_eip.landing_zone_eip.*.public_ip
       landing_zone_eip_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.id)
+        value: '{ for eip in aws_eip.landing_zone_eip.*: eip.tags["Name"] => eip.id }'
       landing_zone_eip_public_ips:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_eip.landing_zone_eip.*.public_ip)
+          { for eip in aws_eip.landing_zone_eip.*: eip.tags["Name"] =>
+          eip.public_ip }

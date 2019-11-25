@@ -19,8 +19,17 @@ component:
       bucket:
         value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket
       landing_zone_pipeline_s3_bucket_id:
-        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.id
+        value: >-
+          { for pipeline_s3_bucket in
+          aws_s3_bucket.landing_zone_pipeline_s3_bucket.*:
+          pipeline_s3_bucket.bucket => pipeline_s3_bucket.id }
       landing_zone_pipeline_s3_bucket_arn:
-        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.arn
+        value: >-
+          { for pipeline_s3_bucket in
+          aws_s3_bucket.landing_zone_pipeline_s3_bucket.*:
+          pipeline_s3_bucket.bucket => pipeline_s3_bucket.arn }
       landing_zone_pipeline_s3_bucket_bucket:
-        value: aws_s3_bucket.landing_zone_pipeline_s3_bucket.bucket
+        value: >-
+          { for pipeline_s3_bucket in
+          aws_s3_bucket.landing_zone_pipeline_s3_bucket.*:
+          pipeline_s3_bucket.bucket => pipeline_s3_bucket.bucket }

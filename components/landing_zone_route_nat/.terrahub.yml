@@ -1,0 +1,66 @@
+component:
+  name: landing_zone_route_nat
+  dependsOn:
+    - landing_zone_route_table
+    - landing_zone_gateway_nat
+  template:
+    locals:
+      elements_landing_zone_vpc_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"]
+      elements_landing_zone_route_table_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"]
+      elements_landing_zone_gateway_nat_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_data"]
+      elements_landing_zone_route_nat_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_nat_resource"]
+    data:
+      aws_vpc:
+        vpc_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_vpc_data"])
+          cidr_block: >-
+            local.elements_landing_zone_vpc_data_map["config_${count.index}"]["cidr_block"]
+      aws_route_table:
+        route_table_selected:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"])
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+          filter:
+            name: 'tag:Name'
+            values:
+              - >-
+                local.elements_landing_zone_route_table_data_map["config_${count.index}"]["name"]
+      aws_nat_gateway:
+        aws_nat_gateway:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_data"])
+          vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
+          filter:
+            - name: 'tag:Name'
+              values:
+                - >-
+                  local.elements_landing_zone_gateway_nat_data_map["config_${count.index}"]["name"]
+    resource:
+      aws_route:
+        landing_zone_route_nat:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_nat_resource"])
+          route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
+          destination_cidr_block: >-
+            local.elements_landing_zone_route_nat_map["config_${count.index}"]["destination_cidr_block"]
+          nat_gateway_id: >-
+            element(distinct(data.aws_nat_gateway.aws_nat_gateway.*.id),
+            count.index)
+    output:
+      ids:
+        value: aws_route.landing_zone_route_nat.*.id
+      thub_ids:
+        value: aws_route.landing_zone_route_nat.*.id
+      landing_zone_route_nat_ids:
+        value: >-
+          { for route_nat in aws_route.landing_zone_route_nat.*: route_nat.id =>
+          route_nat.id }

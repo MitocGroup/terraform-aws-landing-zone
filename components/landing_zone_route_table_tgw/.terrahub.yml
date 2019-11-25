@@ -32,14 +32,11 @@ component:
             local.elements_landing_zone_route_table_tgw_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table.landing_zone_route_table_tgw.*.id)
+        value: aws_route_table.landing_zone_route_table_tgw.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table.landing_zone_route_table_tgw.*.id)
+        value: aws_route_table.landing_zone_route_table_tgw.*.id
       landing_zone_route_table_tgw_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table.landing_zone_route_table_tgw.*.id)
+          { for route_table_tgw in
+          aws_route_table.landing_zone_route_table_tgw.*:
+          route_table_tgw.tags["Name"] => route_table_tgw.id }

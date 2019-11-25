@@ -70,14 +70,11 @@ component:
           vpc_endpoint_type: Interface
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id)
+        value: aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id)
+        value: aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id
       landing_zone_vpc_endpoint_interface_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*.id)
+          { for vpc_endpoint_interface in
+          aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*:
+          vpc_endpoint_interface.tags["Name"] => vpc_endpoint_interface.id }

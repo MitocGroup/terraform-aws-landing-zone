@@ -16,10 +16,9 @@ component:
             local.elements_landing_zone_config_delivery_channel_map["config_${count.index}"]["s3_bucket_name"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_delivery_channel.landing_zone_config_delivery_channel.*.id)
+        value: aws_config_delivery_channel.landing_zone_config_delivery_channel.*.id
       landing_zone_config_delivery_channel_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_delivery_channel.landing_zone_config_delivery_channel.*.id)
+          { for config_delivery_channel in
+          aws_config_delivery_channel.landing_zone_config_delivery_channel.*:
+          config_delivery_channel.name => config_delivery_channel.id }

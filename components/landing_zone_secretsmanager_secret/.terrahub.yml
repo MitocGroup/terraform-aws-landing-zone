@@ -22,18 +22,16 @@ component:
             local.elements_landing_zone_secretsmanager_secret_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.id)
+        value: aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.arn)
+        value: aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.arn
       landing_zone_secretsmanager_secret_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.id)
+          { for secretsmanager_secret in
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*:
+          secretsmanager_secret.name => secretsmanager_secret.id }
       landing_zone_secretsmanager_secret_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*.arn)
+          { for secretsmanager_secret in
+          aws_secretsmanager_secret.landing_zone_secretsmanager_secret.*:
+          secretsmanager_secret.name => secretsmanager_secret.arn }

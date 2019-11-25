@@ -40,14 +40,8 @@ component:
             local.elements_landing_zone_route_map["config_${count.index}"]["destination_cidr_block"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
+        value: aws_route.landing_zone_route.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
+        value: aws_route.landing_zone_route.*.id
       landing_zone_route_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route.*.id)
+        value: '{ for route in aws_route.landing_zone_route.*: route.id => route.id }'

@@ -29,22 +29,12 @@ component:
           tags: 'local.elements_landing_zone_vpc_tags_map["config_${count.index}"]'
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc.landing_zone_vpc.*.id)
+        value: aws_vpc.landing_zone_vpc.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc.landing_zone_vpc.*.id)
+        value: aws_vpc.landing_zone_vpc.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc.landing_zone_vpc.*.arn)
+        value: aws_vpc.landing_zone_vpc.*.arn
       landing_zone_vpc_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc.landing_zone_vpc.*.id)
+        value: '{ for vpc in aws_vpc.landing_zone_vpc.*: vpc.tags["Name"] => vpc.id }'
       landing_zone_vpc_arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_vpc.landing_zone_vpc.*.arn)
+        value: '{ for vpc in aws_vpc.landing_zone_vpc.*: vpc.tags["Name"] => vpc.arn }'

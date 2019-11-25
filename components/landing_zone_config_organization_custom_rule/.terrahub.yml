@@ -20,9 +20,10 @@ component:
     output:
       arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_organization_custom_rule.landing_zone_config_organization_custom_rule.*.arn)
+          aws_config_organization_custom_rule.landing_zone_config_organization_custom_rule.*.arn
       landing_zone_config_organization_custom_rule_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_organization_custom_rule.landing_zone_config_organization_custom_rule.*.arn)
+          { for config_organization_custom_rule in
+          aws_config_organization_custom_rule.landing_zone_config_organization_custom_rule.*:
+          config_organization_custom_rule.name =>
+          config_organization_custom_rule.arn }

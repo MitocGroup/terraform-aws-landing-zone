@@ -3,23 +3,34 @@ component:
   dependsOn:
     - landing_zone_cloudtrail_s3_bucket
   template:
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_cloudtrail_s3_bucket
+            name: landing_zone_cloudtrail_s3_bucket
+    locals:
+      s3_bucket_policy_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["s3_bucket_policy_resource"]
+      remote_state_s3_bucket: >-
+        data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.outputs["landing_zone_cloudtrail_s3_bucket_id"]
     data:
-      terraform_remote_state:
-        landing_zone_cloudtrail_s3_bucket:
-          backend: local
-          config:
-            path: >-
-              ${tfvar.terrahub["tfstate_path"]}/landing_zone_cloudtrail_s3_bucket/terraform.tfstate
       template_file:
         landing_zone_cloudtrail_s3_bucket_policy:
-          template: 'file("${local.component["path"]}/policy.json.tpl")'
+          provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.s3_bucket_policy_map)
+          template: >-
+            file("${local.component["path"]}/policies/${local.s3_bucket_policy_map["config_${count.index}"]["policy_file_name"]}.json.tpl")
           vars:
             s3_bucket_name: >-
-              data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket
-            account_id: var.account_id
+              local.remote_state_s3_bucket["${tfvar.terrahub["landing_zone_providers"]["0"]}"][local.s3_bucket_policy_map["config_${count.index}"]["bucket_name"]]
+            account_id: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id'
     resource:
       aws_s3_bucket_policy:
         landing_zone_cloudtrail_s3_bucket_policy:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          bucket: data.terraform_remote_state.landing_zone_cloudtrail_s3_bucket.bucket
-          policy: data.template_file.landing_zone_cloudtrail_s3_bucket_policy.rendered
+          count: length(local.s3_bucket_policy_map)
+          bucket: >-
+            local.remote_state_s3_bucket["${tfvar.terrahub["landing_zone_providers"]["0"]}"][local.s3_bucket_policy_map["config_${count.index}"]["bucket_name"]]
+          policy: >-
+            element(data.template_file.landing_zone_cloudtrail_s3_bucket_policy.*.rendered,
+            count.index)

@@ -202,6 +202,21 @@ output "landing_zone_route_ipv6_ids" {
   description = "The ID's of the Local Route."
 }
 
+output "landing_zone_route_cgw_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_route_cgw_ids"]
+  description = "The ID's of the Local Route."
+}
+
+output "landing_zone_route_nat_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_route_nat_ids"]
+  description = "The ID's of the Local Route."
+}
+
+output "landing_zone_route_vgw_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_route_vgw_ids"]
+  description = "The ID's of the Local Route."
+}
+
 output "landing_zone_network_acl_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_network_acl_ids"]
   description = "The ID's of the Network ACL."
@@ -496,4 +511,74 @@ output "landing_zone_ssm_patch_baseline_ids" {
 output "landing_zone_ssm_patch_group_ids" {
   value       = module.landing_zone.landing_zone["landing_zone_ssm_patch_group_ids"]
   description = "The ID's of the SSM Patch Group."
+}
+
+output "landing_zone_sns_platform_application_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_platform_application_ids"]
+  description = "The ARN's of the SNS platform application."
+}
+
+output "landing_zone_sns_platform_application_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_platform_application_arns"]
+  description = "The ARN's of the SNS platform application."
+}
+
+output "landing_zone_sns_topic_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_ids"]
+  description = "The ARN's of the SNS topic."
+}
+
+output "landing_zone_sns_topic_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_arns"]
+  description = "The ARN's of the SNS topic."
+}
+
+output "landing_zone_sns_topic_subscription_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_ids"]
+  description = "The ARN's of the subscription."
+}
+
+output "landing_zone_sns_topic_subscription_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_arns"]
+  description = "The ARN's of the subscription stored as a more user-friendly property."
+}
+
+output "landing_zone_sns_topic_subscription_topic_arns" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_topic_arns"]
+  description = "The ARN's of the topic the subscription belongs to."
+}
+
+output "landing_zone_sns_topic_subscription_protocols" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_protocols"]
+  description = "The protocol's being used."
+}
+
+output "landing_zone_sns_topic_subscription_endpoints" {
+  value       = module.landing_zone.landing_zone["landing_zone_sns_topic_subscription_endpoints"]
+  description = "The full endpoint's to send data to (SQS ARN, HTTP(S) URL, Application ARN, SMS number, etc.)."
+}
+
+output "landing_zone_guardduty_detector_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_guardduty_detector_ids"]
+  description = "The ID's of the GuardDuty detector."
+}
+
+output "landing_zone_guardduty_detector_account_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_guardduty_detector_account_ids"]
+  description = "The Account ID's of the GuardDuty detector."
+}
+
+output "landing_zone_guardduty_invite_accepter_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_guardduty_invite_accepter_ids"]
+  description = "The ID's of the GuardDuty Invite Accepter."
+}
+
+output "landing_zone_guardduty_member_ids" {
+  value       = module.landing_zone.landing_zone["landing_zone_guardduty_member_ids"]
+  description = "The ID's of the GuardDuty member."
+}
+
+output "landing_zone_guardduty_member_relationship_statuses" {
+  value       = module.landing_zone.landing_zone["landing_zone_guardduty_member_relationship_statuses"]
+  description = "The statuses of the relationship between the member account and its master account."
 }
