@@ -5,7 +5,7 @@ landing_zone_providers = [
 default_provider = {
   s3_bucket_policy_resource = {
     config_0 = {
-      bucket_name      = "euliancom-data-lake-cloudtrail-us-east-1"
+      bucket_name      = "data-lake-cloudtrail"
       policy_file_name = "policy"
     }
   }
