@@ -49,10 +49,9 @@ component:
             local.elements_landing_zone_ssm_patch_baseline_tags_map["config_${count.index}"]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id)
+        value: aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id
       landing_zone_ssm_patch_baseline_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id)
+          { for ssm_patch_baseline in
+          aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*:
+          ssm_patch_baseline.name => ssm_patch_baseline.id }

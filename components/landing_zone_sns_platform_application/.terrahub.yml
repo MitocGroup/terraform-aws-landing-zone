@@ -10,10 +10,8 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_sns_platform_application_resource"])
-          name: >-
-            local.elements_landing_zone_sns_platform_application_map["name"]
-          platform: >-
-            local.elements_landing_zone_sns_platform_application_map["platform"]
+          name: 'local.elements_landing_zone_sns_platform_application_map["name"]'
+          platform: 'local.elements_landing_zone_sns_platform_application_map["platform"]'
           platform_credential: >-
             local.elements_landing_zone_sns_platform_application_map["platform_credential"]
           event_delivery_failure_topic_arn: >-
@@ -33,21 +31,20 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_platform_application.landing_zone_sns_platform_application.*.id)
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.id
       thub_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_platform_application.landing_zone_sns_platform_application.*.id)
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.id
       arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_platform_application.landing_zone_sns_platform_application.*.arn)
+          aws_sns_platform_application.landing_zone_sns_platform_application.*.arn
       landing_zone_sns_platform_application_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_platform_application.landing_zone_sns_platform_application.*.id)
+          { for sns_platform_application in
+          aws_sns_platform_application.landing_zone_sns_platform_application.*:
+          sns_platform_application.name => sns_platform_application.id }
       landing_zone_sns_platform_application_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_platform_application.landing_zone_sns_platform_application.*.arn)
+          { for sns_platform_application in
+          aws_sns_platform_application.landing_zone_sns_platform_application.*:
+          sns_platform_application.name => sns_platform_application.arn }

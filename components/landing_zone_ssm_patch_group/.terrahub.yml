@@ -1,16 +1,18 @@
 component:
   name: landing_zone_ssm_patch_group
+  dependsOn:
+    - landing_zone_ssm_patch_baseline
   template:
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_ssm_patch_baseline
+            name: landing_zone_ssm_patch_baseline
     locals:
       elements_landing_zone_ssm_patch_group_map: >-
         var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_patch_group_resource"]
-    data:
-      terraform_remote_state:
-        landing_zone_ssm_patch_baseline:
-          backend: local
-          config:
-            path: >-
-              ${tfvar.terrahub["tfstate_path"]}/landing_zone_ssm_patch_group/terraform.tfstate
+      remote_state_ssm_patch_baseline: >-
+        data.terraform_remote_state.landing_zone_ssm_patch_baseline.outputs["landing_zone_ssm_patch_baseline_ids"]
     resource:
       aws_ssm_patch_group:
         landing_zone_ssm_patch_group:
@@ -20,14 +22,12 @@ component:
           patch_group: >-
             local.elements_landing_zone_ssm_patch_group_map["config_${count.index}"]["patch_group"]
           baseline_id: >-
-            element(data.terraform_remote_state.landing_zone_ssm_patch_baseline.outputs.ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"],
-            count.index)
+            local.remote_state_ssm_patch_baseline["${tfvar.terrahub["landing_zone_providers"]["0"]}"][local.elements_landing_zone_ssm_patch_group_map["config_${count.index}"]["ssm_patch_baseline_name"]]
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_patch_baseline.landing_zone_ssm_patch_group.*.id)
+        value: aws_ssm_patch_baseline.landing_zone_ssm_patch_group.*.id
       landing_zone_ssm_patch_group_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_patch_baseline.landing_zone_ssm_patch_group.*.id)
+          { for ssm_patch_group in
+          aws_ssm_patch_baseline.landing_zone_ssm_patch_group.*:
+          ssm_patch_group.id => ssm_patch_group.id }

@@ -52,14 +52,11 @@ component:
           route_table_id: 'element(data.aws_route_table.route_table_selected.*.id, count.index)'
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table_association.landing_zone_route_table_association.*.id)
+        value: aws_route_table_association.landing_zone_route_table_association.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table_association.landing_zone_route_table_association.*.id)
+        value: aws_route_table_association.landing_zone_route_table_association.*.id
       landing_zone_route_table_association_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route_table_association.landing_zone_route_table_association.*.id)
+          { for route_table_association in
+          aws_route_table_association.landing_zone_route_table_association.*:
+          route_table_association.id => route_table_association.id }

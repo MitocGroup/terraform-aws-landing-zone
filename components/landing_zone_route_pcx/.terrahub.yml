@@ -60,14 +60,10 @@ component:
             count.index)
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_pcx.*.id)
+        value: aws_route.landing_zone_route_pcx.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_pcx.*.id)
+        value: aws_route.landing_zone_route_pcx.*.id
       landing_zone_route_pcx_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_route.landing_zone_route_pcx.*.id)
+          { for route_pcx in aws_route.landing_zone_route_pcx.*: route_pcx.id =>
+          route_pcx.id }

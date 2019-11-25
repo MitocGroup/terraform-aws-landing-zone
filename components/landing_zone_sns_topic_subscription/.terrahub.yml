@@ -58,46 +58,42 @@ component:
           delivery_policy: 'element(data.template_file.delivery_policy.*.rendered, count.index)'
     output:
       ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.id)
+        value: aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.id
       thub_ids:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.id)
+        value: aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.id
       arns:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.arn)
+        value: aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.arn
       topic_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.topic_arn)
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.topic_arn
       protocols:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.protocol)
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.protocol
       endpoints:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.endpoint)
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.endpoint
       landing_zone_sns_topic_subscription_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.id)
+          { for sns_topic_subscription in
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*:
+          sns_topic_subscription.id => sns_topic_subscription.id }
       landing_zone_sns_topic_subscription_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.arn)
+          { for sns_topic_subscription in
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*:
+          sns_topic_subscription.id => sns_topic_subscription.arn }
       landing_zone_sns_topic_subscription_topic_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.topic_arn)
+          { for sns_topic_subscription in
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*:
+          sns_topic_subscription.id => sns_topic_subscription.topic_arn }
       landing_zone_sns_topic_subscription_protocols:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.protocol)
+          { for sns_topic_subscription in
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*:
+          sns_topic_subscription.id => sns_topic_subscription.protocol }
       landing_zone_sns_topic_subscription_endpoints:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*.endpoint)
+          { for sns_topic_subscription in
+          aws_sns_topic_subscription.landing_zone_sns_topic_subscription.*:
+          sns_topic_subscription.id => sns_topic_subscription.endpoint }

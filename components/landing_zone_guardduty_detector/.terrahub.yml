@@ -1,0 +1,30 @@
+component:
+  name: landing_zone_guardduty_detector
+  template:
+    locals:
+      elements_landing_zone_guardduty_detector_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_guardduty_detector_resource"]
+    resource:
+      aws_guardduty_detector:
+        landing_zone_guardduty_detector:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.elements_landing_zone_guardduty_detector_map)
+          enable: >-
+            local.elements_landing_zone_guardduty_detector_map["config_${count.index}"]["enable"]
+          finding_publishing_frequency: >-
+            local.elements_landing_zone_guardduty_detector_map["config_${count.index}"]["finding_publishing_frequency"]
+    output:
+      ids:
+        value: aws_guardduty_detector.landing_zone_guardduty_detector.*.id
+      thub_ids:
+        value: aws_guardduty_detector.landing_zone_guardduty_detector.*.id
+      account_ids:
+        value: aws_guardduty_detector.landing_zone_guardduty_detector.*.account_id
+      landing_zone_guardduty_detector_ids:
+        value: >-
+          zipmap(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_output_tags,
+          aws_guardduty_detector.landing_zone_guardduty_detector.*.id)
+      landing_zone_guardduty_detector_account_ids:
+        value: >-
+          zipmap(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_output_tags,
+          aws_guardduty_detector.landing_zone_guardduty_detector.*.account_id)

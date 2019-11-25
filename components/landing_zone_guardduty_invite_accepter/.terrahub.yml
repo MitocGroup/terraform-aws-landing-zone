@@ -1,0 +1,38 @@
+component:
+  name: landing_zone_guardduty_invite_accepter
+  dependsOn:
+    - landing_zone_guardduty_detector
+  template:
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_guardduty_detector
+            name: landing_zone_guardduty_detector
+    locals:
+      guardduty_invite_accepter_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["guardduty_invite_accepter_resource"]
+      remote_state_guardduty_detector_ids: >-
+        data.terraform_remote_state.landing_zone_guardduty_detector.outputs["landing_zone_guardduty_detector_ids"]
+      remote_state_guardduty_detector_account_ids: >-
+        data.terraform_remote_state.landing_zone_guardduty_detector.outputs["landing_zone_guardduty_detector_account_ids"]
+    resource:
+      aws_guardduty_invite_accepter:
+        landing_zone_guardduty_invite_accepter:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.guardduty_invite_accepter_map)
+          master_account_id: >-
+            local.remote_state_guardduty_detector_account_ids[local.guardduty_invite_accepter_map["config_${count.index}"]["guardduty_detector_account_provider"]][local.guardduty_invite_accepter_map["config_${count.index}"]["guardduty_detector_account_name"]]
+          detector_id: >-
+            local.remote_state_guardduty_detector_ids["${tfvar.terrahub["landing_zone_providers"]["0"]}"][local.guardduty_invite_accepter_map["config_${count.index}"]["guardduty_detector_name"]]
+    output:
+      ids:
+        value: >-
+          aws_guardduty_invite_accepter.landing_zone_guardduty_invite_accepter.*.id
+      thub_ids:
+        value: >-
+          aws_guardduty_invite_accepter.landing_zone_guardduty_invite_accepter.*.id
+      landing_zone_guardduty_invite_accepter_ids:
+        value: >-
+          { for guardduty in
+          aws_guardduty_invite_accepter.landing_zone_guardduty_invite_accepter.*:
+          guardduty.id => guardduty.id }

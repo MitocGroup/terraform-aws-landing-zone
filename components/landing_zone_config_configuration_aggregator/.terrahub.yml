@@ -17,9 +17,10 @@ component:
     output:
       arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*.arn)
+          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*.arn
       landing_zone_config_aggregate_authorization_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*.arn)
+          { for config_aggregate_authorization in
+          aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*:
+          config_aggregate_authorization.tags["Name"] =>
+          config_aggregate_authorization.arn }

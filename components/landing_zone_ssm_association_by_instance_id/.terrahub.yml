@@ -50,25 +50,24 @@ component:
     output:
       association_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.association_id)
+          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.association_id
       instance_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.instance_id)
+          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.instance_id
       names:
-        value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.name)
+        value: aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.name
       parameters:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.parameters)
+          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.parameters
       landing_zone_ssm_association_by_instance_id_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.association_id)
+          { for ssm_association_by_instance_id in
+          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*:
+          ssm_association_by_instance_id.name =>
+          ssm_association_by_instance_id.id }
       landing_zone_ssm_association_by_instance_id_names:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*.name)
+          { for ssm_association_by_instance_id in
+          aws_ssm_association.landing_zone_ssm_association_by_instance_id.*:
+          ssm_association_by_instance_id.name =>
+          ssm_association_by_instance_id.name }

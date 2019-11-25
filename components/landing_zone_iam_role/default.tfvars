@@ -8,7 +8,7 @@ default_provider = {
       name               = "LandingZoneIAMRole"
       path               = "/"
       description        = "Managed by TerraHub"
-      assume_role_policy = <<EOT
+      assume_role_policy = <<EOF
         {
           "Version": "2012-10-17",
           "Statement": [
@@ -22,7 +22,7 @@ default_provider = {
             }
           ]
         }
-        EOT
+      EOF
     }
   }
 }

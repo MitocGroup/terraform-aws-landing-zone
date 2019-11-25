@@ -25,21 +25,22 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts_non_master.*.id)
+          aws_organizations_account.landing_zone_organization_accounts_non_master.*.id
       thub_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts_non_master.*.id)
+          aws_organizations_account.landing_zone_organization_accounts_non_master.*.id
       arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts_non_master.*.arn)
+          aws_organizations_account.landing_zone_organization_accounts_non_master.*.arn
       landing_zone_organization_accounts_non_master_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts_non_master.*.id)
+          { for organization_accounts_non_master in
+          aws_organizations_account.landing_zone_organization_accounts_non_master.*:
+          organization_accounts_non_master.name =>
+          organization_accounts_non_master.id }
       landing_zone_organization_accounts_non_master_arns:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_organizations_account.landing_zone_organization_accounts_non_master.*.arn)
+          { for organization_accounts_non_master in
+          aws_organizations_account.landing_zone_organization_accounts_non_master.*:
+          organization_accounts_non_master.name =>
+          organization_accounts_non_master.arn }

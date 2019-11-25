@@ -17,9 +17,10 @@ component:
     output:
       ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_configuration_recorder.landing_zone_config_configuration_recorder.*.id)
+          aws_config_configuration_recorder.landing_zone_config_configuration_recorder.*.id
       landing_zone_config_configuration_recorder_ids:
         value: >-
-          map("${tfvar.terrahub["landing_zone_providers"]["0"]}",
-          aws_config_configuration_recorder.landing_zone_config_configuration_recorder.*.id)
+          { for config_configuration_recorder in
+          aws_config_configuration_recorder.landing_zone_config_configuration_recorder.*:
+          config_configuration_recorder.name => config_configuration_recorder.id
+          }

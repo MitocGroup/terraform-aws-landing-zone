@@ -10,7 +10,7 @@ default_provider = {
       document_type           = "Command"
       permissions_type        = ""
       permissions_account_ids = ""
-      content                 = <<EOT
+      content                 = <<EOF
       {
           "schemaVersion": "1.2",
           "description": "",
@@ -24,7 +24,7 @@ default_provider = {
               }
           }
       }
-      EOT
+      EOF
     }
   },
   landing_zone_ssm_document_tags = {
