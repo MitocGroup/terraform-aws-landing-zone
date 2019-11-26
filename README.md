@@ -12,7 +12,7 @@ control who can manage `landing_zone` module and who can consume `landing_zone`
 module's outputs in read-only mode.
 
 > NOTE: Current implementation is fully compatible with terraform v0.12+.
-Switch to branch `v0.11` if you still using terraform v0.11.x and below.
+Switch to branch `terraform_v0.11` if you still using terraform v0.11.x and below.
 
 Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Components Are Available](#what-components-are-available) | [Why to Use This Solution](#why-to-use-this-solution)
 

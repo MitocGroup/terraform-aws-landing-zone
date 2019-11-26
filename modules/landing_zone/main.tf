@@ -7,7 +7,7 @@ resource "null_resource" "landing_zone_config" {
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "node ${path.module}/scripts/config.js"
 
     environment = {
@@ -20,7 +20,7 @@ resource "null_resource" "landing_zone_config" {
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "node ${path.module}/scripts/remove-config.js"
 
     environment = {
@@ -40,7 +40,7 @@ resource "null_resource" "landing_zone_apply" {
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "node ${path.module}/scripts/apply.js"
 
     environment = {
@@ -52,7 +52,7 @@ resource "null_resource" "landing_zone_apply" {
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "echo 'info: destroy ignored because part of apply'"
   }
 }
@@ -65,12 +65,12 @@ resource "null_resource" "landing_zone_destroy" {
   }
 
   provisioner "local-exec" {
-    when    = "create"
+    when    = create
     command = "echo 'info: apply ignored because part of destroy'"
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "node ${path.module}/scripts/destroy.js"
 
     environment = {
