@@ -13,6 +13,7 @@ module "example_landing_zone_reader" {
 For easier usage and reduced complexity, we recommend to define `locals` as show below:
 ```hcl
 locals {
+  landing_zone_iam_role_arns      = module.example_landing_zone_reader.landing_zone_reader["landing_zone_iam_role_arns"]
   landing_zone_subnet_ids         = module.example_landing_zone_reader.landing_zone_reader["landing_zone_subnet_ids"]
   landing_zone_security_group_ids = module.example_landing_zone_reader.landing_zone_reader["landing_zone_security_group_ids"]
 }
@@ -27,13 +28,13 @@ resource "aws_lambda_function" "hello_world" {
   handler       = "index.handler"
   memory_size   = "128"
   timeout       = "30"
-  role          = "arn:aws:iam::123456789012:role/ServiceRoleForLambdaEdge"
+  role          = local.landing_zone_iam_role_arns["default"]["ServiceRoleForLambdaEdge"]
   s3_bucket     = "www.terrahub.io"
   s3_key        = "/hello-world/nodejs10.x.zip"
 
   vpc_config = {
-    subnet_ids         = local.landing_zone_subnet_ids["default"]
-    security_group_ids = local.landing_zone_security_group_ids["default"]
+    subnet_ids         = values(local.landing_zone_subnet_ids["default"])
+    security_group_ids = values(local.landing_zone_security_group_ids["default"])
   }
 }
 ```
