@@ -38,5 +38,5 @@ component:
         value: aws_security_group.landing_zone_security_group.*.id
       landing_zone_security_group_ids:
         value: >-
-          { for sg in aws_security_group.landing_zone_security_group.*: sg.name
-          => sg.id }
+          { for sg in aws_security_group.landing_zone_security_group.*:
+          sg.tags["Name"] => sg.id }
