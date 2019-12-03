@@ -27,7 +27,7 @@ component:
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
             merge(local.elements_landing_zone_route_table_tags_map["config_${count.index}"],
-            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
             ${tfvar.terrahub["component"]["name"]}
             ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
@@ -38,4 +38,4 @@ component:
       landing_zone_route_table_ids:
         value: >-
           { for route_table in aws_route_table.landing_zone_route_table.*:
-          lookup(route_table.tags, "zHash", route_table.id) => route_table.id }
+          lookup(route_table.tags, "LzHash", route_table.id) => route_table.id }

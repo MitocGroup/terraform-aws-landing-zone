@@ -25,10 +25,10 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
-            name: 'tag:zHash'
+            name: 'tag:LzHash'
             values:
               - >-
-                local.elements_landing_zone_route_table_data_map["config_${count.index}"]["zHash"]
+                local.elements_landing_zone_route_table_data_map["config_${count.index}"]["LzHash"]
     resource:
       aws_route:
         landing_zone_route_ipv6:
