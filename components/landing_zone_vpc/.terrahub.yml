@@ -26,7 +26,12 @@ component:
             local.elements_landing_zone_vpc_map["config_${count.index}"]["enable_dns_hostnames"]
           enable_classiclink_dns_support: >-
             local.elements_landing_zone_vpc_map["config_${count.index}"]["enable_classiclink_dns_support"]
-          tags: 'local.elements_landing_zone_vpc_tags_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_vpc_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_vpc_map["config_${count.index}"]["cidr_block"]}")))
     output:
       ids:
         value: aws_vpc.landing_zone_vpc.*.id
@@ -35,6 +40,10 @@ component:
       arns:
         value: aws_vpc.landing_zone_vpc.*.arn
       landing_zone_vpc_ids:
-        value: '{ for vpc in aws_vpc.landing_zone_vpc.*: vpc.tags["Name"] => vpc.id }'
+        value: >-
+          { for vpc in aws_vpc.landing_zone_vpc.*: lookup(vpc.tags, "LzHash",
+          vpc.cidr_block) => vpc.id }
       landing_zone_vpc_arns:
-        value: '{ for vpc in aws_vpc.landing_zone_vpc.*: vpc.tags["Name"] => vpc.arn }'
+        value: >-
+          { for vpc in aws_vpc.landing_zone_vpc.*: lookup(vpc.tags, "LzHash",
+          vpc.cidr_block) => vpc.arn }

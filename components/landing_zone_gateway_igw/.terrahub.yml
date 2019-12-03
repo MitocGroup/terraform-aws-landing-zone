@@ -24,7 +24,10 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_igw_tags"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
-            local.elements_landing_zone_gateway_igw_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_gateway_igw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_internet_gateway.landing_zone_gateway_igw.*.id
@@ -33,4 +36,4 @@ component:
       landing_zone_gateway_igw_ids:
         value: >-
           { for gateway_igw in aws_internet_gateway.landing_zone_gateway_igw.*:
-          gateway_igw.tags["Name"] => gateway_igw.id }
+          lookup(gateway_igw.tags, "LzHash", gateway_igw.id) => gateway_igw.id }
