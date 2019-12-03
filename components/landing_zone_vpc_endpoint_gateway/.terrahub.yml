@@ -28,10 +28,10 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tables_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           filter:
-            name: 'tag:Name'
+            name: 'tag:zHash'
             values:
               - >-
-                local.elements_landing_zone_route_tables_data_map["config_${count.index}"]["name"]
+                local.elements_landing_zone_route_tables_data_map["config_${count.index}"]["zHash"]
     resource:
       aws_vpc_endpoint:
         landing_zone_vpc_endpoint_gateway:
@@ -49,7 +49,11 @@ component:
             element(data.aws_route_tables.route_tables_selected.*.ids,
             count.index)
           tags: >-
-            local.elements_landing_zone_vpc_endpoint_gateway_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_vpc_endpoint_gateway_tags_map["config_${count.index}"],
+            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_vpc_endpoint_gateway_map["config_${count.index}"]["service_name"]}")))
           vpc_endpoint_type: Gateway
     output:
       ids:
@@ -60,4 +64,5 @@ component:
         value: >-
           { for vpc_endpoint_gateway in
           aws_vpc_endpoint.landing_zone_vpc_endpoint_gateway.*:
-          vpc_endpoint_gateway.tags["Name"] => vpc_endpoint_gateway.id }
+          lookup(vpc_endpoint_gateway.tags, "zHash", vpc_endpoint_gateway.id) =>
+          vpc_endpoint_gateway.id }

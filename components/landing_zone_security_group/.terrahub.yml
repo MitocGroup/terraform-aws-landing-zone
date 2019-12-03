@@ -30,7 +30,10 @@ component:
             local.elements_landing_zone_security_group_map["config_${count.index}"]["description"]
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
-            local.elements_landing_zone_security_group_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_security_group_tags_map["config_${count.index}"],
+            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_security_group.landing_zone_security_group.*.id
@@ -39,4 +42,4 @@ component:
       landing_zone_security_group_ids:
         value: >-
           { for sg in aws_security_group.landing_zone_security_group.*:
-          sg.tags["Name"] => sg.id }
+          lookup(sg.tags, "zHash", sg.id) => sg.id }

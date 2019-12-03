@@ -44,10 +44,10 @@ component:
             - name: vpc-id
               values:
                 - 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-            - name: 'tag:Name'
+            - name: 'tag:zHash'
               values:
                 - >-
-                  local.elements_landing_zone_security_groups_data_map["config_${count.index}"]["name"]
+                  local.elements_landing_zone_security_groups_data_map["config_${count.index}"]["zHash"]
     resource:
       aws_vpc_endpoint:
         landing_zone_vpc_endpoint_interface:
@@ -66,7 +66,11 @@ component:
             count.index)
           subnet_ids: 'element(data.aws_subnet_ids.subnet_ids_selected.*.ids, count.index)'
           tags: >-
-            local.elements_landing_zone_vpc_endpoint_interface_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_vpc_endpoint_interface_tags_map["config_${count.index}"],
+            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_vpc_endpoint_interface_map["config_${count.index}"]["service_name"]}")))
           vpc_endpoint_type: Interface
     output:
       ids:
@@ -77,4 +81,5 @@ component:
         value: >-
           { for vpc_endpoint_interface in
           aws_vpc_endpoint.landing_zone_vpc_endpoint_interface.*:
-          vpc_endpoint_interface.tags["Name"] => vpc_endpoint_interface.id }
+          lookup(vpc_endpoint_interface.tags, "zHash",
+          vpc_endpoint_interface.id) => vpc_endpoint_interface.id }

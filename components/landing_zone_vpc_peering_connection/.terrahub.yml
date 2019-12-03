@@ -34,7 +34,10 @@ component:
           peer_region: >-
             local.elements_landing_zone_vpc_peering_connection_map["config_${count.index}"]["peer_region"]
           tags: >-
-            local.elements_landing_zone_vpc_peering_connection_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_vpc_peering_connection_tags_map["config_${count.index}"],
+            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*.id
@@ -44,4 +47,5 @@ component:
         value: >-
           { for vpc_peering_connection in
           aws_vpc_peering_connection.landing_zone_vpc_peering_connection.*:
-          vpc_peering_connection.tags["Name"] => vpc_peering_connection.id }
+          lookup(vpc_peering_connection.tags, "zHash",
+          vpc_peering_connection.id) => vpc_peering_connection.id }

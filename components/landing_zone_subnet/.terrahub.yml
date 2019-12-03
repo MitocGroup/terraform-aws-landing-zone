@@ -29,7 +29,12 @@ component:
             local.elements_landing_zone_subnet_map["config_${count.index}"]["cidr_block"]
           availability_zone: >-
             local.elements_landing_zone_subnet_map["config_${count.index}"]["availability_zone"]
-          tags: 'local.elements_landing_zone_subnet_tags_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_subnet_tags_map["config_${count.index}"],
+            map("zHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_subnet_map["config_${count.index}"]["cidr_block"]}")))
           assign_ipv6_address_on_creation: >-
             local.elements_landing_zone_subnet_map["config_${count.index}"]["assign_ipv6_address_on_creation"]
     output:
@@ -43,13 +48,13 @@ component:
         value: aws_subnet.landing_zone_subnet.*.arn
       landing_zone_subnet_ids:
         value: >-
-          { for subnet in aws_subnet.landing_zone_subnet.*: subnet.tags["Name"]
-          => subnet.id }
+          { for subnet in aws_subnet.landing_zone_subnet.*: lookup(subnet.tags,
+          "zHash", subnet.cidr_block) => subnet.id }
       landing_zone_subnet_availability_zone_ids:
         value: >-
-          { for subnet in aws_subnet.landing_zone_subnet.*: subnet.tags["Name"]
-          => subnet.availability_zone_id }
+          { for subnet in aws_subnet.landing_zone_subnet.*: lookup(subnet.tags,
+          "zHash", subnet.cidr_block) => subnet.availability_zone_id }
       landing_zone_subnet_arns:
         value: >-
-          { for subnet in aws_subnet.landing_zone_subnet.*: subnet.tags["Name"]
-          => subnet.arn }
+          { for subnet in aws_subnet.landing_zone_subnet.*: lookup(subnet.tags,
+          "zHash", subnet.cidr_block) => subnet.arn }
