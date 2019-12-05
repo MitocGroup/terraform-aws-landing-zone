@@ -38,10 +38,10 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_cgw_data"])
           filter:
-            - name: 'tag:Name'
+            - name: 'tag:LzHash'
               values:
                 - >-
-                  local.elements_landing_zone_gateway_cgw_data_map["config_${count.index}"]["name"]
+                  local.elements_landing_zone_gateway_cgw_data_map["config_${count.index}"]["LzHash"]
     resource:
       aws_route:
         landing_zone_route_cgw:

@@ -26,7 +26,10 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_table_resource"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
-            local.elements_landing_zone_route_table_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_route_table_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_route_table.landing_zone_route_table.*.id
@@ -35,4 +38,4 @@ component:
       landing_zone_route_table_ids:
         value: >-
           { for route_table in aws_route_table.landing_zone_route_table.*:
-          route_table.tags["Name"] => route_table.id }
+          lookup(route_table.tags, "LzHash", route_table.id) => route_table.id }

@@ -28,14 +28,14 @@ guidelines and contains the following folders:
 * [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following prerequisites / dependencies:
-* [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L10)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L45)
+* [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L11)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L48)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
   source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.2.0"
+  version   = "0.2.1"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
