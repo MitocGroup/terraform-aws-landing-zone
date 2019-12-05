@@ -71,7 +71,11 @@ component:
           sqs_failure_feedback_role_arn: >-
             local.elements_landing_zone_sns_topic_map["config_${count.index}"]["sqs_failure_feedback_role_arn"]
           tags: >-
-            local.elements_landing_zone_sns_topic_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_sns_topic_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_sns_topic_map["config_${count.index}"]["name"]}")))
     output:
       ids:
         value: aws_sns_topic.landing_zone_sns_topic.*.id

@@ -39,7 +39,10 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_network_acl_resource"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
           tags: >-
-            local.elements_landing_zone_network_acl_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_network_acl_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
           subnet_ids: >-
             slice(data.aws_subnet.subnet_selected.*.id,
             local.elements_landing_zone_network_acl_map["config_${count.index}"]["subnets_from_index"],
@@ -52,4 +55,4 @@ component:
       landing_zone_network_acl_ids:
         value: >-
           { for network_acl in aws_network_acl.landing_zone_network_acl.*:
-          network_acl.tags["Name"] => network_acl.id }
+          lookup(network_acl.tags, "LzHash", network_acl.id) => network_acl.id }

@@ -29,7 +29,10 @@ component:
           vpn_ecmp_support: >-
             local.elements_landing_zone_gateway_tgw_map["config_${count.index}"]["vpn_ecmp_support"]
           tags: >-
-            local.elements_landing_zone_gateway_tgw_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_gateway_tgw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_ec2_transit_gateway.landing_zone_gateway_tgw.*.id
@@ -39,4 +42,4 @@ component:
         value: >-
           { for gateway_tgw in
           aws_ec2_transit_gateway.landing_zone_gateway_tgw.*:
-          gateway_tgw.tags["Name"] => gateway_tgw.id }
+          lookup(gateway_tgw.tags, "LzHash", gateway_tgw.id) => gateway_tgw.id }

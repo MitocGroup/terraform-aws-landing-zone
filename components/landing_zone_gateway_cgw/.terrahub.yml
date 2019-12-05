@@ -21,7 +21,10 @@ component:
           type: >-
             local.elements_landing_zone_gateway_cgw_map["config_${count.index}"]["type"]
           tags: >-
-            local.elements_landing_zone_gateway_cgw_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_gateway_cgw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_customer_gateway.landing_zone_gateway_cgw.*.id
@@ -30,4 +33,4 @@ component:
       landing_zone_gateway_cgw_ids:
         value: >-
           { for gateway_cgw in aws_customer_gateway.landing_zone_gateway_cgw.*:
-          gateway_cgw.tags["Name"] => gateway_cgw.id }
+          lookup(gateway_cgw.tags, "LzHash", gateway_cgw.id) => gateway_cgw.id }

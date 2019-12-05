@@ -31,7 +31,11 @@ component:
           start_date: >-
             local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["start_date"]
           tags: >-
-            local.elements_landing_zone_ssm_maintenance_window_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_ssm_maintenance_window_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_ssm_maintenance_window_map["config_${count.index}"]["name"]}")))
     output:
       ids:
         value: aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*.id
@@ -41,4 +45,5 @@ component:
         value: >-
           { for ssm_maintenance_window in
           aws_ssm_maintenance_window.landing_zone_ssm_maintenance_window.*:
-          ssm_maintenance_window.tags["Name"] => ssm_maintenance_window.id }
+          lookup(ssm_maintenance_window.tags, "LzHash",
+          ssm_maintenance_window.id) => ssm_maintenance_window.id }

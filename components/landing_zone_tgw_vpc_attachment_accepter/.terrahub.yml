@@ -35,7 +35,11 @@ component:
           transit_gateway_attachment_id: >-
             element(data.aws_ec2_transit_gateway_vpc_attachment.tgw_vpc_selected.*.id,
             count.index)
-          tags: 'local.elements_landing_zone_tgw_tags_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_tgw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
           transit_gateway_default_route_table_association: >-
             local.elements_landing_zone_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
           transit_gateway_default_route_table_propagation: >-
@@ -51,5 +55,5 @@ component:
         value: >-
           { for tgw_vpc_attachment_accepter in
           aws_ec2_transit_gateway_vpc_attachment_accepter.landing_zone_tgw_vpc_attachment_accepter.*:
-          tgw_vpc_attachment_accepter.tags["Name"] =>
-          tgw_vpc_attachment_accepter.id }
+          lookup(tgw_vpc_attachment_accepter.tags, "LzHash",
+          tgw_vpc_attachment_accepter.id) => tgw_vpc_attachment_accepter.id }

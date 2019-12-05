@@ -24,7 +24,11 @@ component:
           registration_limit: >-
             local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["registration_limit"]
           tags: >-
-            local.elements_landing_zone_ssm_activation_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_ssm_activation_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_ssm_activation_map["config_${count.index}"]["name"]}")))
     output:
       ids:
         value: aws_ssm_activation.landing_zone_ssm_activation.*.id
