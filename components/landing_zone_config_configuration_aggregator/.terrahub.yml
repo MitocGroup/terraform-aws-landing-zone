@@ -13,7 +13,10 @@ component:
           account_id: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id'
           region: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region'
           tags: >-
-            local.elements_config_aggregate_authorization_tags_map["config_${count.index}"]
+            merge(local.elements_config_aggregate_authorization_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       arns:
         value: >-
@@ -22,5 +25,6 @@ component:
         value: >-
           { for config_aggregate_authorization in
           aws_config_aggregate_authorization.landing_zone_config_aggregate_authorization.*:
-          config_aggregate_authorization.tags["Name"] =>
+          lookup(config_aggregate_authorization.tags, "LzHash",
+          config_aggregate_authorization.id) =>
           config_aggregate_authorization.arn }

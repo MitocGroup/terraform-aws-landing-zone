@@ -33,7 +33,7 @@ component:
               - >-
                 local.elements_landing_zone_route_table_data_map["config_${count.index}"]["LzHash"]
       aws_nat_gateway:
-        aws_nat_gateway:
+        aws_nat_gateway_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_nat_data"])
@@ -53,7 +53,7 @@ component:
           destination_cidr_block: >-
             local.elements_landing_zone_route_nat_map["config_${count.index}"]["destination_cidr_block"]
           nat_gateway_id: >-
-            element(distinct(data.aws_nat_gateway.aws_nat_gateway.*.id),
+            element(data.aws_nat_gateway.aws_nat_gateway_selected.*.id,
             count.index)
     output:
       ids:

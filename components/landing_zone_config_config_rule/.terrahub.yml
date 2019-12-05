@@ -22,7 +22,11 @@ component:
             source_identifier: >-
               local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["source_identifier"]
           tags: >-
-            local.elements_landing_zone_config_config_rule_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_config_config_rule_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["name"]}")))
     output:
       arns:
         value: aws_config_config_rule.landing_zone_config_config_rule.*.arn
@@ -32,9 +36,11 @@ component:
         value: >-
           { for config_config_rule in
           aws_config_config_rule.landing_zone_config_config_rule.*:
-          config_config_rule.tags["Name"] => config_config_rule.arn }
+          lookup(config_config_rule.tags, "LzHash", config_config_rule.arn) =>
+          config_config_rule.arn }
       landing_zone_config_config_rule_rule_ids:
         value: >-
           { for config_config_rule in
           aws_config_config_rule.landing_zone_config_config_rule.*:
-          config_config_rule.tags["Name"] => config_config_rule.rule_id }
+          lookup(config_config_rule.tags, "LzHash", config_config_rule.arn) =>
+          config_config_rule.rule_id }

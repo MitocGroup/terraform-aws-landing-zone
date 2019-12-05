@@ -29,7 +29,11 @@ component:
           allowed_pattern: >-
             local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["allowed_pattern"]
           tags: >-
-            local.elements_landing_zone_ssm_parameter_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_ssm_parameter_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_ssm_parameter_map["config_${count.index}"]["name"]}")))
     output:
       arns:
         value: aws_ssm_parameter.landing_zone_ssm_parameter.*.arn

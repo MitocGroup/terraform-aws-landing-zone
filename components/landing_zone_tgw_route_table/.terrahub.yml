@@ -28,7 +28,11 @@ component:
           transit_gateway_id: >-
             element(data.aws_ec2_transit_gateway.gateway_tgw_selected.*.id,
             count.index)
-          tags: 'local.elements_landing_zone_route_table_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_route_table_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_ec2_transit_gateway_route_table.landing_zone_tgw_route_table.*.id
@@ -38,4 +42,5 @@ component:
         value: >-
           { for tgw_route_table in
           aws_ec2_transit_gateway_route_table.landing_zone_tgw_route_table.*:
-          tgw_route_table.tags["Name"] => tgw_route_table.id }
+          lookup(tgw_route_table.tags, "LzHash", tgw_route_table.id) =>
+          tgw_route_table.id }

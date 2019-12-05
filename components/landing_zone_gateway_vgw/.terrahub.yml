@@ -28,7 +28,10 @@ component:
           availability_zone: >-
             local.elements_landing_zone_gateway_vgw_map["config_${count.index}"]["availability_zone"]
           tags: >-
-            local.elements_landing_zone_gateway_vgw_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_gateway_vgw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_vpn_gateway.landing_zone_gateway_vgw.*.id
@@ -37,4 +40,4 @@ component:
       landing_zone_gateway_vgw_ids:
         value: >-
           { for gateway_vgw in aws_vpn_gateway.landing_zone_gateway_vgw.*:
-          gateway_vgw.tags["Name"] => gateway_vgw.id }
+          lookup(gateway_vgw.tags, "LzHash", gateway_vgw.id) => gateway_vgw.id }

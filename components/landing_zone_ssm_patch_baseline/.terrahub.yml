@@ -46,7 +46,11 @@ component:
               enable_non_security: >-
                 local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["enable_non_security_1"]
           tags: >-
-            local.elements_landing_zone_ssm_patch_baseline_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_ssm_patch_baseline_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["name"]}")))
     output:
       ids:
         value: aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*.id
@@ -54,4 +58,5 @@ component:
         value: >-
           { for ssm_patch_baseline in
           aws_ssm_patch_baseline.landing_zone_ssm_patch_baseline.*:
-          ssm_patch_baseline.name => ssm_patch_baseline.id }
+          lookup(ssm_patch_baseline.tags, "LzHash", ssm_patch_baseline.id) =>
+          ssm_patch_baseline.id }
