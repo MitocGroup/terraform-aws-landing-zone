@@ -60,7 +60,11 @@ component:
             local.elements_landing_zone_tgw_map["config_${count.index}"]["dns_support"]
           ipv6_support: >-
             local.elements_landing_zone_tgw_map["config_${count.index}"]["ipv6_support"]
-          tags: 'local.elements_landing_zone_tgw_tags_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_tgw_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
           transit_gateway_default_route_table_association: >-
             local.elements_landing_zone_tgw_map["config_${count.index}"]["transit_gateway_default_route_table_association"]
           transit_gateway_default_route_table_propagation: >-
@@ -76,4 +80,5 @@ component:
         value: >-
           { for tgw_vpc_attachment in
           aws_ec2_transit_gateway_vpc_attachment.landing_zone_tgw_vpc_attachment.*:
-          tgw_vpc_attachment.tags["Name"] => tgw_vpc_attachment.id }
+          lookup(tgw_vpc_attachment.tags, "LzHash", tgw_vpc_attachment.id) =>
+          tgw_vpc_attachment.id }

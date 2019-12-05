@@ -64,5 +64,5 @@ component:
         value: >-
           { for vpc_endpoint_gateway in
           aws_vpc_endpoint.landing_zone_vpc_endpoint_gateway.*:
-          lookup(vpc_endpoint_gateway.tags, "LzHash", vpc_endpoint_gateway.id) =>
-          vpc_endpoint_gateway.id }
+          lookup(vpc_endpoint_gateway.tags, "LzHash", vpc_endpoint_gateway.id)
+          => vpc_endpoint_gateway.id }

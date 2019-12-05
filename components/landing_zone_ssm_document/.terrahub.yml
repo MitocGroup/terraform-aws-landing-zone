@@ -26,7 +26,11 @@ component:
             account_ids: >-
               local.elements_landing_zone_ssm_document_map["config_${count.index}"]["permissions_account_ids"]
           tags: >-
-            local.elements_landing_zone_ssm_document_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_ssm_document_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_ssm_document_map["config_${count.index}"]["name"]}")))
     output:
       created_dates:
         value: aws_ssm_document.landing_zone_ssm_document.*.created_date
@@ -53,8 +57,10 @@ component:
       landing_zone_ssm_document_created_dates:
         value: >-
           { for ssm_document in aws_ssm_document.landing_zone_ssm_document.*:
-          ssm_document.tags["Name"] => ssm_document.created_date }
+          lookup(ssm_document.tags, "LzHash", ssm_document.hash) =>
+          ssm_document.created_date }
       landing_zone_ssm_document_hashes:
         value: >-
           { for ssm_document in aws_ssm_document.landing_zone_ssm_document.*:
-          ssm_document.tags["Name"] => ssm_document.hash }
+          lookup(ssm_document.tags, "LzHash", ssm_document.hash) =>
+          ssm_document.hash }

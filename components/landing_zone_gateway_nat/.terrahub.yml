@@ -45,7 +45,10 @@ component:
           allocation_id: 'element(data.aws_eip.eip_selected.*.id, count.index)'
           subnet_id: 'element(data.aws_subnet.subnet_selected.*.id, count.index)'
           tags: >-
-            local.elements_landing_zone_gateway_nat_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_gateway_nat_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
     output:
       ids:
         value: aws_nat_gateway.landing_zone_gateway_nat.*.id
@@ -56,8 +59,9 @@ component:
       landing_zone_gateway_nat_ids:
         value: >-
           { for gateway_nat in aws_nat_gateway.landing_zone_gateway_nat.*:
-          gateway_nat.tags["Name"] => gateway_nat.id }
+          lookup(gateway_nat.tags, "LzHash", gateway_nat.id) => gateway_nat.id }
       landing_zone_gateway_nat_network_interface_ids:
         value: >-
           { for gateway_nat in aws_nat_gateway.landing_zone_gateway_nat.*:
-          gateway_nat.tags["Name"] => gateway_nat.network_interface_id }
+          lookup(gateway_nat.tags, "LzHash", gateway_nat.id) =>
+          gateway_nat.network_interface_id }

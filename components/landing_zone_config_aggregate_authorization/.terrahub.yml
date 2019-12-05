@@ -22,7 +22,11 @@ component:
               split("|",
               local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["regions"])
           tags: >-
-            local.elements_landing_zone_config_configuration_aggregator_tags_map["config_${count.index}"]
+            merge(local.elements_landing_zone_config_configuration_aggregator_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]}
+            ${local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["name"]}")))
     output:
       arns:
         value: >-
@@ -31,5 +35,6 @@ component:
         value: >-
           { for config_configuration_aggregator in
           aws_config_configuration_aggregator.landing_zone_config_configuration_aggregator.*:
-          config_configuration_aggregator.tags["Name"] =>
+          lookup(config_configuration_aggregator.tags, "LzHash",
+          config_configuration_aggregator.arn) =>
           config_configuration_aggregator.arn }

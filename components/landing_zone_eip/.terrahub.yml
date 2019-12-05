@@ -12,7 +12,11 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_eip_resource"])
-          tags: 'local.elements_landing_zone_eip_tags_map["config_${count.index}"]'
+          tags: >-
+            merge(local.elements_landing_zone_eip_tags_map["config_${count.index}"],
+            map("LzHash", sha1("${tfvar.terrahub["project"]["code"]}
+            ${tfvar.terrahub["component"]["name"]}
+            ${tfvar.terrahub["landing_zone_providers"]["0"]} ${count.index}")))
           vpc: 'local.elements_landing_zone_eip_map["config_${count.index}"]["vpc"]'
     output:
       ids:
@@ -22,8 +26,10 @@ component:
       public_ips:
         value: aws_eip.landing_zone_eip.*.public_ip
       landing_zone_eip_ids:
-        value: '{ for eip in aws_eip.landing_zone_eip.*: eip.tags["Name"] => eip.id }'
+        value: >-
+          { for eip in aws_eip.landing_zone_eip.*: lookup(eip.tags, "LzHash",
+          eip.id) => eip.id }
       landing_zone_eip_public_ips:
         value: >-
-          { for eip in aws_eip.landing_zone_eip.*: eip.tags["Name"] =>
-          eip.public_ip }
+          { for eip in aws_eip.landing_zone_eip.*: lookup(eip.tags, "LzHash",
+          eip.id) => eip.public_ip }
