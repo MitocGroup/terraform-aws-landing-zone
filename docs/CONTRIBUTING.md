@@ -38,7 +38,7 @@ Before we get started, here are a few things we expect from you (and that you sh
 
 ## How to contribute
 
-If you'd like to contribute, start by searching through the [issues](https://github.com/TerraHubCorp/terraform-aws-landing-zone/issues) and [pull requests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/pulls) to see whether someone else has raised a similar idea or question.
+If you'd like to contribute, start by searching through the [issues](https://github.com/MitocGroup/terraform-aws-landing-zone/issues) and [pull requests](https://github.com/MitocGroup/terraform-aws-landing-zone/pulls) to see whether someone else has raised a similar idea or question.
 
 If you don't see your idea listed, and you think it fits into the goals of this guide, do one of the following:
 * **If your contribution is minor,** such as a typo fix, open a pull request.
@@ -56,7 +56,7 @@ This project is built using [nodejs](https://www.nodejs.org) and [terrahub](http
 
 Once you have that set up, run:
 
-    git clone git@github.com:TerraHubCorp/terraform-aws-landing-zone.git
+    git clone git@github.com:MitocGroup/terraform-aws-landing-zone.git
     cd ./terraform-aws-landing-zone/
     terraform init
 
@@ -70,6 +70,6 @@ To submit a contribution for review, issue a pull request with comments introduc
 
 ## Community
 
-Discussions about this project take place on this repository's [Issues](https://github.com/TerraHubCorp/terraform-aws-landing-zone/issues) and [Pull Requests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/pulls) sections. Anybody is welcome to join these conversations.
+Discussions about this project take place on this repository's [Issues](https://github.com/MitocGroup/terraform-aws-landing-zone/issues) and [Pull Requests](https://github.com/MitocGroup/terraform-aws-landing-zone/pulls) sections. Anybody is welcome to join these conversations.
 
 Whenever possible, do not take these conversations to private channels, including contacting the maintainers directly. Keeping communications public means everybody can benefit and learn from the conversations.
