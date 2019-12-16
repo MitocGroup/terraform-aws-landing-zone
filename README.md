@@ -18,24 +18,24 @@ Quick Links: [How Does This Module Work](#how-does-this-module-work) | [What Com
 
 
 ## How Does This Module Work
-Terraform module [landing_zone](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone)
+Terraform module [landing_zone](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone)
 is based on [standard module structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure)
 guidelines and contains the following folders:
 * root folder - module's standard terraform configuration
-* [components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
-* [examples](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
-* [modules](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules) - standalone, reusable and production-ready modules
-* [tests](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
+* [components](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components) - yaml-based and terraform compatible configurations
+* [examples](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples) - different ways to combine components as part of this module
+* [modules](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules) - standalone, reusable and production-ready modules
+* [tests](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/tests) - set of automated tests to use in CI/CD pipelines
 
 This terraform module requires the following prerequisites / dependencies:
-* [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L11)
-* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L48)
+* [nodejs](https://www.nodejs.org) - referenced and validated [here](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone/main.tf#L11)
+* [terrahub](https://www.npmjs.com/package/terrahub) - referenced and validated [here](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone/scripts/config.js#L48)
 
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
-  source    = "TerraHubCorp/landing-zone/aws"
-  version   = "0.2.1"
+  source    = "MitocGroup/landing-zone/aws"
+  version   = "0.2.2"
   root_path = path.module
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
@@ -71,7 +71,7 @@ This means that before you use this terraform module, you will need to:
         * `account_id` reflects the AWS account used to deploy AWS resources; prevents provisioning AWS resources into wrong AWS account in case of valid AWS credentials
         * `region` reflects the AWS region used to deploy AWS resources; create 2 different providers for the same AWS account, but different AWS regions
 2. Change `landing_zone_components` to values that fit into your AWS Landing Zone use case
-    * each key from `landing_zone_components` map represents the name of the component from [this list of available components](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components)
+    * each key from `landing_zone_components` map represents the name of the component from [this list of available components](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components)
     * each value from `landing_zone_components` map represents the path to `.tfvars` file on S3 and/or local disk
         * each `.tfvars` file must use HCL format; DO NOT USE other formats like JSON or YAML
 3. Change `terraform_backend` to values that reflect your terraform backend where `.tfstate` files are stored (in `variables.tf` default parameter value is defined as `local`)
@@ -79,7 +79,7 @@ This means that before you use this terraform module, you will need to:
 > NOTE: Terraform module `landing_zone` can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` variable will be ignored.
 
 ### Landing Zone Reader
-Terraform module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra terraform modules: [landing_zone_reader_config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
+Terraform module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra terraform modules: [landing_zone_reader_config](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
 
 Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
 ```hcl
@@ -105,10 +105,10 @@ module "landing_zone_reader" {
 IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can execute successfully `terraform init`. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
 
 ### More Examples
-* [Terraform module for AWS Landing Zone (one component: AWS Organization)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_organization)
-* [Terraform module for AWS Landing Zone (multiple components: S3, CodePipeline and CodeBuild)](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_s3_and_codepipeline)
-* [Terraform module for AWS Landing Zone reader config](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader_config)
-* [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
+* [Terraform module for AWS Landing Zone (one component: AWS Organization)](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_organization)
+* [Terraform module for AWS Landing Zone (multiple components: S3, CodePipeline and CodeBuild)](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_s3_and_codepipeline)
+* [Terraform module for AWS Landing Zone reader config](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader_config)
+* [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
 
 
 ## What Components Are Available
@@ -126,27 +126,27 @@ AWS Landing Zone solution is defined by the following strategy:
 components (work in progress).
 
 ### Multi-Account Structure
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
+<img align="right" src="https://github.com/MitocGroup/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-architecture.png" alt="AWS Landing Zone Multi-Account Architecture" />
 
 Based on the multi-account architecture, here below are currently available components:
-1. [landing_zone_pipeline_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L6)
-2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L6)
-3. [landing_zone_code_pipeline](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L33)
-4. [landing_zone_code_pipeline_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role/.terrahub.yml#L6)
-5. [landing_zone_code_pipeline_role_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role_policy/.terrahub.yml#L41)
-6. [landing_zone_code_build](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build/.terrahub.yml#L21)
-7. [landing_zone_code_build_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role/.terrahub.yml#L6)
-8. [landing_zone_code_build_role_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role_policy/.terrahub.yml#L29)
-9. [landing_zone_organization](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization/.terrahub.yml#L6)
-10. [landing_zone_organization_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy/.terrahub.yml#L6)
-11. [landing_zone_organization_policy_attachment](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy_attachment/.terrahub.yml#L18)
-12. [landing_zone_organization_accounts](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_accounts/.terrahub.yml#L15)
-13. [landing_zone_organization_unit](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_unit/.terrahub.yml#L15)
+1. [landing_zone_pipeline_s3_bucket](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_s3_bucket/.terrahub.yml#L6)
+2. [landing_zone_pipeline_artifact_s3_bucket](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_pipeline_artifact_s3_bucket/.terrahub.yml#L6)
+3. [landing_zone_code_pipeline](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline/.terrahub.yml#L33)
+4. [landing_zone_code_pipeline_role](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role/.terrahub.yml#L6)
+5. [landing_zone_code_pipeline_role_policy](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_pipeline_role_policy/.terrahub.yml#L41)
+6. [landing_zone_code_build](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build/.terrahub.yml#L21)
+7. [landing_zone_code_build_role](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role/.terrahub.yml#L6)
+8. [landing_zone_code_build_role_policy](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_code_build_role_policy/.terrahub.yml#L29)
+9. [landing_zone_organization](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_organization/.terrahub.yml#L6)
+10. [landing_zone_organization_policy](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy/.terrahub.yml#L6)
+11. [landing_zone_organization_policy_attachment](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_policy_attachment/.terrahub.yml#L18)
+12. [landing_zone_organization_accounts](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_accounts/.terrahub.yml#L15)
+13. [landing_zone_organization_unit](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_organization_unit/.terrahub.yml#L15)
 
 <br clear="right" />
 
 ### Account Vending Machine
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine Architecture" />
+<img align="right" src="https://github.com/MitocGroup/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-account-vending-machine.png" alt="AWS Landing Zone Account Vending Machine Architecture" />
 
 Based on the account vending machine architecture, here below are currently available components:
 1. Coming soon ...
@@ -154,21 +154,21 @@ Based on the account vending machine architecture, here below are currently avai
 <br clear="right" />
 
 ### User Access and Identity Management
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access and Identity Management Architecture" />
+<img align="right" src="https://github.com/MitocGroup/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-user-access.png" alt="AWS Landing Zone User Access and Identity Management Architecture" />
 
 Based on the user access architecture, here below are currently available components:
-1. [landing_zone_iam_role](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role/.terrahub.yml#L9)
-2. [landing_zone_iam_policy](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_policy/.terrahub.yml#L9)
-3. [landing_zone_iam_role_policy_attachment](https://github.com/TerraHubCorp/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role_policy_attachment/.terrahub.yml#L9)
+1. [landing_zone_iam_role](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role/.terrahub.yml#L9)
+2. [landing_zone_iam_policy](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_policy/.terrahub.yml#L9)
+3. [landing_zone_iam_role_policy_attachment](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/components/landing_zone_iam_role_policy_attachment/.terrahub.yml#L9)
 4. landing_zone_sso
-5. [landing_zone_directory_service_director](https://github.com/TerraHubCorp/terraform-aws-landing-zone/blob/master/components/landing_zone_directory_service_directory/.terrahub.yml#L24)
+5. [landing_zone_directory_service_director](https://github.com/MitocGroup/terraform-aws-landing-zone/blob/master/components/landing_zone_directory_service_directory/.terrahub.yml#L24)
 
 > NOTE: This solution is relying on cross-account role called `OrganizationAccountAccessRole`. Follow [this link](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role) to learn more and/or create missing IAM role(s)...
 
 <br clear="right" />
 
 ### Monitoring and Notifications
-<img align="right" src="https://github.com/TerraHubCorp/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone Monitoring and Notifications Architecture" />
+<img align="right" src="https://github.com/MitocGroup/terraform-aws-landing-zone/raw/master/docs/aws-landing-zone-notifications.png" alt="AWS Landing Zone Monitoring and Notifications Architecture" />
 
 Based on the notifications architecture, here below are currently available components:
 1. Coming soon ...

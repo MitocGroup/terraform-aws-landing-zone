@@ -51,7 +51,7 @@ async function terrahubOutput(include, jsonBackend) {
 
       if (!result.length) {
         throw new Error('No terraform outputs found. Before using `landing_zone_reader` module, ' +
-          'make sure that `landing_zone` module generates output. Learn more: https://github.com/TerraHubCorp/terraform-aws-landing-zone/');
+          'make sure that `landing_zone` module generates output. Learn more: https://github.com/MitocGroup/terraform-aws-landing-zone/');
       }
 
       const outputValues = await extractOutputValues(result, jsonBackend);
