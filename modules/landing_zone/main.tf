@@ -4,7 +4,7 @@ resource "null_resource" "terraform_config" {
   }
 }
 
-resource "null_resource" "landing_zone_config" {  
+resource "null_resource" "landing_zone_config" {
   depends_on = [null_resource.terraform_config]
 
   triggers = {
