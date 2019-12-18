@@ -16,6 +16,8 @@ component:
             local.elements_landing_zone_iam_role_map["config_${count.index}"]["path"]
           description: >-
             local.elements_landing_zone_iam_role_map["config_${count.index}"]["description"]
+          max_session_duration: >-
+            local.elements_landing_zone_iam_role_map["config_${count.index}"]["max_session_duration"]
           assume_role_policy: >-
             jsondecode(base64decode(local.elements_landing_zone_iam_role_map["config_${count.index}"]["assume_role_policy"]))
     output:

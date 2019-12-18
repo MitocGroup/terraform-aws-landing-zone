@@ -4,30 +4,33 @@ component:
     - landing_zone_organization
   template:
     data:
-      terraform_remote_state:
-        landing_zone_organization:
-          backend: local
-          config:
-            path: >-
-              ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization/terraform.tfstate
+      aws_organizations_organization:
+        landing_zone_organization: {}
     resource:
       aws_organizations_organizational_unit:
         landing_zone_organization_unit:
+          count: length(var.landing_zone_organization_unit_names)
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          name: var.landing_zone_organization_unit_name
-          parent_id: data.terraform_remote_state.landing_zone_organization.roots.0.id
+          name: 'element(var.landing_zone_organization_unit_names, count.index)'
+          parent_id: >-
+            data.aws_organizations_organization.landing_zone_organization.roots.0.id
     output:
-      id:
-        value: aws_organizations_account.landing_zone_organization_unit.id
-      thub_id:
-        value: aws_organizations_account.landing_zone_organization_unit.id
-      arn:
-        value: aws_organizations_account.landing_zone_organization_unit.arn
-      accounts:
-        value: aws_organizations_account.landing_zone_organization_unit.accounts
-      landing_zone_organization_unit_id:
-        value: aws_organizations_account.landing_zone_organization_unit.id
-      landing_zone_organization_unit_arn:
-        value: aws_organizations_account.landing_zone_organization_unit.arn
-      landing_zone_organization_unit_accounts:
-        value: aws_organizations_account.landing_zone_organization_unit.accounts
+      ids:
+        value: >-
+          aws_organizations_organizational_unit.landing_zone_organization_unit.*.id
+      thub_ids:
+        value: >-
+          aws_organizations_organizational_unit.landing_zone_organization_unit.*.id
+      arns:
+        value: >-
+          aws_organizations_organizational_unit.landing_zone_organization_unit.*.arn
+      landing_zone_organization_unit_ids:
+        value: >-
+          { for ou in
+          aws_organizations_organizational_unit.landing_zone_organization_unit.*:
+          ou.name => ou.id }
+      landing_zone_organization_unit_arns:
+        value: >-
+          { for ou in
+          aws_organizations_organizational_unit.landing_zone_organization_unit.*:
+          ou.name => ou.arn }
