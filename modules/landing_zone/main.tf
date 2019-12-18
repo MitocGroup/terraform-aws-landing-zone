@@ -1,6 +1,14 @@
-resource "null_resource" "landing_zone_config" {
+resource "null_resource" "terraform_config" {
+  provisioner "local-exec" {
+    command = var.terraform_config ? "mv .terrahub.yml.backup .terrahub.yml" : "echo 'Terraform config is ignore!'"
+  }
+}
+
+resource "null_resource" "landing_zone_config" {  
+  depends_on = [null_resource.terraform_config]
+
   triggers = {
-    command    = var.landing_zone_command
+    command    = var.terraform_command
     providers  = md5(jsonencode(var.landing_zone_providers))
     components = md5(jsonencode(var.landing_zone_components))
     backend    = md5(jsonencode(var.terraform_backend))
@@ -12,7 +20,7 @@ resource "null_resource" "landing_zone_config" {
 
     environment = {
       ROOT_PATH  = var.root_path
-      COMMAND    = var.landing_zone_command
+      COMMAND    = var.terraform_command
       PROVIDERS  = jsonencode(var.landing_zone_providers)
       COMPONENTS = jsonencode(var.landing_zone_components)
       BACKEND    = jsonencode(var.terraform_backend)
@@ -34,7 +42,7 @@ resource "null_resource" "landing_zone_apply" {
   depends_on = [null_resource.landing_zone_config]
 
   triggers = {
-    command    = var.landing_zone_command
+    command    = var.terraform_command
     components = md5(jsonencode(var.landing_zone_components))
     timestamp  = timestamp()
   }
@@ -46,7 +54,7 @@ resource "null_resource" "landing_zone_apply" {
     environment = {
       OUTPUT_PATH = pathexpand("~/.terrahub/cache/landing_zone/output.json")
       ROOT_PATH   = var.root_path
-      COMMAND     = var.landing_zone_command
+      COMMAND     = var.terraform_command
       COMPONENTS  = jsonencode(var.landing_zone_components)
     }
   }

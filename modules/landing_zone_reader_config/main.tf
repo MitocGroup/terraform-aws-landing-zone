@@ -1,4 +1,12 @@
+resource "null_resource" "terraform_config" {
+  provisioner "local-exec" {
+    command = var.terraform_config ? "mv .terrahub.yml.backup .terrahub.yml" : "echo 'Terraform config is ignore!'"
+  }
+}
+
 resource "null_resource" "landing_zone_reader_config" {
+  depends_on = [null_resource.terraform_config]
+
   triggers = {
     providers  = md5(jsonencode(var.landing_zone_providers))
     components = md5(jsonencode(var.landing_zone_components))
