@@ -26,6 +26,12 @@ variable "terraform_command" {
   description = "The command that will be executed by `terrahub` in this component."
 }
 
+variable "terraform_output_path" {
+  type        = string
+  default     = "~/.terrahub/cache/landing_zone/output.json"
+  description = "The terraform aoutput path that will be used by `terrahub` in this component."
+}
+
 variable "terraform_backend" {
   type        = map(string)
   description = "This is the backend configure for all components."

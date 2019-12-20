@@ -1,7 +1,7 @@
 'use strict';
 
 const Helper = require('./helper');
-const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components } = process.env;
+const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components, OUTPUT_PATH: outputPath } = process.env;
 
 /**
  * Check if required env variables are defined
@@ -17,6 +17,10 @@ function checkEnvironmentVars() {
 
   if (!components) {
     throw Error('ERROR: COMPONENTS variable is empty. Aborting...');
+  }
+
+  if (!outputPath) {
+    throw Error('ERROR: OUTPUT_PATH variable is empty. Aborting...');
   }
 }
 

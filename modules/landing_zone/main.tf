@@ -1,18 +1,26 @@
+resource "null_resource" "terraform_output" {
+  provisioner "local-exec" {
+    command = "touch ${pathexpand(var.terraform_output_path)}"
+  }
+}
+
 resource "null_resource" "terraform_config" {
+  depends_on = [null_resource.terraform_output]
   triggers = {
-    config = var.terraform_config
-    backup = ".terrahub.yml.backup"
-    new    = ".terrahub.yml"
+    config  = var.terraform_config
+    example = ".terrahub.yml.example"
+    new     = ".terrahub.yml"
   }
 
   provisioner "local-exec" {
     when    = create
-    command = self.triggers.config ? "mv ${self.triggers.backup} ${self.triggers.new}" : "echo 'Terraform config is ignore!'"
+    command = self.triggers.config ? "mv ${self.triggers.example} ${self.triggers.new}" : "echo 'Terraform config is ignore!'"
   }
 }
 
 resource "null_resource" "landing_zone_config" {
   depends_on = [null_resource.terraform_config]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
     command     = var.terraform_command
@@ -53,14 +61,15 @@ resource "null_resource" "landing_zone_config" {
 
 resource "null_resource" "landing_zone_apply" {
   depends_on = [null_resource.landing_zone_config]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    command    = var.terraform_command
-    components = jsonencode(var.landing_zone_components)
-    timestamp  = timestamp()
+    command     = var.terraform_command
+    components  = jsonencode(var.landing_zone_components)
+    timestamp   = timestamp()
     module_path = path.module
     root_path   = var.root_path
-    output_path = pathexpand("~/.terrahub/cache/landing_zone/output.json")
+    output_path = pathexpand(var.terraform_output_path)
   }
 
   provisioner "local-exec" {
@@ -85,6 +94,7 @@ resource "null_resource" "landing_zone_apply" {
 
 resource "null_resource" "landing_zone_destroy" {
   depends_on = [null_resource.landing_zone_apply]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
     components  = jsonencode(var.landing_zone_components)
