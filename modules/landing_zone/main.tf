@@ -1,53 +1,88 @@
-resource "null_resource" "landing_zone_config" {
+resource "null_resource" "terraform_output" {
+  provisioner "local-exec" {
+    command = "touch ${pathexpand(var.terraform_output_path)}"
+  }
+}
+
+resource "null_resource" "terraform_config" {
+  depends_on = [null_resource.terraform_output]
   triggers = {
-    command    = var.landing_zone_command
-    providers  = md5(jsonencode(var.landing_zone_providers))
-    components = md5(jsonencode(var.landing_zone_components))
-    backend    = md5(jsonencode(var.terraform_backend))
+    config  = var.terraform_config
+    example = ".terrahub.yml.example"
+    new     = ".terrahub.yml"
   }
 
   provisioner "local-exec" {
     when    = create
-    command = "node ${path.module}/scripts/config.js"
+    command = self.triggers.config ? "mv ${self.triggers.example} ${self.triggers.new}" : "echo 'Terraform config is ignore!'"
+  }
+}
+
+resource "null_resource" "landing_zone_config" {
+  depends_on = [null_resource.terraform_config]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
+
+  triggers = {
+    command     = var.terraform_command
+    providers   = jsonencode(var.landing_zone_providers)
+    components  = jsonencode(var.landing_zone_components)
+    backend     = jsonencode(var.terraform_backend)
+    module_path = path.module
+    root_path   = var.root_path
+  }
+
+  provisioner "local-exec" {
+    when    = create
+    command = <<-EOC
+      node ${self.triggers.module_path}/scripts/config.js
+    EOC
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMMAND    = var.landing_zone_command
-      PROVIDERS  = jsonencode(var.landing_zone_providers)
-      COMPONENTS = jsonencode(var.landing_zone_components)
-      BACKEND    = jsonencode(var.terraform_backend)
+      ROOT_PATH  = self.triggers.root_path
+      COMMAND    = self.triggers.command
+      PROVIDERS  = self.triggers.providers
+      COMPONENTS = self.triggers.components
+      BACKEND    = self.triggers.backend
     }
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "node ${path.module}/scripts/remove-config.js"
+    command = <<-EOD
+      node ${self.triggers.module_path}/scripts/remove-config.js
+    EOD
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMPONENTS = jsonencode(var.landing_zone_components)
+      ROOT_PATH  = self.triggers.root_path
+      COMPONENTS = self.triggers.components
     }
   }
 }
 
 resource "null_resource" "landing_zone_apply" {
   depends_on = [null_resource.landing_zone_config]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    command    = var.landing_zone_command
-    components = md5(jsonencode(var.landing_zone_components))
-    timestamp  = timestamp()
+    command     = var.terraform_command
+    components  = jsonencode(var.landing_zone_components)
+    timestamp   = timestamp()
+    module_path = path.module
+    root_path   = var.root_path
+    output_path = pathexpand(var.terraform_output_path)
   }
 
   provisioner "local-exec" {
     when    = create
-    command = "node ${path.module}/scripts/apply.js"
+    command = <<-EOC
+      node ${self.triggers.module_path}/scripts/apply.js
+    EOC
 
     environment = {
-      OUTPUT_PATH = pathexpand("~/.terrahub/cache/landing_zone/output.json")
-      ROOT_PATH   = var.root_path
-      COMMAND     = var.landing_zone_command
-      COMPONENTS  = jsonencode(var.landing_zone_components)
+      OUTPUT_PATH = self.triggers.output_path
+      ROOT_PATH   = self.triggers.root_path
+      COMMAND     = self.triggers.command
+      COMPONENTS  = self.triggers.components
     }
   }
 
@@ -59,9 +94,12 @@ resource "null_resource" "landing_zone_apply" {
 
 resource "null_resource" "landing_zone_destroy" {
   depends_on = [null_resource.landing_zone_apply]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    components = "any component (or all components)"
+    components  = jsonencode(var.landing_zone_components)
+    module_path = path.module
+    root_path   = var.root_path
   }
 
   provisioner "local-exec" {
@@ -71,11 +109,13 @@ resource "null_resource" "landing_zone_destroy" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "node ${path.module}/scripts/destroy.js"
+    command = <<-EOD
+      node ${self.triggers.module_path}/scripts/destroy.js
+    EOD
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMPONENTS = jsonencode(var.landing_zone_components)
+      ROOT_PATH  = self.triggers.root_path
+      COMPONENTS = self.triggers.components
     }
   }
 }

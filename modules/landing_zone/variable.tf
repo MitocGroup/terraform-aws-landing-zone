@@ -14,10 +14,22 @@ variable "landing_zone_components" {
   description = "This is the list of AWS Landing Zone components that will be deployed if corresponding `.tfvars` file is included."
 }
 
-variable "landing_zone_command" {
+variable "terraform_config" {
+  type        = bool
+  default     = true
+  description = "The command that will be generate the `terraform` config file."
+}
+
+variable "terraform_command" {
   type        = string
   default     = "apply"
   description = "The command that will be executed by `terrahub` in this component."
+}
+
+variable "terraform_output_path" {
+  type        = string
+  default     = "~/.terrahub/cache/landing_zone/output.json"
+  description = "The terraform aoutput path that will be used by `terrahub` in this component."
 }
 
 variable "terraform_backend" {

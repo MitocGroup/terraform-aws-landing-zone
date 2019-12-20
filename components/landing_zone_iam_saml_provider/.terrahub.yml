@@ -22,7 +22,7 @@ component:
             local.elements_landing_zone_iam_saml_provider_map["config_${count.index}"]["name"]
           saml_metadata_document: >-
             data.local_file.s3_file_selected[index(var.landing_zone_providers,
-            "${local.index_element}")].content
+            local.index_element)].content
 build:
   env:
     variables:

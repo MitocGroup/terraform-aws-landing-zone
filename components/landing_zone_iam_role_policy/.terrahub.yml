@@ -1,0 +1,54 @@
+component:
+  name: landing_zone_iam_role_policy
+  template:
+    locals:
+      elements_landing_zone_iam_role_policy_data_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_role_policy_data"]
+      elements_landing_zone_iam_role_policy_map: >-
+        var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_role_policy_resource"]
+    data:
+      template_file:
+        policy:
+          provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: length(local.elements_landing_zone_iam_role_policy_data_map)
+          template: >-
+            file("${local.component["path"]}/policies/${local.elements_landing_zone_iam_role_policy_data_map["config_${count.index}"]["name"]}.json.tpl")
+          vars: >-
+            merge(map("region",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_region,
+            "account_id",
+            var.${tfvar.terrahub["landing_zone_providers"]["0"]}_account_id),
+            local.elements_landing_zone_iam_role_policy_data_map["config_${count.index}"])
+    resource:
+      aws_iam_role_policy:
+        landing_zone_iam_role_policy:
+          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_role_policy_resource"])
+          name: >-
+            local.elements_landing_zone_iam_role_policy_map["config_${count.index}"]["name"]
+          role: >-
+            local.elements_landing_zone_iam_role_policy_map["config_${count.index}"]["role"]
+          policy: 'element(data.template_file.policy.*.rendered, count.index)'
+    output:
+      ids:
+        value: aws_iam_role_policy.landing_zone_iam_role_policy.*.id
+      policies:
+        value: aws_iam_role_policy.landing_zone_iam_role_policy.*.policy
+      names:
+        value: aws_iam_role_policy.landing_zone_iam_role_policy.*.name
+      landing_zone_iam_role_policy_ids:
+        value: >-
+          { for iam_policy in
+          aws_iam_role_policy.landing_zone_iam_role_policy.*: iam_policy.name =>
+          iam_policy.id }
+      landing_zone_iam_role_policy_policies:
+        value: >-
+          { for iam_policy in
+          aws_iam_role_policy.landing_zone_iam_role_policy.*: iam_policy.name =>
+          iam_policy.policy }
+      landing_zone_iam_role_policy_names:
+        value: >-
+          { for iam_policy in
+          aws_iam_role_policy.landing_zone_iam_role_policy.*: iam_policy.name =>
+          iam_policy.name }

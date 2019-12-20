@@ -1,24 +1,29 @@
 component:
   name: landing_zone_organization_policy_attachment
+  dependsOn:
+    - landing_zone_organization_unit
+    - landing_zone_organization_policy
   template:
     data:
-      terraform_remote_state:
-        landing_zone_organization_unit:
-          backend: local
-          config:
-            path: >-
-              ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization_unit/terraform.tfstate
-        landing_zone_organization_policy:
-          backend: local
-          config:
-            path: >-
-              ${tfvar.terrahub["tfstate_path"]}/landing_zone_organization_policy/terraform.tfstate
+      aws_organizations_organization:
+        landing_zone_organization: {}
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_organization_policy
+            name: landing_zone_organization_policy
+    locals:
+      organization_policy_thub_id: >-
+        data.terraform_remote_state.landing_zone_organization_policy.outputs.thub_id["default"]
     resource:
       aws_organizations_policy_attachment:
         landing_zone_organization_policy_attachment:
-          provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          policy_id: data.terraform_remote_state.landing_zone_organization_policy.id
-          target_id: data.terraform_remote_state.landing_zone_organization_unit.id
+          count: >-
+            length(data.aws_organizations_organization.landing_zone_organization.accounts[*].id)
+          policy_id: local.organization_policy_thub_id
+          target_id: >-
+            element(data.aws_organizations_organization.landing_zone_organization.accounts[*].id,
+            count.index)
     output:
       id:
         value: >-
