@@ -1,6 +1,13 @@
 resource "null_resource" "terraform_config" {
+  triggers = {
+    config = var.terraform_config
+    backup = ".terrahub.yml.backup"
+    new    = ".terrahub.yml"
+  }
+
   provisioner "local-exec" {
-    command = var.terraform_config ? "mv .terrahub.yml.backup .terrahub.yml" : "echo 'Terraform config is ignore!'"
+    when    = create
+    command = self.triggers.config ? "mv ${self.triggers.backup} ${self.triggers.new}" : "echo 'Terraform config is ignore!'"
   }
 }
 
@@ -8,32 +15,38 @@ resource "null_resource" "landing_zone_config" {
   depends_on = [null_resource.terraform_config]
 
   triggers = {
-    command    = var.terraform_command
-    providers  = md5(jsonencode(var.landing_zone_providers))
-    components = md5(jsonencode(var.landing_zone_components))
-    backend    = md5(jsonencode(var.terraform_backend))
+    command     = var.terraform_command
+    providers   = jsonencode(var.landing_zone_providers)
+    components  = jsonencode(var.landing_zone_components)
+    backend     = jsonencode(var.terraform_backend)
+    module_path = path.module
+    root_path   = var.root_path
   }
 
   provisioner "local-exec" {
     when    = create
-    command = "node ${path.module}/scripts/config.js"
+    command = <<-EOC
+      node ${self.triggers.module_path}/scripts/config.js
+    EOC
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMMAND    = var.terraform_command
-      PROVIDERS  = jsonencode(var.landing_zone_providers)
-      COMPONENTS = jsonencode(var.landing_zone_components)
-      BACKEND    = jsonencode(var.terraform_backend)
+      ROOT_PATH  = self.triggers.root_path
+      COMMAND    = self.triggers.command
+      PROVIDERS  = self.triggers.providers
+      COMPONENTS = self.triggers.components
+      BACKEND    = self.triggers.backend
     }
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "node ${path.module}/scripts/remove-config.js"
+    command = <<-EOD
+      node ${self.triggers.module_path}/scripts/remove-config.js
+    EOD
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMPONENTS = jsonencode(var.landing_zone_components)
+      ROOT_PATH  = self.triggers.root_path
+      COMPONENTS = self.triggers.components
     }
   }
 }
@@ -43,19 +56,24 @@ resource "null_resource" "landing_zone_apply" {
 
   triggers = {
     command    = var.terraform_command
-    components = md5(jsonencode(var.landing_zone_components))
+    components = jsonencode(var.landing_zone_components)
     timestamp  = timestamp()
+    module_path = path.module
+    root_path   = var.root_path
+    output_path = pathexpand("~/.terrahub/cache/landing_zone/output.json")
   }
 
   provisioner "local-exec" {
     when    = create
-    command = "node ${path.module}/scripts/apply.js"
+    command = <<-EOC
+      node ${self.triggers.module_path}/scripts/apply.js
+    EOC
 
     environment = {
-      OUTPUT_PATH = pathexpand("~/.terrahub/cache/landing_zone/output.json")
-      ROOT_PATH   = var.root_path
-      COMMAND     = var.terraform_command
-      COMPONENTS  = jsonencode(var.landing_zone_components)
+      OUTPUT_PATH = self.triggers.output_path
+      ROOT_PATH   = self.triggers.root_path
+      COMMAND     = self.triggers.command
+      COMPONENTS  = self.triggers.components
     }
   }
 
@@ -69,7 +87,9 @@ resource "null_resource" "landing_zone_destroy" {
   depends_on = [null_resource.landing_zone_apply]
 
   triggers = {
-    components = "any component (or all components)"
+    components  = jsonencode(var.landing_zone_components)
+    module_path = path.module
+    root_path   = var.root_path
   }
 
   provisioner "local-exec" {
@@ -79,11 +99,13 @@ resource "null_resource" "landing_zone_destroy" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "node ${path.module}/scripts/destroy.js"
+    command = <<-EOD
+      node ${self.triggers.module_path}/scripts/destroy.js
+    EOD
 
     environment = {
-      ROOT_PATH  = var.root_path
-      COMPONENTS = jsonencode(var.landing_zone_components)
+      ROOT_PATH  = self.triggers.root_path
+      COMPONENTS = self.triggers.components
     }
   }
 }

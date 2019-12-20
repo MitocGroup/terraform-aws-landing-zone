@@ -31,9 +31,11 @@ function main() {
 
   Object.keys(jsonComponents).forEach(key => include.push(key));
 
-  processes.push(['build', '--include', include.join(',')]);
-  processes.push(['init', '--include', include.join(',')]);
-  processes.push(['apply', '--auto-approve', '--dependency', 'ignore', '--include', include.join(',')]);
+  if (include.length > 0) {
+    processes.push(['build', '--include', include.join(',')]);
+    processes.push(['init', '--include', include.join(',')]);
+    processes.push(['apply', '--auto-approve', '--dependency', 'ignore', '--include', include.join(',')]);
+  }
 
   try {
     Helper.executeWithErrors(rootPath, 'terrahub', processes);

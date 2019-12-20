@@ -28,7 +28,9 @@ function main() {
 
   Object.keys(jsonComponents).forEach(key => include.push(key));
 
-  processes.push(['destroy', '--auto-approve', '--include', include.join(','), '--dependency', 'ignore']);
+  if (include.length > 0) {
+    processes.push(['destroy', '--auto-approve', '--include', include.join(','), '--dependency', 'ignore']);
+  }
 
   try {
     Helper.executeWithErrors(rootPath, 'terrahub', processes);
