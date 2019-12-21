@@ -95,9 +95,7 @@ landing_zone_providers = {
 
 terraform_backend = {
   backend = "s3"
-  config  = {
-    region  = "us-east-1"
-    bucket  = "terraform-aws-landing-zone"
-    key     = "components"
-  }
+  region  = "us-east-1"
+  bucket  = "terraform-aws-landing-zone"
+  key     = "components"
 }

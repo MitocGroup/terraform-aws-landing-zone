@@ -1,11 +1,11 @@
-# terraform-aws-landing-zone
+# terraform module `landing-zone`
 [AWS Landing Zone](https://aws.amazon.com/solutions/aws-landing-zone/) is
 a solution that helps customers more quickly set up a secure, multi-account
-AWS environment based on AWS best practices. This repository contains terraform
-module `landing_zone` that dynamically deploys components of AWS Landing Zone
-solution based on input list of `.tfvars` files.
+AWS environment based on AWS best practices. This repository contains
+terraform module `landing_zone` that dynamically deploys components of
+AWS Landing Zone solution based on input list of `.tfvars` files.
 
-Terraform module `landing_zone_reader` was moved to a new home: https://github.com/MitocGroup/terraform-aws-landing-zone-reader
+RELATED: [terraform module `landing_zone_reader`](https://github.com/MitocGroup/terraform-aws-landing-zone-reader)
 
 > NOTE: Current implementation is fully compatible with terraform v0.12+.
 Switch to branch `terraform_v0.11` if you still using terraform v0.11.x and below.
@@ -30,8 +30,8 @@ This terraform module requires the following prerequisites / dependencies:
 To get started, simply include `main.tf` into your terraform codebase:
 ```hcl
 module "landing_zone" {
-  source    = "MitocGroup/landing-zone/aws"
-  version   = "0.2.2"
+  source  = "MitocGroup/landing-zone/aws"
+  version = "0.2.2"
   landing_zone_providers  = var.landing_zone_providers
   landing_zone_components = var.landing_zone_components
   terraform_backend       = var.terraform_backend
