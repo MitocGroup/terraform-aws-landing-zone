@@ -17,12 +17,6 @@ variable "terraform_backend" {
   }
 }
 
-variable "terraform_command" {
-  type        = string
-  default     = "apply"
-  description = "The command that will be executed by `terraform` in this component."
-}
-
 variable "terraform_config" {
   type        = bool
   default     = true

@@ -23,12 +23,6 @@ variable "terraform_backend" {
   }
 }
 
-variable "terraform_command" {
-  type        = string
-  description = "The command that will be executed by `terrahub` in this component."
-  default     = "apply"
-}
-
 variable "terraform_config" {
   type        = bool
   description = "The command that will be generate the `terraform` config file."

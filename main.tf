@@ -5,5 +5,4 @@ module "landing_zone" {
   landing_zone_components = var.landing_zone_components
   terraform_backend       = var.terraform_backend
   terraform_config        = var.terraform_config
-  terraform_command       = var.terraform_command
 }

@@ -28,7 +28,6 @@ resource "null_resource" "landing_zone_config" {
     providers   = jsonencode(var.landing_zone_providers)
     components  = jsonencode(var.landing_zone_components)
     backend     = jsonencode(var.terraform_backend)
-    command     = var.terraform_command
   }
 
   provisioner "local-exec" {
@@ -42,7 +41,6 @@ resource "null_resource" "landing_zone_config" {
       PROVIDERS  = self.triggers.providers
       COMPONENTS = self.triggers.components
       BACKEND    = self.triggers.backend
-      COMMAND    = self.triggers.command
     }
   }
 
@@ -68,7 +66,6 @@ resource "null_resource" "landing_zone_apply" {
     root_path   = var.root_path
     output_path = pathexpand(var.terraform_output_path)
     components  = jsonencode(var.landing_zone_components)
-    command     = var.terraform_command
     timestamp   = timestamp()
   }
 
@@ -81,7 +78,6 @@ resource "null_resource" "landing_zone_apply" {
     environment = {
       ROOT_PATH   = self.triggers.root_path
       OUTPUT_PATH = self.triggers.output_path
-      COMMAND     = self.triggers.command
       COMPONENTS  = self.triggers.components
     }
   }
