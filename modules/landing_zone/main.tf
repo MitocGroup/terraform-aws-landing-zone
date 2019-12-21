@@ -9,12 +9,12 @@ resource "null_resource" "terraform_config" {
   triggers = {
     config = var.terraform_config
     sample = ".terrahub.yml.sample"
-    yaml   = ".terrahub.yml"
+    root   = ".terrahub.yml"
   }
 
   provisioner "local-exec" {
     when    = create
-    command = self.triggers.config ? "mv ${self.triggers.sample} ${self.triggers.yaml}" : "echo 'Root .terrahub.yml is ignored!'"
+    command = self.triggers.config ? "mv ${self.triggers.sample} ${self.triggers.root}" : "echo 'Root .terrahub.yml is ignored!'"
   }
 }
 
