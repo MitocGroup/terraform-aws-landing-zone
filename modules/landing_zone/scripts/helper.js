@@ -194,7 +194,7 @@ class Helper {
   /**
    * Check if terrahub cli is installed
    */
-  checkIfTerrahubIsInstalled() {
+  checkIsTerrahubAvailable() {
     const where = os.platform() === 'win32' ? 'where' : 'which';
 
     try {
