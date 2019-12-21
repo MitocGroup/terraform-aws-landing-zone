@@ -5,11 +5,7 @@ AWS environment based on AWS best practices. This repository contains terraform
 module `landing_zone` that dynamically deploys components of AWS Landing Zone
 solution based on input list of `.tfvars` files.
 
-Additionally, there are 2 more terraform modules: `landing_zone_reader_config`
-and `landing_zone_reader`. They allow AWS Landing Zone consumers to reuse
-terraform outputs programmatically. This way administrators of AWS Landing Zone
-control who can manage `landing_zone` module and who can consume `landing_zone`
-module's outputs in read-only mode.
+Terraform module `landing_zone_reader` was moved to a new home: https://github.com/MitocGroup/terraform-aws-landing-zone-reader
 
 > NOTE: Current implementation is fully compatible with terraform v0.12+.
 Switch to branch `terraform_v0.11` if you still using terraform v0.11.x and below.
@@ -77,36 +73,9 @@ This means that before you use this terraform module, you will need to:
 
 > NOTE: Terraform module `landing_zone` can have tens, hundreds or thousands of deployable components, but not all of them should be and will be deployed. At runtime, components that are not part of `landing_zone_components` variable will be ignored.
 
-### Landing Zone Reader
-Terraform module for AWS Landing Zone can create, retrieve, update and destroy resources in your AWS accounts. But in some cases, your teams will need ONLY retrieve capability with implicit deny of all the other capabilities like create, update or destroy resources. In order to achieve this feature, we have created 2 extra terraform modules: [landing_zone_reader_config](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader_config) and [landing_zone_reader](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/modules/landing_zone_reader).
-
-Module `landing_zone_reader_config` must be executed first by passing the same parameters as in module `landing_zone`:
-```hcl
-module "landing_zone_reader_config" {
-  source    = "./modules/landing_zone_reader_config"
-  root_path = path.module
-  landing_zone_providers  = var.landing_zone_providers
-  landing_zone_components = var.landing_zone_components
-}
-```
-
-After `landing_zone_reader_config` module configures everything, second step is to use the `landing_zone_reader` module:
-```hcl
-module "landing_zone_reader" {
-  source = "./modules/landing_zone_reader"
-  terraform_backend_type   = "local"
-  terraform_backend_config = {
-    path = "/tmp/.terrahub/landing_zone/terrahub_load_outputs/terraform.tfstate"
-  }
-}
-```
-
-IMPORTANT: `landing_zone_reader_config` module must write output results into `.tfstate` files before `landing_zone_reader` module can execute successfully `terraform init`. Therefore these two modules cannot be used in parallel or combined with `depends_on` argument. We recommend to use them sequentially.
-
 ### More Examples
 * [Terraform module for AWS Landing Zone (one component: AWS Organization)](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_organization)
 * [Terraform module for AWS Landing Zone (multiple components: S3, CodePipeline and CodeBuild)](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_s3_and_codepipeline)
-* [Terraform module for AWS Landing Zone reader config](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader_config)
 * [Terraform module for AWS Lambda function using AWS Landing Zone reader](https://github.com/MitocGroup/terraform-aws-landing-zone/tree/master/examples/example_landing_zone_reader)
 
 

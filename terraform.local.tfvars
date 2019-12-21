@@ -92,8 +92,3 @@ landing_zone_providers = {
   #    region     = "us-east-1"
   #  }
 }
-
-terraform_backend = {
-  backend = "local"
-  path    = "/tmp/.terrahub/landing_zone"
-}

@@ -7,14 +7,14 @@ resource "null_resource" "terraform_output" {
 resource "null_resource" "terraform_config" {
   depends_on = [null_resource.terraform_output]
   triggers = {
-    config  = var.terraform_config
-    example = ".terrahub.yml.example"
-    new     = ".terrahub.yml"
+    config = var.terraform_config
+    sample = ".terrahub.yml.sample"
+    yaml   = ".terrahub.yml"
   }
 
   provisioner "local-exec" {
     when    = create
-    command = self.triggers.config ? "mv ${self.triggers.example} ${self.triggers.new}" : "echo 'Terraform config is ignore!'"
+    command = self.triggers.config ? "mv ${self.triggers.sample} ${self.triggers.yaml}" : "echo 'Root .terrahub.yml is ignored!'"
   }
 }
 
@@ -23,12 +23,12 @@ resource "null_resource" "landing_zone_config" {
   count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    command     = var.terraform_command
+    module_path = path.module
+    root_path   = var.root_path
     providers   = jsonencode(var.landing_zone_providers)
     components  = jsonencode(var.landing_zone_components)
     backend     = jsonencode(var.terraform_backend)
-    module_path = path.module
-    root_path   = var.root_path
+    command     = var.terraform_command
   }
 
   provisioner "local-exec" {
@@ -39,10 +39,10 @@ resource "null_resource" "landing_zone_config" {
 
     environment = {
       ROOT_PATH  = self.triggers.root_path
-      COMMAND    = self.triggers.command
       PROVIDERS  = self.triggers.providers
       COMPONENTS = self.triggers.components
       BACKEND    = self.triggers.backend
+      COMMAND    = self.triggers.command
     }
   }
 
@@ -64,12 +64,12 @@ resource "null_resource" "landing_zone_apply" {
   count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    command     = var.terraform_command
-    components  = jsonencode(var.landing_zone_components)
-    timestamp   = timestamp()
     module_path = path.module
     root_path   = var.root_path
     output_path = pathexpand(var.terraform_output_path)
+    components  = jsonencode(var.landing_zone_components)
+    command     = var.terraform_command
+    timestamp   = timestamp()
   }
 
   provisioner "local-exec" {
@@ -79,8 +79,8 @@ resource "null_resource" "landing_zone_apply" {
     EOC
 
     environment = {
-      OUTPUT_PATH = self.triggers.output_path
       ROOT_PATH   = self.triggers.root_path
+      OUTPUT_PATH = self.triggers.output_path
       COMMAND     = self.triggers.command
       COMPONENTS  = self.triggers.components
     }
@@ -88,7 +88,7 @@ resource "null_resource" "landing_zone_apply" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "echo 'info: destroy ignored because part of apply'"
+    command = "echo 'info: destroy action ignored because part of landing_zone_apply'"
   }
 }
 
@@ -97,14 +97,14 @@ resource "null_resource" "landing_zone_destroy" {
   count      = length(var.landing_zone_components) == 0 ? 0 : 1
 
   triggers = {
-    components  = jsonencode(var.landing_zone_components)
     module_path = path.module
     root_path   = var.root_path
+    components  = jsonencode(var.landing_zone_components)
   }
 
   provisioner "local-exec" {
     when    = create
-    command = "echo 'info: apply ignored because part of destroy'"
+    command = "echo 'info: apply action ignored because part of landing_zone_destroy'"
   }
 
   provisioner "local-exec" {
