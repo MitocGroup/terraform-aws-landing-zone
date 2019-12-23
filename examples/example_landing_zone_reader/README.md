@@ -15,7 +15,7 @@ module "example_landing_zone_reader" {
 }
 ```
 
-For easier usage and reduced complexity, we recommend to define `locals` as show below:
+For easier usage and reduced complexity, we recommend to define `locals` as shown below:
 ```hcl
 locals {
   landing_zone_iam_role_arns      = module.example_landing_zone_reader.landing_zone_reader["landing_zone_iam_role_arns"]
