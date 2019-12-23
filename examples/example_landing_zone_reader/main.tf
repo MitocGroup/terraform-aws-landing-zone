@@ -4,7 +4,7 @@ module "example_landing_zone_reader" {
   terraform_backend_type = "s3"
   terraform_backend_config = {
     bucket = "terraform-aws-landing-zone-mitocgroup"
-    key    = "terraform/terrahub_load_outputs/terraform.tfstate"
+    key    = "terraform/landing_zone_reader_output/terraform.tfstate"
     region = "us-east-1"
   }
   landing_zone_providers = {
