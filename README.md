@@ -37,7 +37,7 @@ module "landing_zone" {
   terraform_backend       = var.terraform_backend
 }
 ```
-> NOTE: Make sure to include `variables.tf` and whatever makes sense from `outputs.tf`
+> NOTE: Make sure to include `variables.tf` and optionally `terraform.tfvars`
 
 To simplify and make it easier to understand, we included default values in `terraform.tfvars`:
 ```hcl
@@ -49,7 +49,7 @@ landing_zone_providers = {
   [...]
 }
 landing_zone_components = {
-  landing_zone_vpc = "s3://terraform-aws-landing-zone/components/landing_zone_vpc/default.tfvars"
+  landing_zone_vpc = "s3://terraform-aws-landing-zone/components/landing_zone_vpc/*.tfvars"
   [...]
 }
 terraform_backend = {
