@@ -1,24 +1,10 @@
 module "example_landing_zone_reader" {
-  source                 = "MitocGroup/landing-zone-reader/aws"
-  terraform_redeploy     = true
-  terraform_backend_type = "s3"
-  terraform_backend_config = {
-    bucket = "terraform-aws-landing-zone-mitocgroup"
-    key    = "terraform/landing_zone_reader_output/terraform.tfstate"
-    region = "us-east-1"
-  }
-  landing_zone_providers = {
-    default = {
-      account_id = "123456789012"
-      region     = "us-east-1"
-    }
-  }
-  landing_zone_components = {
-    landing_zone_iam_role                             = "./*.tfvars"
-    landing_zone_security_group                       = "./*.tfvars"
-    landing_zone_subnet                               = "./*.tfvars"
-    landing_zone_vpc                                  = "./*.tfvars"
-  }
+  source                   = "MitocGroup/landing-zone-reader/aws"
+  landing_zone_providers   = var.landing_zone_providers
+  landing_zone_components  = var.landing_zone_components
+  terraform_backend_type   = var.terraform_backend_type
+  terraform_backend_config = var.terraform_backend_config
+  terraform_reader_config  = var.terraform_reader_config
 }
 
 resource "aws_lambda_function" "hello_world" {
