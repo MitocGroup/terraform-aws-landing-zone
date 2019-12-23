@@ -49,7 +49,7 @@ function main() {
 (async () => {
   try {
     checkEnvironmentVars();
-    Helper.checkIsTerrahubAvailable();
+    Helper.isTerrahubAvailable();
 
     console.log(main());
   } catch (error) {

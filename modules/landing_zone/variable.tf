@@ -32,5 +32,5 @@ variable "terraform_config" {
 variable "terraform_output_path" {
   type        = string
   description = "The terraform aoutput path that will be used by `terrahub` in this component."
-  default     = "~/.terrahub/cache/landing_zone/output.json"
+  default     = "/tmp/.terrahub/landing_zone/output.json"
 }

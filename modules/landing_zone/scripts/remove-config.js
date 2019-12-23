@@ -20,7 +20,7 @@ function checkEnvironmentVars() {
 (async () => {
   try {
     checkEnvironmentVars();
-    Helper.checkIsTerrahubAvailable();
+    Helper.isTerrahubAvailable();
 
     console.log(Helper.removeConfig(rootPath, components));
   } catch (error) {
