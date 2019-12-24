@@ -7,11 +7,11 @@ This module can be used as easy as:
 ```hcl
 module "example_landing_zone_reader" {
   source                   = "MitocGroup/landing-zone-reader/aws"
+  landing_zone_providers   = var.landing_zone_providers
+  landing_zone_components  = var.landing_zone_components
   terraform_backend_type   = var.terraform_backend_type
   terraform_backend_config = var.terraform_backend_config
   terraform_reader_config  = var.terraform_reader_config
-  landing_zone_providers   = var.landing_zone_providers
-  landing_zone_components  = var.landing_zone_components
 }
 ```
 
