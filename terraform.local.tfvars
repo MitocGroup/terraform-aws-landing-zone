@@ -60,7 +60,6 @@ landing_zone_components = {
   landing_zone_ssm_maintenance_window               = "./*.tfvars"
   landing_zone_ssm_maintenance_window_target        = "./*.tfvars"
   landing_zone_ssm_parameter                        = "./*.tfvars"
-  landing_zone_sso                                  = "./*.tfvars"
   landing_zone_sns_platform_application             = "./*.tfvars"
   landing_zone_sns_sms_preferences                  = "./*.tfvars"
   landing_zone_sns_topic                            = "./*.tfvars"

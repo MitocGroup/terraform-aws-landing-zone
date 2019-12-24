@@ -1,6 +1,6 @@
 resource "null_resource" "terraform_output" {
   provisioner "local-exec" {
-    command = "touch ${pathexpand(var.terraform_output_path)}"
+    command = "touch ${pathexpand(var.terraform_output_path)} && npm install"
   }
 }
 
