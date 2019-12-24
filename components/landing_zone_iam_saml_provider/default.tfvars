@@ -5,7 +5,7 @@ landing_zone_providers = [
 default_provider = {
   landing_zone_iam_saml_provider_resource = {
     config_0 = {
-      name   = "saml"
+      name = "saml"
     }
   }
 }

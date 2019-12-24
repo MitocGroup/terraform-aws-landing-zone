@@ -9,7 +9,7 @@ default_provider = {
       path                 = "/"
       description          = "Managed by TerraHub"
       max_session_duration = 3600
-      assume_role_policy = <<EOF
+      assume_role_policy   = <<EOF
         {
           "Version": "2012-10-17",
           "Statement": [
