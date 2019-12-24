@@ -1,7 +1,7 @@
 'use strict';
 
 const Helper = require('./helper');
-const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components, OUTPUT_PATH: outputPath } = process.env;
+const { ROOT_PATH: rootPath, COMPONENTS: components, OUTPUT_PATH: outputPath } = process.env;
 
 /**
  * Check if required env variables are defined
@@ -9,10 +9,6 @@ const { ROOT_PATH: rootPath, COMMAND: command, COMPONENTS: components, OUTPUT_PA
 function checkEnvironmentVars() {
   if (!rootPath) {
     throw Error('ERROR: ROOT_PATH variable is empty. Aborting...');
-  }
-
-  if (!command) {
-    throw Error('ERROR: COMMAND variable is empty. Aborting...');
   }
 
   if (!components) {
@@ -53,7 +49,7 @@ function main() {
 (async () => {
   try {
     checkEnvironmentVars();
-    Helper.checkIfTerrahubIsInstalled();
+    Helper.isTerrahubAvailable();
 
     console.log(main());
   } catch (error) {

@@ -45,7 +45,7 @@ async function main() {
 (async () => {
   try {
     checkEnvironmentVars();
-    Helper.checkIfTerrahubIsInstalled();
+    Helper.isTerrahubAvailable();
     const resp = await main();
 
     console.log(resp);
