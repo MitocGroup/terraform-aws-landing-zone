@@ -10,7 +10,8 @@ component:
       template_file:
         policy:
           provider!: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          count: length(local.elements_landing_zone_iam_policy_map)
+          count: >-
+            length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_iam_policy_resource"])
           template: >-
             file("${local.component["path"]}/policies/${local.elements_landing_zone_iam_policy_map["config_${count.index}"]["name"]}.json.tpl")
           vars: >-

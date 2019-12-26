@@ -1,13 +1,17 @@
 component:
   name: landing_zone_organization_accounts
   dependsOn:
-    - landing_zone_organization
+    - landing_zone_organization_unit
   template:
-    data:
-      aws_organizations_organization:
-        landing_zone_organization: {}
+    dynamic:
+      data:
+        terraform_remote_state:
+          - component: landing_zone_organization_unit
+            name: landing_zone_organization_unit
     locals:
       elements_landing_zone_organization_accounts_map: 'var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider'
+      ou_remote_state: >-
+        data.terraform_remote_state.landing_zone_organization_unit.outputs.landing_zone_organization_unit_ids["default"]
     resource:
       aws_organizations_account:
         landing_zone_organization_accounts:
@@ -18,9 +22,7 @@ component:
           email: >-
             local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["email"]
           parent_id: >-
-            lookup(element(data.aws_organizations_organization.landing_zone_organization.roots,
-            local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["organization_index"]),
-            "id")
+            local.ou_remote_state["${local.elements_landing_zone_organization_accounts_map["config_${count.index}"]["organization_unit"]}"]
     output:
       ids:
         value: aws_organizations_account.landing_zone_organization_accounts.*.id

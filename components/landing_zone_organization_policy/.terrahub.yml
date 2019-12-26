@@ -1,12 +1,15 @@
 component:
   name: landing_zone_organization_policy
+  dependsOn:
+    - landing_zone_organization
   template:
     resource:
       aws_organizations_policy:
         landing_zone_organization_policy:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
-          content: 'file("${local.component["path"]}/iam_trust_policy.json.tpl")'
+          content: 'file("./${var.landing_zone_organization_policy_name}.json.tpl")'
           name: var.landing_zone_organization_policy_name
+          description: var.landing_zone_organization_policy_description
     output:
       id:
         value: aws_organizations_policy.landing_zone_organization_policy.id
