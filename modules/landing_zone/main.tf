@@ -6,6 +6,8 @@ resource "null_resource" "terraform_output" {
 
 resource "null_resource" "terraform_config" {
   depends_on = [null_resource.terraform_output]
+  count      = length(var.landing_zone_components) == 0 ? 0 : 1
+
   triggers = {
     config = var.terraform_config
     sample = ".terrahub.yml.sample"
