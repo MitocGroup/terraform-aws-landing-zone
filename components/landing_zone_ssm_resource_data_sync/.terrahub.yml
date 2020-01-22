@@ -21,7 +21,7 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_ssm_resource_data_sync_resource"])
           name: >-
             local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["name"]
-          s3_destination:
+          s3_destination!:
             bucket_name: >-
               local.elements_landing_zone_ssm_resource_data_sync_map["config_${count.index}"]["s3_dest_bucket"]
             region: >-

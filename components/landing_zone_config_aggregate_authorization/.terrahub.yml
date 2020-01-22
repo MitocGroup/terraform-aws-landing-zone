@@ -14,7 +14,7 @@ component:
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_config_configuration_aggregator_tags"])
           name: >-
             local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["name"]
-          account_aggregation_source:
+          account_aggregation_source!:
             account_ids: >-
               split("|",
               local.elements_landing_zone_config_configuration_aggregator_map["config_${count.index}"]["account_ids"])
