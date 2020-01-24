@@ -26,16 +26,16 @@ component:
           rejected_patches: >-
             split("|",
             local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["rejected_patches"])
-          global_filter:
+          global_filter!:
             - key: >-
                 local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_key_1"]
               values: >-
                 split("|",
                 local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["global_filter_values_1"])
-          approval_rule:
+          approval_rule!:
             - approve_after_days: >-
                 local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["ar_approve_after_days_1"]
-              patch_filter:
+              patch_filter!:
                 - key: >-
                     local.elements_landing_zone_ssm_patch_baseline_map["config_${count.index}"]["patch_filter_key_1"]
                   values: >-

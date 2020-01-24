@@ -26,7 +26,7 @@ component:
             local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["description"]
           resource_type: >-
             local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["resource_type"]
-          targets:
+          targets!:
             key: >-
               local.elements_landing_zone_ssm_maintenance_window_target_map["config_${count.index}"]["target_key"]
             values: >-

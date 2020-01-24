@@ -18,7 +18,7 @@ component:
             local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["association_name"]
           document_version: >-
             local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["document_version"]
-          output_location:
+          output_location!:
             s3_bucket_name: >-
               local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["ol_s3_bucket_name"]
             s3_key_prefix: >-
@@ -33,7 +33,7 @@ component:
             local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["max_concurrency"]
           max_errors: >-
             local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["max_errors"]
-          targets:
+          targets!:
             - key: >-
                 local.elements_landing_zone_ssm_association_by_targets_map["config_${count.index}"]["targets_key_1"]
               values:

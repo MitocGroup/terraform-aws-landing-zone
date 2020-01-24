@@ -37,7 +37,7 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
-          filter:
+          filter!:
             - name: options.amazon-side-asn
               values:
                 - >-

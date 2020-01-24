@@ -16,7 +16,7 @@ component:
             local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["name"]
           description: >-
             local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["description"]
-          source:
+          source!:
             owner: >-
               local.elements_landing_zone_config_config_rule_map["config_${count.index}"]["source_owner"]
             source_identifier: >-

@@ -27,7 +27,7 @@ component:
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_route_tables_data"])
           vpc_id: 'element(data.aws_vpc.vpc_selected.*.id, count.index)'
-          filter:
+          filter!:
             name: 'tag:LzHash'
             values:
               - >-

@@ -22,16 +22,16 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           name: var.landing_zone_code_build_name
           service_role: data.terraform_remote_state.landing_zone_code_build_role.arn
-          artifacts:
+          artifacts!:
             - type: var.landing_zone_code_build_artifacts_type
-          source:
+          source!:
             - type: var.landing_zone_code_build_source_type
               buildspec: 'file("${local.component["path"]}/buildspec.yml")'
-          environment:
+          environment!:
             - compute_type: var.landing_zone_code_build_environment_compute_type
               image: var.landing_zone_code_build_environment_image
               type: var.landing_zone_code_build_environment_type
-              environment_variable:
+              environment_variable!:
                 - name: ARTIFACT_BUCKET
                   value: >-
                     data.terraform_remote_state.landing_zone_pipeline_artifact_s3_bucket.bucket
