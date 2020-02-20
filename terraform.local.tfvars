@@ -86,8 +86,16 @@ landing_zone_providers = {
     account_id = "123456789012"
     region     = "us-east-1"
   }
-  #  ,sample = {
-  #    account_id = "987654321098"
+  #  ,core_account_security = {
+  #    account_id = "123456789013"
+  #    region     = "us-east-1"
+  #  }
+  #  ,core_account_logging = {
+  #    account_id = "123456789014"
+  #    region     = "us-east-1"
+  #  }
+  #  ,core_account_shared = {
+  #    account_id = "123456789015"
   #    region     = "us-east-1"
   #  }
 }
