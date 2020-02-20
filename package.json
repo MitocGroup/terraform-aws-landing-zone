@@ -9,7 +9,7 @@
     "npm": ">=6.0"
   },
   "dependencies": {
-    "terrahub": "^0.4.21"
+    "terrahub": "^0.4.24"
   },
   "devDependencies": {
     "eslint": "^5.3.0",
