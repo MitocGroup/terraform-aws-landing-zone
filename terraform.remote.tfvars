@@ -83,19 +83,19 @@ landing_zone_components = {
 
 landing_zone_providers = {
   default = {
-    account_id = "123456789012"
+    account_id = "123456789000"
     region     = "us-east-1"
   }
   #  ,core_account_security = {
-  #    account_id = "123456789013"
+  #    account_id = "123456789001"
   #    region     = "us-east-1"
   #  }
   #  ,core_account_logging = {
-  #    account_id = "123456789014"
+  #    account_id = "123456789002"
   #    region     = "us-east-1"
   #  }
   #  ,core_account_shared = {
-  #    account_id = "123456789015"
+  #    account_id = "123456789003"
   #    region     = "us-east-1"
   #  }
 }
