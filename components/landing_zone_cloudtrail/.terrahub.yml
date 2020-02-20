@@ -17,8 +17,8 @@ component:
           name: var.landing_zone_cloudtrail_name
           is_multi_region_trail: var.landing_zone_cloudtrail_is_multi_region_trail
           is_organization_trail: var.landing_zone_cloudtrail_is_organization_trail
-          event_selector:
-            data_resource:
+          event_selector!:
+            data_resource!:
               type: var.landing_zone_event_selector_data_resource_type
               values: var.landing_zone_event_selector_data_resource_values
     output:

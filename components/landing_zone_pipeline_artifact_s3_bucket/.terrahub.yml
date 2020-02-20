@@ -6,11 +6,11 @@ component:
         landing_zone_pipeline_artifact_s3_bucket:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           bucket: var.landing_zone_pipeline_artifact_s3_bucket_name
-          versioning:
+          versioning!:
             enabled: var.landing_zone_pipeline_artifact_s3_bucket_versioning
-          server_side_encryption_configuration:
-            rule:
-              apply_server_side_encryption_by_default:
+          server_side_encryption_configuration!:
+            rule!:
+              apply_server_side_encryption_by_default!:
                 sse_algorithm: var.landing_zone_pipeline_artifact_s3_bucket_sse_algorithm
     output:
       id:

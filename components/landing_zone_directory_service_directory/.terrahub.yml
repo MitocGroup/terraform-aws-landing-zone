@@ -43,7 +43,7 @@ component:
             local.elements_landing_zone_directory_service_map["config_${count.index}"]["size"]
           type: >-
             local.elements_landing_zone_directory_service_map["config_${count.index}"]["type"]
-          vpc_settings:
+          vpc_settings!:
             vpc_id: data.aws_vpc.vpc_selected.id
             subnet_ids: data.aws_subnet.subnet_selected.*.id
     output:

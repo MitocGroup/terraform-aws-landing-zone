@@ -25,7 +25,7 @@ component:
         tgw_vpc_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: length(data.aws_vpc.vpc_selected.*.id)
-          filter:
+          filter!:
             name: vpc-id
             values:
               - 'element(data.aws_vpc.vpc_selected.*.id , count.index)'
@@ -34,7 +34,7 @@ component:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: >-
             length(var.${tfvar.terrahub["landing_zone_providers"]["0"]}_provider["landing_zone_gateway_tgw_data"])
-          filter:
+          filter!:
             - name: options.amazon-side-asn
               values:
                 - >-
@@ -43,7 +43,7 @@ component:
         route_table_tgw_selected:
           provider: 'aws.${tfvar.terrahub["landing_zone_providers"]["0"]}'
           count: length(data.aws_ec2_transit_gateway.gateway_tgw_selected.*.id)
-          filter:
+          filter!:
             - name: transit-gateway-id
               values:
                 - >-
